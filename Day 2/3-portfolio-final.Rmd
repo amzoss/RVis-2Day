@@ -1,0 +1,138 @@
+---
+title: "R Visualization Portfolio"
+author: "Angela Zoss"
+date: "8/14/2018"
+output: 
+  flexdashboard::flex_dashboard:
+    orientation: columns
+    vertical_layout: fill
+---
+
+```{r setup, include=FALSE}
+library(tidyverse)
+library(flexdashboard)
+library(plotly)
+```
+
+```{r}
+
+# Loading data before anything renders
+
+starwars_chars <- starwars
+
+new_names <- read_csv('data/StarWarsNames.csv') %>% select(NewNames)
+  
+starwars_opins <- read_csv('data/StarWars.csv', skip=2, col_names=FALSE) %>% setNames(unlist(new_names))
+
+got <- read_csv("data/got_ratings.csv")
+
+gap <- read_csv("data/gapminder_avg.csv")
+names(gap) <- make.names(names(gap), unique=TRUE)
+
+```
+
+```{r}
+
+# flexdashboard layouts:
+# https://rmarkdown.rstudio.com/flexdashboard/layouts.html
+
+```
+
+
+Game of Thrones
+=====================================  
+
+Column {.tabset}
+-------------------------------------
+
+### Goodness vs. Beauty
+
+```{r}
+
+got_expl <- ggplot(got, aes(x=moral,y=physical)) + 
+  geom_point(size=5, color="firebrick", alpha=.75) +
+  labs(title="The moral and physical ratings of characters from Game of Thrones") +
+  geom_smooth(method="lm", se=FALSE)
+
+ggplotly(got_expl)
+
+```
+
+### Quadrant visualization
+
+```{r}
+
+got_nyt <- ggplot(got, aes(x=moral,y=physical, color=gender)) + 
+  scale_y_reverse(lim=c(1,0)) +
+  scale_x_continuous(limits=c(0,1)) +
+  geom_hline(yintercept=.5) +
+  geom_vline(xintercept=.5)+ 
+  geom_point(aes())  + 
+  geom_text(aes(label=label), nudge_y = -.025, show.legend = FALSE) +
+  theme_bw() +
+  annotate(geom = "text", x=c(.5,.5,0,1), y=c(1,0,.48,.52), label=c("Ugly","Beautiful","Evil","Good"))
+
+ggplotly(got_nyt)
+
+```
+
+Star Wars
+=====================================  
+
+Column {data-width=650}
+-----------------------------------------------------------------------
+
+### Star Wars characters by birth year
+
+```{r}
+
+plot_ly(starwars_chars %>% filter(!is.na(birth_year))) %>%
+  add_markers(x = ~birth_year, y = ~fct_reorder(as_factor(name),birth_year)) %>%
+  layout(yaxis = list(title="name"),
+         xaxis = list(title="age"))
+
+
+```
+
+Column {data-width=350}
+-----------------------------------------------------------------------
+
+### Star Wars characters by mass and height
+
+```{r}
+
+plot_ly(data = starwars_chars %>% dplyr::select(name, mass, height) %>% na.omit(), 
+        x = ~height) %>%
+  add_markers(y = ~mass, showlegend = FALSE) %>%
+  add_lines(y = ~fitted(lm(mass~height)), showlegend = FALSE) %>%
+  add_text(data = starwars_chars %>% filter(!is.na(mass)) %>% filter(mass == max(mass) | height == min(height)), x = ~height, y = ~mass, text = ~name, textposition="top center")
+
+```
+
+### Have you seen any of the 6 films in the Star Wars franchise?
+
+```{r}
+
+plot_ly(starwars_opins %>% count(SeenAnyYN)) %>%
+  add_pie(labels = ~SeenAnyYN, values = ~n, textinfo="label+percent", showlegend=F)
+
+```
+
+Gapminder
+=====================================  
+
+```{r}
+
+gap_plot <- ggplot(gap, aes(x=Average.GDP.per.capita, y=Average.Life.expectancy.at.birth)) +
+  geom_point(aes(size=Average.Total.population, color=Region)) +
+  scale_x_log10() + 
+  labs(x="Average GDP per capita (log 10)", y="Average life expectancy at birth", title="Averages across all years of the traditional Gapminder dataset") +
+  scale_size_continuous(name="Average total population", breaks=c(7500000,75000000,750000000),labels=c("7.5 million","75 million","750 million")) +
+  geom_smooth(method="lm", se=FALSE, color="gray50") +
+  geom_text(data=gap %>% filter(Average.Total.population>200000000), aes(label=Country)) +
+  theme_bw()
+
+ggplotly(gap_plot)
+
+```
+

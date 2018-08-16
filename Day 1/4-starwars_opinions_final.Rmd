@@ -1,0 +1,194 @@
+---
+title: "Star Wars Opinion Data"
+author: "Angela Zoss"
+date: "8/12/2018"
+output: github_document
+---
+
+## Setup your environment
+
+```{r}
+
+# Load required libraries
+
+library(tidyverse)
+
+```
+
+## Load your data
+
+```{r}
+
+# data from https://fivethirtyeight.com/features/americas-favorite-star-wars-movies-and-least-favorite-characters/
+# note: CSV has two rows of headers, so I have manually created a list of headers and am adding
+# that after loading just the data rows
+
+new_names <- read_csv('data/StarWarsNames.csv') %>% select(NewNames)
+  
+starwars_opins <- read_csv('data/StarWars.csv', skip=2, col_names=FALSE) %>% setNames(unlist(new_names))
+
+```
+
+## What percentage of survey participants responded "No" to "SeenAnyYN"?
+
+```{r}
+
+# start with a bar chart
+
+ggplot(starwars_opins) +
+  geom_bar(aes(SeenAnyYN))
+
+```
+
+
+```{r}
+
+# change it to a stacked bar chart, where the answers are different colors
+# hint: there will only be one bar, so x will no longer be tied to a variable
+
+ggplot(starwars_opins) +
+  geom_bar(aes(1,fill=SeenAnyYN))
+
+```
+
+```{r}
+
+# change the coordinate system to polar with theta="y"
+
+ggplot(starwars_opins) +
+  geom_bar(aes(1,fill=SeenAnyYN)) +
+  coord_polar(theta="y")
+
+```
+
+## Advanced 1: Compare this pattern across genders
+
+```{r}
+
+ggplot(starwars_opins) +
+  geom_bar(aes(1,fill=SeenAnyYN)) +
+  coord_polar(theta="y") +
+  facet_grid(.~Gender)
+
+ggplot(starwars_opins) +
+  geom_bar(aes(1,fill=SeenAnyYN), position="fill") +
+  coord_polar(theta="y") +
+  facet_grid(.~Gender)
+
+
+```
+
+## Advanced 2: Calculate percentage and add as a label, simplify theme
+
+```{r}
+
+ggplot(starwars_opins) +
+  geom_bar(aes(1,fill=SeenAnyYN),show.legend = FALSE) +
+  coord_polar(theta="y") +
+  geom_text(data=starwars_opins %>% count(SeenAnyYN) %>% mutate(total=sum(n),label=paste0(SeenAnyYN,"\n",round(n/total*100,1),"%")),aes(c(1,1),c(1050,450),label=label)) +
+  theme_void() +
+  labs(title="Have you seen any of the 6 films in the Star Wars franchise?")
+
+```
+
+
+
+## Plot the opinions for Hans Solo
+
+```{r}
+
+# hint: there is a geom that will take a categorical variable and count the data points in
+# each category
+# also: feel free to remove NAs
+
+ggplot(starwars_opins %>% filter(!is.na(OpinionSolo))) +
+  geom_bar(aes(OpinionSolo))
+
+```
+
+## Plot the opinions for Jar Jar Binks
+
+```{r}
+
+ggplot(starwars_opins %>% filter(!is.na(OpinionJarJar))) +
+  geom_bar(aes(OpinionJarJar))
+
+```
+
+## Edit the axes of each of these charts to make them comparable
+
+```{r}
+
+# remember, editing an axis usually requires a scale
+
+ggplot(starwars_opins %>% filter(!is.na(OpinionSolo))) +
+  geom_bar(aes(OpinionSolo)) +
+  scale_y_continuous(limits=c(0,610))
+
+ggplot(starwars_opins %>% filter(!is.na(OpinionJarJar))) +
+  geom_bar(aes(OpinionJarJar)) +
+  scale_y_continuous(limits=c(0,610))
+
+```
+
+## Advanced: can you think of another way to standardize the axes?
+
+```{r}
+
+ggplot(starwars_opins %>% select(OpinionSolo,OpinionJarJar) %>% gather(character,opinion) %>% na.omit()) +
+  geom_bar(aes(opinion)) +
+  facet_grid(.~character)
+
+```
+
+## Reorder the opinion levels so they are in a logical order
+
+```{r}
+
+opinion.levels <- c("Unfamiliar (N/A)","Very unfavorably","Somewhat unfavorably",
+                    "Neither favorably nor unfavorably (neutral)",
+                    "Somewhat favorably","Very favorably")
+
+ggplot(starwars_opins %>% select(OpinionSolo,OpinionJarJar) %>% gather(character,opinion) %>% na.omit() %>% mutate(opinion=factor(opinion, opinion.levels))) +
+  geom_bar(aes(opinion)) +
+  facet_grid(.~character)
+
+```
+
+## Flip the axes so the opinion levels are on the y-axis
+
+```{r}
+
+ggplot(starwars_opins %>% select(OpinionSolo,OpinionJarJar) %>% gather(character,opinion) %>% na.omit() %>% mutate(opinion=factor(opinion, opinion.levels))) +
+  geom_bar(aes(opinion)) +
+  facet_grid(.~character) +
+  coord_flip()
+
+```
+
+## Use a different color for each opinion level
+
+```{r}
+
+ggplot(starwars_opins %>% select(OpinionSolo,OpinionJarJar) %>% gather(character,opinion) %>% na.omit() %>% mutate(opinion=factor(opinion, opinion.levels))) +
+  geom_bar(aes(opinion,fill=opinion),show.legend = FALSE) +
+  facet_grid(.~character) +
+  coord_flip()
+
+```
+
+## Customize the color palette
+
+```{r}
+
+# hint: editing colors requires a change of scale
+# can google "R colors" for a list of all named colors
+
+ggplot(starwars_opins %>% select(OpinionSolo,OpinionJarJar) %>% gather(character,opinion) %>% na.omit() %>% mutate(opinion=factor(opinion, opinion.levels))) +
+  geom_bar(aes(opinion,fill=opinion),show.legend = FALSE) +
+  facet_grid(.~character) +
+  coord_flip() +
+  scale_fill_manual(values = c("grey50","firebrick4","firebrick1","grey85","dodgerblue1","dodgerblue4")) +
+  theme_minimal()
+
+```

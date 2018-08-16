@@ -1,0 +1,114 @@
+---
+title: "Star Wars Character Data"
+author: "Angela Zoss"
+date: "8/12/2018"
+output: github_document
+---
+
+## Setup your environment
+
+```{r}
+
+# Load required libraries
+
+library(tidyverse)
+
+```
+
+## Load your data
+
+```{r}
+
+# built-in data
+
+starwars_chars <- starwars
+
+```
+
+## Create a plot to explore the height of Star Wars characters
+
+```{r}
+
+# hint: height is numerical; 
+# look for geoms that do a good job of summarizing numerical variables
+
+
+```
+
+## Compare character heights to weights (masses)
+
+```{r}
+
+# what geom is best for two numerical variables?
+
+
+```
+
+## Add a linear trend line
+
+```{r}
+
+
+```
+
+
+## Add a label to (only) the heaviest character
+
+```{r}
+
+# hint: you can use "data=" in a geom layer to use different data for that layer 
+
+
+```
+
+## Add a label to (only) the shortest character
+
+```{r}
+
+
+```
+
+## Add a facet to the chart to create small multiples for each species
+
+```{r}
+
+# hint: try facet_wrap
+
+
+```
+
+## Plot each character by their age (birth_year)
+
+```{r}
+
+# hint: many characters have NA for birth_year;
+# try removing those characters before plotting
+
+
+```
+
+## Sort the characters by their age
+
+```{r}
+
+# hint: the forcats package (which is included in tidyvers) 
+# has a useful function called fct_reorder that can be used on factors
+
+
+```
+
+## Relabel the axes if they are difficult to read
+
+```{r}
+
+
+
+
+```
+
+## Create another exploratory chart using at least three variables
+
+```{r}
+
+
+```

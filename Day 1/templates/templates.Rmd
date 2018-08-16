@@ -1,0 +1,618 @@
+---
+title: "ggplot2 Templates"
+author: "Angela Zoss"
+date: "2/1/2018"
+output: github_document
+---
+
+```{r setup}
+knitr::opts_chunk$set(error = TRUE)
+```
+
+## Setup your environment
+
+```{r}
+
+# Load required libraries
+
+library(tidyverse)
+
+```
+
+## Load your data
+
+```{r}
+
+# data comes from https://www.kaggle.com/uciml/adult-census-income
+
+# adding a few settings to correct the data types of a couple of the columns
+
+adult <- read_csv("../data/adult.csv", na="?")
+
+```
+
+## Try a few charts
+
+### Bar charts
+
+```{r}
+
+# Bar chart, automatically counting number of observations
+
+ggplot(adult) +
+  geom_bar(aes(sex))
+
+```
+
+```{r}
+
+# Bar chart, using another column for the length
+
+ggplot(adult) +
+  geom_col(aes(x=sex, y=capital.loss))
+
+# or you can use geom_bar and just change the default statistical function ("stat"), 
+# which is normally "count"
+
+ggplot(adult) +
+  geom_bar(aes(sex, capital.loss), stat="identity")
+
+# What does it do when you have multiple records for each category?
+
+adult %>% group_by(sex) %>% summarise(total = sum(capital.loss))
+
+```
+
+
+```{r}
+
+# Bar chart, using another column for length and specifying the summary function
+
+ggplot(adult) +
+  geom_bar(aes(sex, capital.loss), stat="summary", fun.y="mean")
+
+# In this case, geom_col doesn't work
+
+ggplot(adult) +
+  geom_col(aes(sex, capital.loss), stat="summary", fun.y="mean")
+
+```
+
+```{r}
+
+# You can also summarize numerical variables with a bar chart, but consider using histogram or density instead
+
+ggplot(adult) +
+  geom_bar(aes(age))
+
+ggplot(adult) +
+  geom_histogram(aes(age))
+
+ggplot(adult) +
+  geom_histogram(aes(age), binwidth = 1)
+
+ggplot(adult) +
+  geom_density(aes(age))
+
+```
+```{r}
+
+# Adding another category - do you want to stack or dodge or fill?
+
+# By default, a new category fills the bar (position="stack")
+ggplot(adult) +
+  geom_bar(aes(sex, fill=race))
+
+# Change position to "dodge" for side-by-side bars
+ggplot(adult) +
+  geom_bar(aes(sex, fill=race), position="dodge")
+
+# Change position to "fill" for bars scaled up to 100%
+ggplot(adult) +
+  geom_bar(aes(sex, fill=race), position="fill")
+
+```
+
+```{r}
+
+# Pie charts are...  weird.  In ggplot2, you make a pie chart by taking a single stacked bar and changing the coordinate system to coord_polar.
+
+ggplot(adult) +
+  geom_bar(aes(x="", fill=sex))
+
+ggplot(adult) +
+  geom_bar(aes(x="", fill=sex)) +
+  coord_polar("y")
+
+# Can get rid of hole in the middle by specifying width = 1
+
+ggplot(adult) +
+  geom_bar(aes(x="", fill=sex), width=1) +
+  coord_polar("y")
+
+
+
+```
+
+### Scatter plots
+
+```{r}
+
+# Scatter plots can show relationships between numerical variables, but be careful of overplotting (dots stacked on top of each other)
+
+ggplot(adult) +
+  geom_point(aes(age, capital.loss))
+
+ggplot(adult) +
+  geom_bin2d(aes(age, capital.loss))
+
+# Note: if your counts are heavily skewed, you can apply a transformation on the color scale
+
+ggplot(adult) +
+  geom_bin2d(aes(age, capital.loss)) +
+  scale_fill_continuous(trans="log10")
+
+```
+
+### Line charts
+
+```{r}
+
+# Line charts don't include any inherent summary, so individual data points get mapped and connected with a line
+
+ggplot(adult) + 
+  geom_line(aes(x=age, y=capital.loss))
+
+ggplot(adult) + 
+  geom_line(aes(x=age, y=capital.loss)) +
+  geom_point(aes(x=age, y=capital.loss))
+
+# You can add your own function to summarize all of the y values at the same x value
+
+ggplot(adult) + 
+  geom_line(aes(x=age, y=capital.loss), stat="summary", fun.y=mean)
+
+# Alternately, you can use geom_smooth to calculate a variety of summary lines
+
+ggplot(adult) + 
+  geom_smooth(aes(x=age, y=capital.loss))
+
+ggplot(adult) + 
+  geom_smooth(aes(x=age, y=capital.loss), method = "lm")
+
+```
+
+## Design the charts
+
+### Titles
+
+```{r}
+
+# Adding main title and axis labels
+
+ggplot(adult) +
+  geom_bar(aes(sex)) +
+  labs(title="This sample has about twice as many men as women.",
+       x="Sex",
+       y="Number of Respondents")
+
+```
+
+```{r}
+
+# Changing the legend title is a little harder; 
+# you have to modify the "scale" properties for the non-axis variable
+
+ggplot(adult) +
+  geom_bar(aes(sex, fill=race)) +
+  labs(title="This sample has about twice as many men as women.",
+       x="Sex",
+       y="Number of Respondents") +
+  scale_fill_discrete(name="Race/Ethnicity")
+
+
+# The structure is: "scale_" plus whatever aesthetic property you're modifying (e.g., x, fill, size) 
+# plus either a.) the kind of variable it is (e.g., continuous, discrete) or 
+# b.) a special function that will be applied (e.g., log10, gradient)
+
+# For example, you can't modify the name of the fill aesthetic if you treat it like a continuous variable
+
+ggplot(adult) +
+  geom_bar(aes(sex, fill=race)) +
+  labs(title="This sample has about twice as many men as women.",
+       x="Sex",
+       y="Number of Respondents") +
+  scale_fill_continuous(name="Race/Ethnicity")
+
+
+```
+
+### Axes
+
+```{r}
+
+# ggplot2 does a pretty good job guessing what the axes should look like, but you can modify
+# individual properties manually
+
+# Changing axis properties requires adding a "scale" layer for one or both axes, 
+# just like modifying the legend properties
+
+ggplot(adult) +
+  geom_point(aes(age, capital.gain)) +
+  scale_x_continuous(breaks=c(20,30,40,50,60,70,80,90))
+
+# Gridlines often show up for both major and minor breaks.  To turn off gridlines for minor
+# breaks, an easy way is to set the minor breaks to NULL.
+
+ggplot(adult) +
+  geom_point(aes(age, capital.gain)) +
+  scale_x_continuous(breaks=c(20,30,40,50,60,70,80,90), minor_breaks = NULL)
+
+# Can also change how the numbers on the axis are spaces out, without doing any mathematical
+# transformations to the data
+
+ggplot(adult) +
+  geom_point(aes(age, capital.gain)) +
+  scale_x_continuous(breaks=c(20,30,40,50,60,70,80,90), minor_breaks = NULL) +
+  scale_y_log10()
+
+# Note: log scale spreads out small values, but you can't plot the value "0" on a log scale,
+# so we can filter those out first, then do some formatting on the breaks and labels
+
+ggplot(adult %>% filter(capital.gain > 0)) +
+  geom_point(aes(age, capital.gain)) +
+  scale_x_continuous(breaks=c(20,30,40,50,60,70,80,90), minor_breaks = NULL) +
+  scale_y_log10(breaks=c(10,100,1000,10000,100000), 
+                labels=function(x){format(x, scientific = FALSE, big.mark=",")})
+
+```
+
+### Coordinate systems
+
+```{r}
+
+# Coordinate layers help control the output of the chart
+
+# coord_fixed helps normalize the units across the two axes; 
+# ratio = 1 means that each unit on the x axis is the same length as each unit on the y axis
+# the syntax for ratio is y/x
+
+ggplot(adult) +
+  geom_point(aes(age, capital.gain)) +
+  coord_fixed(ratio = 1)
+
+# a 1:1 ratio for this chart is terrible; the y-axis goes from 0 to 100,000, while the
+# x-axis goes from 17 to 90. To have the units look similar, each unit on the x-axis
+# should be about 1,000 of the y-axis units.
+
+ggplot(adult) +
+  geom_point(aes(age, capital.gain)) +
+  coord_fixed(ratio = 1/1000)
+
+# Now the grid on the chart is approximately square
+
+```
+
+```{r}
+
+# Another useful coord layer is coord_flip.  Some charts require certain variables in
+# certain slots.  For example, geom_bar requires the categorical variable in the x
+# position and the numerical variable in the y position
+
+ggplot(adult) +
+  geom_bar(aes(x=sex))
+
+ggplot(adult) +
+  geom_bar(aes(y=sex))
+
+
+# To get the categories on the y-axis, you start with the category on the x-axis and then
+# add the coord_flip
+
+ggplot(adult) +
+  geom_bar(aes(x=sex)) +
+  coord_flip()
+
+```
+
+```{r}
+
+# Scales can change the spacing of numbers on the axis - essentially, changing the grid
+# against which the numbers are plotted
+
+ggplot(adult %>% filter(capital.gain > 0)) +
+  geom_point(aes(age, capital.gain)) +
+  scale_y_log10(breaks=c(10,100,1000,10000,100000), 
+                labels=function(x){format(x, scientific = FALSE, big.mark=",")})
+
+# The coord_trans can also change the grid, but it still uses a cartesian approach to the
+# major breaks
+
+ggplot(adult %>% filter(capital.gain > 0)) +
+  geom_point(aes(age, capital.gain)) +
+  coord_trans(y="log10")
+
+
+```
+
+### Axis/legend labels
+
+```{r}
+
+# As we've already seen, the labels on a numerical axis can be changed by manually setting
+# the breaks in the axis and/or formatting the labels
+
+ggplot(adult) +
+  geom_point(aes(age, capital.gain))
+
+ggplot(adult) +
+  geom_point(aes(age, capital.gain)) +
+  scale_x_continuous(breaks=c(20,30,40,50,60,70,80,90))
+
+# regardless of the type of axis, you can set the labels to whatever you want
+ggplot(adult) +
+  geom_point(aes(age, capital.gain)) +
+  scale_x_continuous(breaks=c(20,30,40,50,60,70,80,90),
+                     labels=c("A","B","C","D","E","F","G","H"))
+
+# the same works for a categorical variable, either on an axis or in a legend
+
+ggplot(adult) +
+  geom_bar(aes(sex, fill=race)) +
+  scale_x_discrete(labels=c("A","B")) +
+  scale_fill_discrete(labels=c("A","B","C","D","E"))
+
+```
+
+```{r}
+
+# The one thing you can't do with scales is change the order of the categories.  For that,
+# you have to turn the variable into a factor and specify the order in the "levels" setting
+# of the factor() function
+
+adult$sex <- factor(adult$sex, levels = c("Male","Female"))
+
+adult$race <- factor(adult$race, levels = c("Other","Amer-Indian-Eskimo","Asian-Pac-Islander","Black","White"))
+
+ggplot(adult) +
+  geom_bar(aes(sex, fill=race))
+
+```
+
+### Data labels
+
+```{r}
+
+# You can label charts with variables from the dataset or other calculated variables within the chart;
+# just like other chart layers, geom_text layers need x and y positions, and they also require "label"
+
+ggplot(adult) +
+  geom_bar(aes(sex)) +
+  geom_text(aes(sex, label=sex), stat="count")
+
+# Note: geom_bar has stat="count" embedded within it.  If we don't add that to the geom_text
+# layer, the text layer will try to process each data point individually and will ask
+# for a y value
+
+# Instead of using the exact y position calculated by the stat_count function, you can
+# nudge the label up or down.  Remember, this "nudge" value needs to be in the same units
+# as the axis.
+
+ggplot(adult) +
+  geom_bar(aes(sex)) +
+  geom_text(aes(sex, label=..count..), stat="count", nudge_y = 1000)
+
+# geom_label is like geom_text, but it formats the label differently
+ggplot(adult) +
+  geom_bar(aes(sex)) +
+  geom_label(aes(sex, label=..count..), stat="count", nudge_y = 1000)
+
+```
+
+### Themes
+
+```{r}
+
+# Themes control the overall look and feel of the graph.  Several themes are built in to ggplot2.
+
+ggplot(adult) +
+  geom_bar(aes(sex)) +
+  theme_gray() +
+  ggtitle("Gray")
+
+ggplot(adult) +
+  geom_bar(aes(sex)) +
+  theme_classic() +
+  ggtitle("Classic")
+
+ggplot(adult) +
+  geom_bar(aes(sex)) +
+  theme_bw() +
+  ggtitle("Black and white")
+
+ggplot(adult) +
+  geom_bar(aes(sex)) +
+  theme_dark() +
+  ggtitle("Dark")
+
+ggplot(adult) +
+  geom_bar(aes(sex)) +
+  theme_light() +
+  ggtitle("Light")
+
+ggplot(adult) +
+  geom_bar(aes(sex)) +
+  theme_minimal() +
+  ggtitle("Minimal")
+
+ggplot(adult) +
+  geom_bar(aes(sex)) +
+  theme_void() +
+  ggtitle("Void")
+
+```
+
+```{r}
+
+# If the preset themes are insufficient, individual properties can be redefined with theme()
+
+ggplot(adult) +
+  geom_bar(aes(sex)) +
+  theme_bw() +
+  theme(panel.background = element_rect(fill="pink"))
+
+# you can also use themes to remove grid lines without removing tick marks
+
+ggplot(adult) +
+  geom_bar(aes(sex)) +
+  theme(panel.grid.major.y = element_blank())
+
+```
+
+### Annotation
+
+```{r}
+
+# Earlier, we used geom_text for data labels.  We can also use it for general notes on the graph.
+
+ggplot(adult) +
+  geom_point(aes(age, capital.gain)) +
+  geom_text(x=25,y=75000,label="A note goes here.")
+
+
+# This is suboptimal, though, because a text object that doesn't relate to the data will process
+# slowly.  In this case, the chart is actually drawing a separate text object for every data point
+# in the dataframe.
+
+# Instead, use annotate for unrelated text objects
+# Note: you have to specify a "geom" for each annotation - text, rect, segment, pointrange
+
+ggplot(adult) +
+  geom_point(aes(age, capital.gain)) +
+  annotate("text",x=25,y=75000,label="A note goes here.")
+
+ggplot(adult) +
+  geom_point(aes(age, capital.gain)) +
+  annotate("rect",xmin=12, xmax=95, ymin=25000, ymax=50000, alpha=.2)
+
+```
+
+### Colors
+
+```{r}
+
+# Most charts use x and y axes to display variables, but you can usually also add another variable to
+# the chart by mapping it to color. 
+
+# Note - some geoms use the "color" aesthetic (e.g., geom_point), while others use "fill" (e.g., geom_bar)
+
+ggplot(adult) +
+  geom_point(aes(age, capital.gain, fill=race))
+
+ggplot(adult) +
+  geom_point(aes(age, capital.gain, color=race))
+
+ggplot(adult) +
+  geom_bar(aes(sex, fill=race))
+
+ggplot(adult) +
+  geom_bar(aes(sex, color=race))
+
+```
+
+
+```{r}
+# You can change the colors of the chart elements using pre-defined palettes or by manually
+# selecting colors
+
+# You can apply pre-defined palettes to a fill or color aesthetic using a scale.
+# A useful pre-defined palette is the grey palette, which uses shades of grey to keep a chart
+# black and white
+
+ggplot(adult) +
+  geom_bar(aes(sex, fill=race)) +
+  scale_fill_grey()
+
+# The grey palette picks shades of grey between the start and end value, which by default are 0.2 and 0.8.
+# The values can be reversed or made larger or smaller.
+
+ggplot(adult) +
+  geom_bar(aes(sex, fill=race)) +
+  scale_fill_grey(start=0.8, end=0.2)
+
+# Other default palettes include palettes from colorbrewer2.org
+
+ggplot(adult) +
+  geom_bar(aes(sex, fill=race)) +
+  scale_fill_brewer(palette="Dark2")
+
+ggplot(adult) +
+  geom_bar(aes(sex, fill=race)) +
+  scale_fill_brewer(palette="Dark2", direction=-1)
+
+```
+
+```{r}
+
+# Specifying colors manually is as simple as giving a vector of colors to a "manual" scale
+
+ggplot(adult) +
+  geom_bar(aes(sex, fill=race)) +
+  scale_fill_manual(values=c("cadetblue3","lightpink2","lightskyblue3","lightsalmon2","olivedrab3"))
+
+# R knows names for some colors, but others will need to be specified with codes
+
+ggplot(adult) +
+  geom_bar(aes(sex, fill=race)) +
+  scale_fill_manual(values=c("#ffffd4","#fed98e","#fe9929","#d95f0e","#993404"))
+
+# For continuous numbers, you can also use scale_color_gradient or scale_fill_gradient
+
+ggplot(adult) +
+  geom_point(aes(age, capital.gain, color=age))
+
+ggplot(adult) +
+  geom_point(aes(age, capital.gain, color=age)) +
+  scale_color_gradient(low="gray80",high="gray20")
+
+# Color Brewer palettes can be used with continuous numbers, but you use "distiller"
+# instead of "brewer"
+
+ggplot(adult) +
+  geom_point(aes(age, capital.gain, color=age)) +
+  scale_color_distiller(palette="Greens")
+
+```
+
+### Facets
+
+```{r}
+
+# Facets are some of the most useful layers when you have a large amount of data. Facets create
+# "small multiples", or a series of charts that each has the same specification but that visualizes
+# a different subset of the data.  You can think of it as splitting the data into chunks and then
+# visualizing each chunk the same way.
+
+# facet_wrap creates a series of charts split by one category and then wraps the charts into
+# multiple rows as needed
+
+ggplot(adult) +
+  geom_point(aes(age, hours.per.week)) +
+  geom_smooth(aes(age, hours.per.week)) +
+  facet_wrap(~education)
+
+# facet_grid allows you to split the data by one category in the y direction and another in the x
+# syntax: facet_grid(y~x)
+# Note: you can use a "." to ignore one direction
+
+ggplot(adult) +
+  geom_point(aes(age, hours.per.week)) +
+  geom_smooth(aes(age, hours.per.week)) +
+  facet_grid(.~race)
+
+ggplot(adult) +
+  geom_point(aes(age, hours.per.week)) +
+  geom_smooth(aes(age, hours.per.week)) +
+  facet_grid(sex~race)
+
+```

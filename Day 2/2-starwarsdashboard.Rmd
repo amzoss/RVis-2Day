@@ -1,0 +1,46 @@
+---
+title: "Simple dashboards with flexdashboard"
+author: "Angela Zoss"
+date: "8/14/2018"
+output: 
+  flexdashboard::flex_dashboard:
+    orientation: columns
+    vertical_layout: fill
+---
+
+```{r setup, include=FALSE}
+library(tidyverse)
+library(flexdashboard)
+library(plotly)
+```
+
+```{r}
+
+# Loading data before anything renders
+
+starwars_chars <- starwars
+
+new_names <- read_csv('data/StarWarsNames.csv') %>% select(NewNames)
+  
+starwars_opins <- read_csv('data/StarWars.csv', skip=2, col_names=FALSE) %>% setNames(unlist(new_names))
+
+
+```
+
+```{r}
+
+# flexdashboard documentation:
+# https://rmarkdown.rstudio.com/flexdashboard/using.html
+
+```
+
+Column {data-width=650}
+-----------------------------------------------------------------------
+
+add an R code block with the plotly version of this chart, including a heading (###)
+
+Column {data-width=350}
+-----------------------------------------------------------------------
+
+add two charts and headings
+

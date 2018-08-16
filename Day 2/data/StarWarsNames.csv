@@ -1,0 +1,39 @@
+OriginalColumn1,OriginalColumn2,NewNames
+RespondentID,,RespondentID
+Have you seen any of the 6 films in the Star Wars franchise?,Response,SeenAnyYN
+Do you consider yourself to be a fan of the Star Wars film franchise?,Response,IsFanYN
+Which of the following Star Wars films have you seen? Please select all that apply.,Star Wars: Episode I  The Phantom Menace,SeenPhantomMenace
+,Star Wars: Episode II  Attack of the Clones,SeenAttackClones
+,Star Wars: Episode III  Revenge of the Sith,SeenRevengeSith
+,Star Wars: Episode IV  A New Hope,SeenNewHope
+,Star Wars: Episode V The Empire Strikes Back,SeenEmpire
+,Star Wars: Episode VI Return of the Jedi,SeenReturnJedi
+Please rank the Star Wars films in order of preference with 1 being your favorite film in the franchise and 6 being your least favorite film.,Star Wars: Episode I  The Phantom Menace,RankPhantomMenace
+,Star Wars: Episode II  Attack of the Clones,RankAttackClones
+,Star Wars: Episode III  Revenge of the Sith,RankRevengeSith
+,Star Wars: Episode IV  A New Hope,RankNewHope
+,Star Wars: Episode V The Empire Strikes Back,RankEmpire
+,Star Wars: Episode VI Return of the Jedi,RankReturnJedi
+"Please state whether you view the following characters favorably, unfavorably, or are unfamiliar with him/her.",Han Solo,OpinionSolo
+,Luke Skywalker,OpinionLuke
+,Princess Leia Organa,OpinionLeia
+,Anakin Skywalker,OpinionAnakin
+,Obi Wan Kenobi,OpinionObiWan
+,Emperor Palpatine,OpinionPalpatine
+,Darth Vader,OpinionVader
+,Lando Calrissian,OpinionLando
+,Boba Fett,OpinionBobaFett
+,C-3P0,OpinionC3P0
+,R2 D2,OpinionR2D2
+,Jar Jar Binks,OpinionJarJar
+,Padme Amidala,OpinionPadme
+,Yoda,OpinionYoda
+Which character shot first?,Response,WhoShotFirst
+Are you familiar with the Expanded Universe?,Response,FamiliarExpandedUniverse
+Do you consider yourself to be a fan of the Expanded Universe?åÊ,Response,FanExpandedUniverse
+Do you consider yourself to be a fan of the Star Trek franchise?,Response,FanStarTrek
+Gender,Response,Gender
+Age,Response,Age
+Household Income,Response,Income
+Education,Response,Education
+Location (Census Region),Response,Location

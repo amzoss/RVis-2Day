@@ -1,0 +1,55 @@
+---
+title: "Using Shiny with RMarkdown"
+author: "Angela Zoss"
+date: "8/14/2018"
+output: html_document
+runtime: shiny
+---
+
+```{r setup, echo=FALSE, message = FALSE, warning = FALSE}
+knitr::opts_chunk$set(message = FALSE, warning = FALSE)
+library(tidyverse)
+library(shiny)
+```
+
+
+```{r, echo=FALSE}
+
+# data comes from https://int.nyt.com/newsgraphics/2017/2017-07-17-got-matrix/mean.json
+# data based on ratings using tool at https://www.nytimes.com/interactive/2017/08/09/upshot/game-of-thrones-chart.html
+
+got <- read_csv("data/got_ratings.csv")
+
+```
+
+## Game of Thrones New York Times
+
+```{r, echo=FALSE}
+
+# check out options with ?selectInput
+selectInput(inputId = "gotcolor", 
+            label = "Select Variable for Color:", 
+            choices = c("gender","loyalty"))
+
+# check out options with ?sliderInput
+sliderInput(inputId = "labelsize", 
+            label = "Change Label Font Size:", 
+            min=1,
+            max=10,
+            value=4, 
+            step=1)
+
+renderPlot({ggplot(got, aes_string(x="moral",y="physical", color=input$gotcolor)) + 
+  scale_y_reverse(lim=c(1,0)) +
+  scale_x_continuous(limits=c(0,1)) +
+  geom_hline(yintercept=.5) +
+  geom_vline(xintercept=.5)+ 
+  geom_point(aes())  + 
+  geom_text(aes(label=label), nudge_y = -.025, show.legend = FALSE, size=as.numeric(input$labelsize)) +
+  theme_bw() +
+  annotate(geom = "text", x=c(.5,.5,0,1), y=c(1,0,.48,.52), label=c("Ugly","Beautiful","Evil","Good"))}, width=10*96, height=7*96, res=96)
+
+
+```
+
+

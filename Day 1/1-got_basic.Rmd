@@ -1,0 +1,82 @@
+---
+title: "Game of Thromes Data Exploration"
+author: "Angela Zoss"
+date: "8/12/2018"
+output: github_document
+---
+
+## Setup your environment
+
+```{r}
+
+# Load required libraries
+
+library(tidyverse)
+
+```
+
+## Load your data
+
+```{r}
+
+# data comes from https://int.nyt.com/newsgraphics/2017/2017-07-17-got-matrix/mean.json
+# data based on ratings using tool at https://www.nytimes.com/interactive/2017/08/09/upshot/game-of-thrones-chart.html
+
+got <- read_csv("data/got_ratings.csv")
+
+```
+
+## Create a basic plot
+
+```{r}
+
+# a plot should include:
+# - a call to ggplot()
+# - a dataset
+# - a call to aes(), including the main x and y variables
+# - a geom layer that specifies the type of chart or shape
+
+
+```
+
+## Set the size of all points to 5
+
+```{r}
+
+# hint: check ?geom_point to see the different aesthetics options available, but think carefully
+# about where the new option should go in the function
+
+
+```
+
+## Set the color of all points to "firebrick"
+
+```{r}
+
+
+```
+
+## Set the alpha (transparency) of all points to .75
+
+```{r}
+
+
+```
+
+## Add a main title
+
+```{r}
+
+# check https://ggplot2.tidyverse.org/reference/ for likely layers
+
+
+```
+
+## Advanced: add a trend line, preferably a simple linear trend line
+
+```{r}
+
+# hint: look at the options for geom_smooth
+
+
+```
