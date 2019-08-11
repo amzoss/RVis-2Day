@@ -1,0 +1,37 @@
+---
+title: "Gapminder Average"
+author: "Angela Zoss"
+date: "9/7/2018"
+output: html_document
+---
+
+## Setup your environment
+
+```{r}
+
+# Load required libraries
+
+library(tidyverse)
+
+```
+
+## Load your data
+
+```{r}
+
+# data comes from http://www.gapminder.org/
+
+gap <- read_csv("data/gapminder_avg.csv")
+names(gap) <- c("country","gdp","life.exp","pop","region","color")
+
+```
+
+## Try to reproduce this graphic
+
+![](images/gapminder-goal.png)
+
+```{r}
+
+
+
+```

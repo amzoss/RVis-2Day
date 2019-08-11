@@ -1,0 +1,87 @@
+---
+title: "Star Wars Character Data"
+author: "Angela Zoss"
+date: "3/20/2019"
+output: html_document
+---
+
+## Setup your environment
+
+```{r}
+
+# Load required libraries
+
+library(tidyverse)
+
+```
+
+## Load your data
+
+```{r}
+
+# built-in data
+
+starwars_chars <- starwars
+
+```
+
+## Create a plot to explore the height of Star Wars characters
+
+```{r}
+
+# hint: height is numerical; 
+# look for geoms that do a good job of summarizing numerical variables
+
+
+
+```
+
+## Add a facet to the chart to create small multiples for each gender
+
+```{r}
+
+# hint: try facet_wrap
+
+
+
+```
+
+## Create a new plot to compare character heights to weights (masses)
+
+```{r}
+
+# what geom is best for two numerical variables?
+
+
+
+```
+
+## Add a linear trend line
+
+```{r}
+
+# hint: look at the options for geom_smooth
+
+
+
+```
+
+
+## Add a label to (only) the heaviest character
+
+```{r}
+
+# hint: you can use "data=" in a geom layer to use different data for that layer 
+
+
+
+```
+
+## Add a label to (only) the shortest character
+
+```{r}
+
+
+
+```
+

@@ -1,0 +1,117 @@
+---
+title: "Star Wars Opinion Data"
+author: "Angela Zoss"
+date: "2/18/19"
+output: html_document
+---
+
+## Setup your environment
+
+```{r}
+
+# Load required libraries
+
+library(tidyverse)
+
+```
+
+## Load your data
+
+```{r}
+
+# data from https://fivethirtyeight.com/features/americas-favorite-star-wars-movies-and-least-favorite-characters/
+# note: CSV has two rows of headers, so I have manually created a list of headers 
+# and am adding that after loading just the data rows
+
+# also extracting just the opinion columns and reshaping them to long data format
+
+new_names <- read_csv('data/StarWarsNames.csv') %>% dplyr::select(NewNames)
+
+starwars_opins <- read_csv('data/StarWars.csv', skip=2, col_names=FALSE) %>% setNames(unlist(new_names))
+  
+starwars_opins_tidy <- starwars_opins %>% dplyr::select(RespondentID, starts_with("Opinion")) %>% gather("Character","Opinion",-RespondentID) %>% mutate(Character=sub("Opinion","",Character)) %>% na.omit()
+
+# finally creating three separate datasets - Han Solo, Jar Jar, and combined
+
+solo <- starwars_opins_tidy %>% dplyr::filter(Character=="Solo")
+jarjar <- starwars_opins_tidy %>% dplyr::filter(Character == "JarJar")
+combined <- bind_rows(solo, jarjar)
+
+
+```
+
+## Plot the opinions for Han Solo
+
+```{r}
+
+# hint: there is a geom that will take a categorical variable and count the data points in
+# each category
+
+
+```
+
+## Plot the opinions for Jar Jar Binks
+
+```{r}
+
+
+```
+
+## Edit the axes of each of these charts to make them comparable
+
+```{r}
+
+# remember, editing an axis usually requires a scale
+
+
+```
+
+## Advanced: can you think of another way to standardize the axes?
+
+```{r}
+
+
+```
+
+## Reorder the opinion levels so they are in a logical order
+
+```{r}
+
+opinion.levels <- c("Unfamiliar (N/A)","Very unfavorably","Somewhat unfavorably",
+                    "Neither favorably nor unfavorably (neutral)",
+                    "Somewhat favorably","Very favorably")
+
+combined.f <- combined %>% 
+         mutate(Opinion=factor(Opinion, opinion.levels))
+
+
+```
+
+## Flip the axes so the opinion levels are on the y-axis
+
+```{r}
+
+
+```
+
+## Use a different color for each opinion level
+
+```{r}
+
+
+```
+
+## Customize the color palette
+
+```{r}
+
+# hint: editing colors requires a change of scale
+# can google "R colors" for a list of all named colors
+
+opinion.colors <- c("grey50","firebrick4","firebrick1","grey85","dodgerblue1","dodgerblue4")
+
+
+
+```
+
+

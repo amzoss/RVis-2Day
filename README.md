@@ -1,6 +1,6 @@
 # Visualization for Data Science in R
 
-This repository contains files for a two-day course on Visualization for Data Science in R, offered during [Data Matters](http://datamatters.org) 2018.  The course description and activities are listed below.
+This repository contains files for a two-day course on Visualization for Data Science in R, offered during [Data Matters](http://datamatters.org) 2019.  The course description and activities are listed below.
 
 ## Description
 
@@ -8,20 +8,20 @@ This course is designed for two audiences: experienced visualization designers l
 
 ### Why Take This Course?
 
-Data science skills are increasingly important for research and industry projects. With complex data science projects, however, come complex needs for understanding and communicating analysis processes and results. The rise of data science has accompanied a comparable rise in business intelligence and the demand for visualizations and dashboards that can explain models, summarize results, assist with decision making, and even predict outcomes. Ultimately, an analyst's data science toolbox is incomplete without visualization skills.
+Data science skills are increasingly important for research and industry projects. With complex data science projects, however, come complex needs for understanding and communicating analysis processes and results. Ultimately, an analyst's data science toolbox is incomplete without visualization skills. Incorporating effective visualizations directly into the analysis tool you are using can facilitate quick data exploration, streamline your research process, and improve the reproducibility of your research.
 
 ### What Will Participants Learn?
 
-The course will take a project-based approach to learning best practices for visualization for data science. Participants will be guided through 2-3 sample analysis and visualization projects that will highlight different types of visualization, different features of R and its visualization libraries, and different challenges that arise when trying to apply an open data science philosophy to visualization.
+The course will take a project-based approach to learning best practices for visualization for data science. Participants will be guided through several sample analysis and visualization projects that will highlight different types of visualization, different features of R and its visualization libraries, and different challenges that arise when trying to apply an open data science philosophy to visualization. In short, students will learn the following:
 
-* Introduction to visualization in R
-* Visualization for data exploration
-* Visualization for communication
-* Interactive visualizations with Shiny
+* introduction to visualization in R
+* basic syntax for ggplot2
+* applying common graphic design principles to ggplot2 visualizations
+* using Shiny to create interactive websites that include R data and visualizations
 
 ### Prerequisites and Requirements
 
-This course assumes basic familiarity with R -- e.g., R syntax, data structures, development environments. Most visualizations will be created with ggplot2 and other tidyverse libraries, but prior experience with those libraries is not required. In order to participate in class exercises, participants should bring a laptop where current versions of R and RStudio have been installed and where the participant has sufficient privileges to install new R packages on demand.
+This course assumes basic familiarity with R -- e.g., R syntax, data structures, development environments. Visualizations will primarily be created with ggplot2 and other tidyverse libraries, but prior experience with those libraries is not required. In order to fully participate in class exercises, participants should install the following on their laptops: current versions of R, RStudio, and the following packages: tidyverse, plotly, flexdashboard, shiny, and knitr (optional).
 
 ## Resources
 

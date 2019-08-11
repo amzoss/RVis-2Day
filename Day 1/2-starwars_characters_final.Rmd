@@ -1,0 +1,107 @@
+---
+title: "Star Wars Character Data"
+author: "Angela Zoss"
+date: "3/20/2019"
+output: html_document
+---
+
+## Setup your environment
+
+```{r}
+
+# Load required libraries
+
+library(tidyverse)
+
+```
+
+## Load your data
+
+```{r}
+
+# built-in data
+
+starwars_chars <- starwars
+
+```
+
+## Create a plot to explore the height of Star Wars characters
+
+```{r}
+
+# hint: height is numerical; 
+# look for geoms that do a good job of summarizing numerical variables
+
+ggplot(starwars_chars) +
+  geom_histogram(aes(height))
+
+```
+
+## Add a facet to the chart to create small multiples for each gender
+
+```{r}
+
+# hint: try facet_wrap
+
+ggplot(starwars_chars) +
+  geom_histogram(aes(height)) + 
+  facet_wrap(~gender)
+
+```
+
+## Create a new plot to compare character heights to weights (masses)
+
+```{r}
+
+# what geom is best for two numerical variables?
+
+ggplot(starwars_chars, aes(height,mass)) +
+  geom_point()
+
+```
+
+## Add a linear trend line
+
+```{r}
+
+# hint: look at the options for geom_smooth
+
+ggplot(starwars_chars, aes(height,mass)) +
+  geom_point() +
+  geom_smooth(method = "lm", se=FALSE)
+
+```
+
+
+## Add a label to (only) the heaviest character
+
+```{r}
+
+# hint: you can use "data=" in a geom layer to use different data for that layer 
+
+ggplot(starwars_chars, aes(height,mass)) +
+  geom_point() +
+  geom_smooth(method = "lm", se=FALSE) + 
+  geom_text(data=starwars_chars %>% dplyr::filter(mass > 1000), aes(label=name), nudge_y = -50)
+
+```
+
+## Add a label to (only) the shortest character
+
+```{r}
+
+ggplot(starwars_chars, aes(height,mass)) +
+  geom_point() +
+  geom_smooth(method = "lm", se=FALSE) + 
+  geom_text(data=starwars_chars %>% dplyr::filter(mass > 1000), aes(label=name), nudge_y = -50) + 
+  geom_text(data=starwars_chars %>% dplyr::filter(height < 75), aes(label=name), nudge_y = 50)
+
+# or
+ggplot(starwars_chars, aes(height,mass)) +
+  geom_point() +
+  geom_smooth(method = "lm", se=FALSE) + 
+  geom_text(data=starwars_chars %>% dplyr::filter(mass == max(mass, na.rm=T) | height == min(height, na.rm=T)), aes(label=name), nudge_y = 50)
+
+
+```
+
