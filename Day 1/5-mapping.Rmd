@@ -19,20 +19,50 @@ library(maps)
 #install.packages("mapproj")
 library(mapproj)
 
+#install.packages("sf")
+library(sf)
+
 ```
+## Using sf
+
+```{r}
+
+# example from https://www.r-spatial.org/book/
+
+# load NC data included in sf package, then transform to appropriate projection
+# (North Carolina State Plane, with EPSG code 32119)
+
+nc <- system.file("gpkg/nc.gpkg", package="sf") %>% read_sf() %>% st_transform(32119)
+
+```
+
+```{r}
+
+ggplot(nc) +
+  geom_sf(aes(fill=BIR74)) +
+    scale_fill_gradientn(colors = sf.colors())
+
+```
+
 
 ## California counties, random data
 
 ```{r}
 
 # load in the data for each county in California; 
-# this function comes from the "maps" package, which gets loaded automatically
+# this function comes from the "maps" package
+
+# ?map_data for more information about how to get basic polygons
 
 county_map <- map_data("county","california")
 
+# add a new column providing a random value for each county
+
 county_map <- county_map %>% group_by(subregion) %>% mutate(rand = runif(1))
 
-# ?map_data for more information about how to get basic polygons
+# With polygon data (data where you have a series of lat/lon points defining a polygon),
+# you can use geom_polygon() and coord_map(). Make sure to assign the id of each polygon to 
+# "group" to have each polygon appear as separate shapes.
 
 ggplot(county_map) + 
   geom_polygon(aes(x = long,
@@ -103,7 +133,8 @@ mp
 ```{r}
 
 elnino <- read_csv("data/elnino.csv", na=c(".",NA), 
-                   col_types = cols(Date = col_date(format="%y%m%d"))) %>% 
+                   col_types = cols(Date = col_date(format="%y%m%d"),
+                                    Humidity = col_double())) %>% 
   type_convert()
 
 elnino$Longitude <- ifelse(elnino$Longitude < 0, 360+elnino$Longitude,elnino$Longitude)
@@ -135,9 +166,40 @@ mp <- ggplot()
 mp <- mp + map_countries 
 mp
 
+# add coord_map to show polygons in Mercator projection
+mp <- mp + coord_map()
+mp
+
+# try alternative data overlays
 mp + map_buoys
 mp + map_bin2d
 
 
 ```
 
+```{r}
+
+# example from ggplot2 cheatsheet
+
+# create a small data frame of state name and murder rate
+data <- data.frame(murder = USArrests$Murder, state = tolower(rownames(USArrests)))
+
+# grab state polygons from map_data
+map <- map_data("state")
+
+# In this example, still getting polygon data from map_data, but the numerical
+# data that is used for fill is not included inside the polygon data.
+# The fill is mapped from the USArrests dataset, but then the polygon
+# data (from "map") is passed to the geom_map layer via the map attribute.
+
+# The expand_limits command seems to be necessary because the plot doesn't
+# have access to lat and long as the y and x variables in the normal way.
+
+
+ggplot(data, aes(fill = murder)) + 
+  geom_map(aes(map_id = state), map = map) + 
+  expand_limits(x = map$long, y = map$lat) +
+  coord_map(projection = "azequalarea")
+
+
+```

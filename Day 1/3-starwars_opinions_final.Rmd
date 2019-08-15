@@ -1,7 +1,7 @@
 ---
 title: "Star Wars Opinion Data"
 author: "Angela Zoss"
-date: "3/20/19"
+date: "8/14/19"
 output: html_document
 ---
 
@@ -82,7 +82,7 @@ ggplot(jarjar) +
 
 ggplot(combined) +
   geom_bar(aes(Opinion)) +
-  facet_wrap(~Character)
+  facet_wrap(vars(Character))
 
 ```
 
@@ -99,7 +99,7 @@ combined.f <- combined %>%
 
 ggplot(combined.f) +
   geom_bar(aes(Opinion)) +
-  facet_wrap(~Character)
+  facet_wrap(vars(Character))
 
 ```
 
@@ -109,7 +109,7 @@ ggplot(combined.f) +
 
 ggplot(combined.f) +
   geom_bar(aes(Opinion)) +
-  facet_wrap(~Character) +
+  facet_wrap(vars(Character)) +
   coord_flip()
 
 ```
@@ -120,7 +120,7 @@ ggplot(combined.f) +
 
 ggplot(combined.f) +
   geom_bar(aes(Opinion, fill=Opinion), show.legend = FALSE) +
-  facet_wrap(~Character) +
+  facet_wrap(vars(Character)) +
   coord_flip()
 
 ```
@@ -136,7 +136,7 @@ opinion.colors <- c("grey50","firebrick4","firebrick1","grey85","dodgerblue1","d
 
 ggplot(combined.f) +
   geom_bar(aes(Opinion, fill=Opinion), show.legend = FALSE) +
-  facet_wrap(~Character) +
+  facet_wrap(vars(Character)) +
   coord_flip() +
   scale_fill_manual(values = opinion.colors) +
   theme_minimal()

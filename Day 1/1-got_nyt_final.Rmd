@@ -1,7 +1,7 @@
 ---
 title: "Game of Thromes Character Ratings"
 author: "Angela Zoss"
-date: "3/19/2019"
+date: "8/14/2019"
 output: html_document
 ---
 
@@ -125,6 +125,6 @@ ggplot(got, aes(x=moral,y=physical, color=gender)) +
 ggplot(got, aes(x=moral,y=physical, color=gender)) + 
   geom_point(alpha=.75)  + 
   geom_text(aes(label=label), nudge_y = -.015, show.legend = FALSE) +
-  facet_wrap(~loyalty)
+  facet_wrap(vars(loyalty))
 
 ```

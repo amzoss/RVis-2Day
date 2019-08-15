@@ -1,7 +1,7 @@
 ---
 title: "Star Wars Character Data"
 author: "Angela Zoss"
-date: "3/20/2019"
+date: "8/14/2019"
 output: html_document
 ---
 
@@ -45,7 +45,7 @@ ggplot(starwars_chars) +
 
 ggplot(starwars_chars) +
   geom_histogram(aes(height)) + 
-  facet_wrap(~gender)
+  facet_wrap(vars(gender))
 
 ```
 
