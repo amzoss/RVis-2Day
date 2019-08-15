@@ -24,6 +24,17 @@ new_names <- read_csv('data/StarWarsNames.csv') %>% select(NewNames)
   
 starwars_opins <- read_csv('data/StarWars.csv', skip=2, col_names=FALSE) %>% setNames(unlist(new_names))
 
+starwars_opins_tidy <- starwars_opins %>% dplyr::select(RespondentID, starts_with("Opinion")) %>% gather("Character","Opinion",-RespondentID) %>% mutate(Character=sub("Opinion","",Character)) %>% na.omit()
+
+combined <- starwars_opins_tidy %>% dplyr::filter(Character %in% c("Solo", "JarJar"))
+
+opinion.levels <- c("Unfamiliar (N/A)","Very unfavorably","Somewhat unfavorably",
+                    "Neither favorably nor unfavorably (neutral)",
+                    "Somewhat favorably","Very favorably")
+
+combined.f <- combined %>% 
+         mutate(Opinion=factor(Opinion, opinion.levels))
+
 got <- read_csv("data/got_ratings.csv")
 
 gap <- read_csv("data/gapminder_avg.csv")
@@ -45,7 +56,8 @@ names(gap) <- make.names(names(gap), unique=TRUE)
 # instructions:
 # 1. add a new page for Game of Thrones
 #     a. create one column with a tabset -- see documentation
-#     b. in that column, add the two GoT plots, each with a normal heading (###)
+#     b. in that column, add two versions of the GoT plot (ggplotly, plot_ly), 
+#        each with a normal heading (###)
 # 2. add a page for Gapminder and include the Gapminder plot
 
 
@@ -57,20 +69,6 @@ Star Wars
 Column {data-width=650}
 -----------------------------------------------------------------------
 
-### Star Wars characters by birth year
-
-```{r}
-
-plot_ly(starwars_chars %>% filter(!is.na(birth_year))) %>%
-  add_markers(x = ~birth_year, y = ~fct_reorder(as_factor(name),birth_year)) %>%
-  layout(yaxis = list(title="name"),
-         xaxis = list(title="age"))
-
-
-```
-
-Column {data-width=350}
------------------------------------------------------------------------
 
 ### Star Wars characters by mass and height
 
@@ -80,17 +78,58 @@ plot_ly(data = starwars_chars %>% dplyr::select(name, mass, height) %>% na.omit(
         x = ~height) %>%
   add_markers(y = ~mass, showlegend = FALSE) %>%
   add_lines(y = ~fitted(lm(mass~height)), showlegend = FALSE) %>%
-  add_text(data = starwars_chars %>% filter(!is.na(mass)) %>% filter(mass == max(mass) | height == min(height)), x = ~height, y = ~mass, text = ~name, textposition="top center")
+  add_text(data = starwars_chars %>% dplyr::filter(mass == max(mass, na.rm=T) | height == min(height, na.rm=T)), x = ~height, y = ~mass, text = ~name, textposition="top center")
 
 ```
 
-### Have you seen any of the 6 films in the Star Wars franchise?
+Column {data-width=350}
+-----------------------------------------------------------------------
+
+### Height distribution of Star Wars characters
 
 ```{r}
 
-plot_ly(starwars_opins %>% count(SeenAnyYN)) %>%
-  add_pie(labels = ~SeenAnyYN, values = ~n, textinfo="label+percent", showlegend=F)
+plot_ly(data = starwars_chars, x = ~height, type = "histogram")
 
 ```
+
+### How do opinions of Han Solo compare to opinions of Jar Jar Binks?
+
+```{r}
+
+han <- plot_ly(combined.f %>% dplyr::filter(Character == "Solo") %>% drop_na(Opinion) %>% count(Opinion)) %>%
+  add_bars(x = ~n, y = ~Opinion, orientation = 'h', color = ~Opinion, showlegend = FALSE) %>%
+  layout( xaxis = list(range = c(0, 620)),
+          annotations = list(
+  text = "Han Solo",
+  xref = "paper",
+  yref = "paper",
+  yanchor = "bottom",
+  xanchor = "center",
+  align = "center",
+  x = 0.5,
+  y = 1,
+  showarrow = FALSE
+))
+
+jarjar <- plot_ly(combined.f %>% dplyr::filter(Character == "JarJar") %>% drop_na(Opinion) %>% count(Opinion)) %>%
+  add_bars(x = ~n, y = ~Opinion, orientation = 'h', color = ~Opinion, showlegend = FALSE) %>%
+  layout( xaxis = list(range = c(0, 620)),
+          annotations = list(
+  text = "Jar Jar Binks",
+  xref = "paper",
+  yref = "paper",
+  yanchor = "bottom",
+  xanchor = "center",
+  align = "center",
+  x = 0.5,
+  y = 1,
+  showarrow = FALSE
+))
+
+subplot(han, jarjar, shareY = T)
+
+```
+
 
 

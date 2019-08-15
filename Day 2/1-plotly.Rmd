@@ -1,7 +1,7 @@
 ---
 title: "Interactive charts with plotly"
 author: "Angela Zoss"
-date: "8/14/2018"
+date: "9/14/2019"
 output: html_document
 ---
 
@@ -19,21 +19,30 @@ knitr::opts_chunk$set(message = FALSE, warning = FALSE)
 library(tidyverse)
 library(plotly)
 
+#install.packages("maps")
+library(maps)
+
+#install.packages("mapproj")
+library(mapproj)
+
+#install.packages("sf")
+library(sf)
+
+
 ```
 
 ## Game of Thrones Data Exploration
 
 ```{r}
 
+# data comes from https://int.nyt.com/newsgraphics/2017/2017-07-17-got-matrix/mean.json
+# data based on ratings using tool at https://www.nytimes.com/interactive/2017/08/09/upshot/game-of-thrones-chart.html
+
 got <- read_csv("data/got_ratings.csv")
 
-# start with previous static chart
-# saving chart as an object so we can use it later
-
-got_expl <- ggplot(got, aes(x=moral,y=physical)) + 
-  geom_point(size=5, color="firebrick", alpha=.75) +
-  labs(title="The moral and physical ratings of characters from Game of Thrones") +
-  geom_smooth(method="lm", se=FALSE)
+got_expl <- ggplot(got, aes(x=moral,y=physical, color=gender)) + 
+  geom_point(alpha=.75) + 
+  geom_text(aes(label=label), nudge_y = -.015, show.legend = FALSE)
 
 got_expl
 
@@ -53,36 +62,24 @@ got_expl
 # building the chart natively in plotly
 # what differences do you notice?
 
-plot_ly(data = got, x = ~moral) %>%
-  add_markers(y = ~physical,
-        marker = list(size = 15,
-                       color = 'rgba(178, 34, 34, .75)'),
-        showlegend = FALSE) %>%
-  add_lines(y = ~fitted(lm(physical~moral)), showlegend = FALSE,
-                           line = list(color = '#0000ff')) %>%
-  layout(title = "The moral and physical ratings of characters from Game of Thrones")
+plot_ly(data = got, x = ~moral, y = ~physical, color = ~gender) %>%
+  add_markers() %>%
+  add_text(textposition = "top center", text = ~label, showlegend = FALSE)
 
 ```
 
-
-
-## Game of Thrones New York Times
+## Star Wars Character Data
 
 ```{r}
 
-# original NYT-style quadrant plot
+# built-in data
 
-got_nyt <- ggplot(got, aes(x=moral,y=physical, color=gender)) + 
-  scale_y_reverse(lim=c(1,0)) +
-  scale_x_continuous(limits=c(0,1)) +
-  geom_hline(yintercept=.5) +
-  geom_vline(xintercept=.5)+ 
-  geom_point(aes())  + 
-  geom_text(aes(label=label), nudge_y = -.025, show.legend = FALSE) +
-  theme_bw() +
-  annotate(geom = "text", x=c(.5,.5,0,1), y=c(1,0,.48,.52), label=c("Ugly","Beautiful","Evil","Good"))
+starwars_chars <- starwars
 
-got_nyt
+sw_height <- ggplot(starwars_chars) +
+  geom_histogram(aes(height))
+
+sw_height
 
 ```
 
@@ -96,40 +93,25 @@ got_nyt
 
 ```{r}
 
-# review code to figure out what the different parts do
 # finish the plot_ly call to recreate the chart natively
-# what differences do you notice?
-
-plot_ly(data = got) %>%
-  # add variable assignments for x, y, and color
-  add_markers(x = ..., y = ..., color = ..., colors=c("red","blue")) %>%
-  # add variable assignments for x, y, color, and text
-  add_text(x = ..., y = ..., color = ..., text = ..., colors=c("red","blue"), showlegend=FALSE, textposition="bottom center") %>%
-  add_segments(x = .5, xend = .5, y = 0, yend = 1, line = list(color = "black"), showlegend = FALSE) %>%
-  add_segments(x = 0, xend = 1, y = .5, yend = .5, line = list(color = "black"), showlegend = FALSE) %>%
-  add_annotations(x= 0.5,y= 0,text = "Beautiful",showarrow = F) %>%
-  # add three more annotations for the other chart labels
-  layout(yaxis = list(autorange = "reversed",zeroline = F),
-         xaxis = list(zeroline = F))
+# (add variable assignments for data and x)
+  
+plot_ly(data = ..., x = ~..., type = "histogram")
 
 ```
 
-
-## Star Wars Character Data
 
 ```{r}
 
 # original chart
 
-starwars_chars <- starwars
-
 sw_char <- ggplot(starwars_chars, aes(height,mass)) +
   geom_point() +
   geom_smooth(method = "lm", se=FALSE) + 
-  geom_text(data=starwars_chars %>% filter(mass > 1000), aes(label=name), nudge_y = -50) + 
-  geom_text(data=starwars_chars %>% filter(height < 75), aes(label=name), nudge_y = 50)
+  geom_text(data=starwars_chars %>% dplyr::filter(mass == max(mass, na.rm=T) | height == min(height, na.rm=T)), aes(label=name), nudge_y = 50)
 
 sw_char
+
 ```
 
 ```{r}
@@ -144,36 +126,9 @@ sw_char
 
 # try making this one yourself
 # hint: you can specify a new dataset for different layers, just like in ggplot2
+# also hint: you'll be adding three layers - markers, lines, text
 # which is easier - plotly or ggplot2?
 
-
-
-```
-
-```{r}
-
-# original chart
-
-sw_char2 <- ggplot(starwars_chars %>% filter(!is.na(birth_year)), aes(birth_year, fct_reorder(as_factor(name),birth_year))) +
-  geom_point() +
-  labs(y="name", x="age")
-
-sw_char2
-
-```
-
-```{r}
-
-# use ggplotly() function to convert ggplot2 chart to interactive plotly chart
-
-
-```
-
-```{r}
-
-# try making this one yourself
-# hint: you can use some of the same data trickes we used in the ggplot2 chart
-# challenge: can you figure out how to rename the axes?
 
 
 ```
@@ -184,56 +139,36 @@ sw_char2
 
 # original chart
 
+# data from https://fivethirtyeight.com/features/americas-favorite-star-wars-movies-and-least-favorite-characters/
+# note: CSV has two rows of headers, so I have manually created a list of headers and am adding
+# that after loading just the data rows
+
 new_names <- read_csv('data/StarWarsNames.csv') %>% select(NewNames)
   
 starwars_opins <- read_csv('data/StarWars.csv', skip=2, col_names=FALSE) %>% setNames(unlist(new_names))
 
-sw_opin <- ggplot(starwars_opins) +
-  geom_bar(aes(1,fill=SeenAnyYN),show.legend = FALSE) +
-  coord_polar(theta="y") +
-  geom_text(data=starwars_opins %>% count(SeenAnyYN) %>% mutate(total=sum(n),label=paste0(SeenAnyYN,"\n",round(n/total*100,1),"%")),aes(c(1,1),c(1050,450),label=label)) +
-  theme_void() +
-  labs(title="Have you seen any of the 6 films in the Star Wars franchise?")
+starwars_opins_tidy <- starwars_opins %>% dplyr::select(RespondentID, starts_with("Opinion")) %>% gather("Character","Opinion",-RespondentID) %>% mutate(Character=sub("Opinion","",Character)) %>% na.omit()
 
-sw_opin
+combined <- starwars_opins_tidy %>% dplyr::filter(Character %in% c("Solo", "JarJar"))
 
 opinion.levels <- c("Unfamiliar (N/A)","Very unfavorably","Somewhat unfavorably",
                     "Neither favorably nor unfavorably (neutral)",
                     "Somewhat favorably","Very favorably")
 
+combined.f <- combined %>% 
+         mutate(Opinion=factor(Opinion, opinion.levels))
 
-```
+opinion.colors <- c("grey50","firebrick4","firebrick1","grey85","dodgerblue1","dodgerblue4")
 
-```{r}
-
-# use ggplotly() function to convert ggplot2 chart to interactive plotly chart
-# what happens?
-
-```
-
-```{r}
-
-# a native pie chart in plotly
-# note: you have to calculate the totals first, unlike ggplot2
-
-plot_ly(starwars_opins %>% count(SeenAnyYN)) %>%
-  add_pie(labels = ~SeenAnyYN, values = ~n, textinfo="label+percent", showlegend=F) %>%
-  layout(title="Have you seen any of the 6 films in the Star Wars franchise?")
-
-```
-
-```{r}
-
-# original chart 
-
-sw_opin2 <- ggplot(starwars_opins %>% select(OpinionSolo,OpinionJarJar) %>% gather(character,opinion) %>% na.omit() %>% mutate(opinion=factor(opinion, opinion.levels))) +
-  geom_bar(aes(opinion,fill=opinion),show.legend = FALSE) +
-  facet_grid(.~character) +
+sw_opin <- ggplot(combined.f) +
+  geom_bar(aes(Opinion, fill=Opinion), show.legend = FALSE) +
+  facet_wrap(vars(Character)) +
   coord_flip() +
-  scale_fill_manual(values = c("grey50","firebrick4","firebrick1","grey85","dodgerblue1","dodgerblue4")) +
+  scale_fill_manual(values = opinion.colors) +
   theme_minimal()
 
-sw_opin2
+sw_opin
+
 
 ```
 
@@ -249,9 +184,9 @@ sw_opin2
 
 # reproducing the faceted bar chart in plotly with subplots
 
-han <- plot_ly(starwars_opins %>% na.omit(OpinionSolo) %>% count(OpinionSolo) %>% mutate(OpinionSolo=factor(OpinionSolo, opinion.levels))) %>%
-  add_bars(x = ~n, y = ~OpinionSolo, orientation = 'h', color = ~OpinionSolo, showlegend = FALSE) %>%
-  layout( xaxis = list(range = c(0, 115)),
+han <- plot_ly(combined.f %>% dplyr::filter(Character == "Solo") %>% drop_na(Opinion) %>% count(Opinion)) %>%
+  add_bars(x = ~n, y = ~Opinion, orientation = 'h', color = ~Opinion, showlegend = FALSE) %>%
+  layout( xaxis = list(range = c(0, 620)),
           annotations = list(
   text = "Han Solo",
   xref = "paper",
@@ -264,9 +199,9 @@ han <- plot_ly(starwars_opins %>% na.omit(OpinionSolo) %>% count(OpinionSolo) %>
   showarrow = FALSE
 ))
 
-jarjar <- plot_ly(starwars_opins %>% na.omit(OpinionJarJar) %>% count(OpinionJarJar) %>% mutate(OpinionJarJar=factor(OpinionJarJar, opinion.levels))) %>%
-  add_bars(x = ~n, y = ~OpinionJarJar, orientation = 'h', color = ~OpinionJarJar, showlegend = FALSE) %>%
-  layout(xaxis = list(range = c(0, 115)),
+jarjar <- plot_ly(combined.f %>% dplyr::filter(Character == "JarJar") %>% drop_na(Opinion) %>% count(Opinion)) %>%
+  add_bars(x = ~n, y = ~Opinion, orientation = 'h', color = ~Opinion, showlegend = FALSE) %>%
+  layout( xaxis = list(range = c(0, 620)),
           annotations = list(
   text = "Jar Jar Binks",
   xref = "paper",
@@ -316,5 +251,38 @@ gap_plot
 
 # reproduce the chart in plotly
 
+
+```
+
+## Mapping with sf
+
+```{r}
+
+nc <- system.file("gpkg/nc.gpkg", package="sf") %>% read_sf() %>% st_transform(32119)
+
+nc_map <- ggplot(nc) +
+  geom_sf(aes(fill=BIR74)) +
+    scale_fill_gradientn(colors = sf.colors())
+
+nc_map
+
+```
+
+
+```{r}
+
+# use ggplotly() function to convert ggplot2 chart to interactive plotly chart
+
+
+
+```
+
+
+```{r}
+
+# plotly needs a slightly different data load process
+nc2 <- sf::st_read(system.file("shape/nc.shp", package = "sf"), quiet = TRUE)
+
+plot_ly(nc2, split=~NAME, color = ~BIR74, showlegend=F)
 
 ```

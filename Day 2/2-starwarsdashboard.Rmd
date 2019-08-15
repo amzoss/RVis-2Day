@@ -1,7 +1,7 @@
 ---
 title: "Simple dashboards with flexdashboard"
 author: "Angela Zoss"
-date: "8/14/2018"
+date: "9/14/2019"
 output: 
   flexdashboard::flex_dashboard:
     orientation: columns
@@ -37,10 +37,10 @@ starwars_opins <- read_csv('data/StarWars.csv', skip=2, col_names=FALSE) %>% set
 Column {data-width=650}
 -----------------------------------------------------------------------
 
-add an R code block with the plotly version of this chart, including a heading (###)
+add an R code block with the plotly version of the Star Wars scatterplot, including a heading (###)
 
 Column {data-width=350}
 -----------------------------------------------------------------------
 
-add two charts and headings
+add the two remaining Star Wars charts, including headings
 

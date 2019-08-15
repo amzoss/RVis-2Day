@@ -24,6 +24,17 @@ new_names <- read_csv('data/StarWarsNames.csv') %>% select(NewNames)
   
 starwars_opins <- read_csv('data/StarWars.csv', skip=2, col_names=FALSE) %>% setNames(unlist(new_names))
 
+starwars_opins_tidy <- starwars_opins %>% dplyr::select(RespondentID, starts_with("Opinion")) %>% gather("Character","Opinion",-RespondentID) %>% mutate(Character=sub("Opinion","",Character)) %>% na.omit()
+
+combined <- starwars_opins_tidy %>% dplyr::filter(Character %in% c("Solo", "JarJar"))
+
+opinion.levels <- c("Unfamiliar (N/A)","Very unfavorably","Somewhat unfavorably",
+                    "Neither favorably nor unfavorably (neutral)",
+                    "Somewhat favorably","Very favorably")
+
+combined.f <- combined %>% 
+         mutate(Opinion=factor(Opinion, opinion.levels))
+
 got <- read_csv("data/got_ratings.csv")
 
 gap <- read_csv("data/gapminder_avg.csv")
@@ -45,34 +56,26 @@ Game of Thrones
 Column {.tabset}
 -------------------------------------
 
-### Goodness vs. Beauty
+### ggplotly
 
 ```{r}
 
-got_expl <- ggplot(got, aes(x=moral,y=physical)) + 
-  geom_point(size=5, color="firebrick", alpha=.75) +
-  labs(title="The moral and physical ratings of characters from Game of Thrones") +
-  geom_smooth(method="lm", se=FALSE)
+got_expl <- ggplot(got, aes(x=moral,y=physical, color=gender)) + 
+  geom_point(alpha=.75) + 
+  geom_text(aes(label=label), nudge_y = -.015, show.legend = FALSE)
 
 ggplotly(got_expl)
 
+
 ```
 
-### Quadrant visualization
+### plot_ly
 
 ```{r}
 
-got_nyt <- ggplot(got, aes(x=moral,y=physical, color=gender)) + 
-  scale_y_reverse(lim=c(1,0)) +
-  scale_x_continuous(limits=c(0,1)) +
-  geom_hline(yintercept=.5) +
-  geom_vline(xintercept=.5)+ 
-  geom_point(aes())  + 
-  geom_text(aes(label=label), nudge_y = -.025, show.legend = FALSE) +
-  theme_bw() +
-  annotate(geom = "text", x=c(.5,.5,0,1), y=c(1,0,.48,.52), label=c("Ugly","Beautiful","Evil","Good"))
-
-ggplotly(got_nyt)
+plot_ly(data = got, x = ~moral, y = ~physical, color = ~gender) %>%
+  add_markers() %>%
+  add_text(textposition = "top center", text = ~label, showlegend = FALSE)
 
 ```
 
@@ -80,21 +83,6 @@ Star Wars
 =====================================  
 
 Column {data-width=650}
------------------------------------------------------------------------
-
-### Star Wars characters by birth year
-
-```{r}
-
-plot_ly(starwars_chars %>% filter(!is.na(birth_year))) %>%
-  add_markers(x = ~birth_year, y = ~fct_reorder(as_factor(name),birth_year)) %>%
-  layout(yaxis = list(title="name"),
-         xaxis = list(title="age"))
-
-
-```
-
-Column {data-width=350}
 -----------------------------------------------------------------------
 
 ### Star Wars characters by mass and height
@@ -105,16 +93,56 @@ plot_ly(data = starwars_chars %>% dplyr::select(name, mass, height) %>% na.omit(
         x = ~height) %>%
   add_markers(y = ~mass, showlegend = FALSE) %>%
   add_lines(y = ~fitted(lm(mass~height)), showlegend = FALSE) %>%
-  add_text(data = starwars_chars %>% filter(!is.na(mass)) %>% filter(mass == max(mass) | height == min(height)), x = ~height, y = ~mass, text = ~name, textposition="top center")
+  add_text(data = starwars_chars %>% dplyr::filter(mass == max(mass, na.rm=T) | height == min(height, na.rm=T)), x = ~height, y = ~mass, text = ~name, textposition="top center")
 
 ```
 
-### Have you seen any of the 6 films in the Star Wars franchise?
+Column {data-width=350}
+-----------------------------------------------------------------------
+
+### Height distribution of Star Wars characters
 
 ```{r}
 
-plot_ly(starwars_opins %>% count(SeenAnyYN)) %>%
-  add_pie(labels = ~SeenAnyYN, values = ~n, textinfo="label+percent", showlegend=F)
+plot_ly(data = starwars_chars, x = ~height, type = "histogram")
+
+```
+
+### How do opinions of Han Solo compare to opinions of Jar Jar Binks?
+
+```{r}
+
+han <- plot_ly(combined.f %>% dplyr::filter(Character == "Solo") %>% drop_na(Opinion) %>% count(Opinion)) %>%
+  add_bars(x = ~n, y = ~Opinion, orientation = 'h', color = ~Opinion, showlegend = FALSE) %>%
+  layout( xaxis = list(range = c(0, 620)),
+          annotations = list(
+  text = "Han Solo",
+  xref = "paper",
+  yref = "paper",
+  yanchor = "bottom",
+  xanchor = "center",
+  align = "center",
+  x = 0.5,
+  y = 1,
+  showarrow = FALSE
+))
+
+jarjar <- plot_ly(combined.f %>% dplyr::filter(Character == "JarJar") %>% drop_na(Opinion) %>% count(Opinion)) %>%
+  add_bars(x = ~n, y = ~Opinion, orientation = 'h', color = ~Opinion, showlegend = FALSE) %>%
+  layout( xaxis = list(range = c(0, 620)),
+          annotations = list(
+  text = "Jar Jar Binks",
+  xref = "paper",
+  yref = "paper",
+  yanchor = "bottom",
+  xanchor = "center",
+  align = "center",
+  x = 0.5,
+  y = 1,
+  showarrow = FALSE
+))
+
+subplot(han, jarjar, shareY = T)
 
 ```
 
@@ -123,16 +151,12 @@ Gapminder
 
 ```{r}
 
-gap_plot <- ggplot(gap, aes(x=Average.GDP.per.capita, y=Average.Life.expectancy.at.birth)) +
-  geom_point(aes(size=Average.Total.population, color=Region)) +
-  scale_x_log10() + 
-  labs(x="Average GDP per capita (log 10)", y="Average life expectancy at birth", title="Averages across all years of the traditional Gapminder dataset") +
-  scale_size_continuous(name="Average total population", breaks=c(7500000,75000000,750000000),labels=c("7.5 million","75 million","750 million")) +
-  geom_smooth(method="lm", se=FALSE, color="gray50") +
-  geom_text(data=gap %>% filter(Average.Total.population>200000000), aes(label=Country)) +
-  theme_bw()
+plot_ly(gap, x = ~Average.GDP.per.capita) %>%
+  add_markers(y = ~Average.Life.expectancy.at.birth, size = ~Average.Total.population, color = ~Region) %>%
+  add_lines(y = ~fitted(lm(Average.Life.expectancy.at.birth~log(Average.GDP.per.capita))),showlegend = F, line = list(color = '#555555')) %>%
+  layout(xaxis = list(type = "log")) %>%
+  add_text(data = gap %>% filter(Average.Total.population > 200000000), y = ~Average.Life.expectancy.at.birth, text = ~Country, textposition="top center", showlegend=F)
 
-ggplotly(gap_plot)
 
 ```
 

@@ -90,7 +90,8 @@ plotOutput("plot1", brush = brushOpts(id = "plot1_brush"))
 
 output$plot1 <- renderPlot({
   
-  # add the Star Wars character birth year plot, ggplot2 version
+  ggplot(starwars_chars, aes(birth_year, name)) +
+  geom_point(size=5)
   
 })
 ```
