@@ -8,7 +8,7 @@ This course assumes basic familiarity with R — e.g., R syntax, data structures
 
 ## Installations
 
-In order to participate in class exercises, participants will need a computer where you have installed current versions of current versions of [R](https://www.r-project.org/), [RStudio](https://www.rstudio.com/), and the following packages: 
+In order to participate in class exercises, participants will need a computer where you have installed current versions of [R](https://www.r-project.org/), [RStudio](https://www.rstudio.com/), and the following packages: 
 
 * tidyverse (which includes ggplot2)
 * knitr
