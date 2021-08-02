@@ -1,7 +1,7 @@
 ---
 title: "Star Wars Opinion Data"
 author: "Angela Zoss"
-date: "8/14/19"
+date: "3/23/21"
 output: html_document
 ---
 
@@ -108,9 +108,8 @@ ggplot(combined.f) +
 ```{r}
 
 ggplot(combined.f) +
-  geom_bar(aes(Opinion)) +
-  facet_wrap(vars(Character)) +
-  coord_flip()
+  geom_bar(aes(y=Opinion)) +
+  facet_wrap(vars(Character))
 
 ```
 
@@ -119,9 +118,8 @@ ggplot(combined.f) +
 ```{r}
 
 ggplot(combined.f) +
-  geom_bar(aes(Opinion, fill=Opinion), show.legend = FALSE) +
-  facet_wrap(vars(Character)) +
-  coord_flip()
+  geom_bar(aes(y=Opinion, fill=Opinion), show.legend = FALSE) +
+  facet_wrap(vars(Character))
 
 ```
 
@@ -135,12 +133,25 @@ ggplot(combined.f) +
 opinion.colors <- c("grey50","firebrick4","firebrick1","grey85","dodgerblue1","dodgerblue4")
 
 ggplot(combined.f) +
-  geom_bar(aes(Opinion, fill=Opinion), show.legend = FALSE) +
+  geom_bar(aes(y=Opinion, fill=Opinion), show.legend = FALSE) +
   facet_wrap(vars(Character)) +
-  coord_flip() +
   scale_fill_manual(values = opinion.colors) +
   theme_minimal()
 
 ```
 
+## Advanced: Explore full dataset using new chart formatting
+
+```{r}
+
+starwars_opins_tidy.f <- starwars_opins_tidy %>% 
+         mutate(Opinion=factor(Opinion, opinion.levels))
+
+ggplot(starwars_opins_tidy.f) +
+  geom_bar(aes(y=Opinion, fill=Opinion), show.legend = FALSE) +
+  facet_wrap(vars(Character)) +
+  scale_fill_manual(values = opinion.colors) +
+  theme_minimal()
+
+```
 

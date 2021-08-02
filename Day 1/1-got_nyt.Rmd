@@ -1,7 +1,7 @@
 ---
 title: "Game of Thromes Character Ratings"
 author: "Angela Zoss"
-date: "2/19/2019"
+date: "3/23/2021"
 output: html_document
 ---
 
@@ -32,8 +32,8 @@ got <- read_csv("data/got_ratings.csv")
 
 # Remember the basic steps:
 # - set the data (main function)
-# - choose a shape layer
 # - map variables to aesthetics using aes() -> start with x and y in main function
+# - choose a shape layer
 
 
 
@@ -71,7 +71,7 @@ got <- read_csv("data/got_ratings.csv")
 
 ```
 
-## Add colors
+## Inheritance: Add colors
 
 ```{r}
 
@@ -94,12 +94,3 @@ got <- read_csv("data/got_ratings.csv")
 
 ```
 
-## Split the chart up into separate charts for each family (loyalty group)
-
-```{r}
-
-# Hint: check https://ggplot2.tidyverse.org/reference/ for facet layers
-
-
-
-```

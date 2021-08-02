@@ -1,7 +1,7 @@
 ---
 title: "ggplot2 Templates"
 author: "Angela Zoss"
-date: "2/1/2018"
+date: "3/23/2021"
 output: github_document
 ---
 
@@ -69,12 +69,12 @@ adult %>% group_by(sex) %>% summarise(total = sum(capital.loss))
 # Bar chart, using another column for length and specifying the summary function
 
 ggplot(adult) +
-  geom_bar(aes(sex, capital.loss), stat="summary", fun.y="mean")
+  geom_bar(aes(sex, capital.loss), stat="summary", fun="mean")
 
-# In this case, geom_col doesn't work
+# In this case, geom_col doesn't work; just gives a warning and returns sum
 
 ggplot(adult) +
-  geom_col(aes(sex, capital.loss), stat="summary", fun.y="mean")
+  geom_col(aes(sex, capital.loss), stat="summary", fun="mean")
 
 ```
 
@@ -170,7 +170,7 @@ ggplot(adult) +
 # You can add your own function to summarize all of the y values at the same x value
 
 ggplot(adult) + 
-  geom_line(aes(x=age, y=capital.loss), stat="summary", fun.y=mean)
+  geom_line(aes(x=age, y=capital.loss), stat="summary", fun=mean)
 
 # Alternately, you can use geom_smooth to calculate a variety of summary lines
 
@@ -215,7 +215,12 @@ ggplot(adult) +
 # plus either a.) the kind of variable it is (e.g., continuous, discrete) or 
 # b.) a special function that will be applied (e.g., log10, gradient)
 
+```
+
+```{r, eval=F}
+
 # For example, you can't modify the name of the fill aesthetic if you treat it like a continuous variable
+# Will throw an error ("Discrete value supplied to continuous scale")
 
 ggplot(adult) +
   geom_bar(aes(sex, fill=race)) +
@@ -248,8 +253,9 @@ ggplot(adult) +
   geom_point(aes(age, capital.gain)) +
   scale_x_continuous(breaks=c(20,30,40,50,60,70,80,90), minor_breaks = NULL)
 
-# Can also change how the numbers on the axis are spaces out, without doing any mathematical
-# transformations to the data
+# Can also change how the numbers on the axis are spaced out, without doing any mathematical
+# transformations to the data; this throws a warning because there are zero values
+# that can't be transformed by a log
 
 ggplot(adult) +
   geom_point(aes(age, capital.gain)) +
@@ -302,12 +308,12 @@ ggplot(adult) +
 ggplot(adult) +
   geom_bar(aes(x=sex))
 
+# To get the categories on the y-axis, you can now use y as the sole aesthetic
+
 ggplot(adult) +
   geom_bar(aes(y=sex))
 
-
-# To get the categories on the y-axis, you start with the category on the x-axis and then
-# add the coord_flip
+# In older versions of ggplot2, you used coord_flip() to create horizontal bars
 
 ggplot(adult) +
   geom_bar(aes(x=sex)) +
@@ -474,6 +480,7 @@ ggplot(adult) +
 ```{r}
 
 # Earlier, we used geom_text for data labels.  We can also use it for general notes on the graph.
+# Warning: this plot takes a few seconds.
 
 ggplot(adult) +
   geom_point(aes(age, capital.gain)) +
@@ -485,7 +492,7 @@ ggplot(adult) +
 # in the dataframe.
 
 # Instead, use annotate for unrelated text objects
-# Note: you have to specify a "geom" for each annotation - text, rect, segment, pointrange
+# Note: you have to specify a "geom" attribute for each annotation - text, rect, segment, pointrange
 
 ggplot(adult) +
   geom_point(aes(age, capital.gain)) +
@@ -493,7 +500,7 @@ ggplot(adult) +
 
 ggplot(adult) +
   geom_point(aes(age, capital.gain)) +
-  annotate("rect",xmin=12, xmax=95, ymin=25000, ymax=50000, alpha=.2)
+  annotate("rect", xmin=12, xmax=95, ymin=25000, ymax=50000, alpha=.2)
 
 ```
 
@@ -594,25 +601,25 @@ ggplot(adult) +
 # visualizing each chunk the same way.
 
 # facet_wrap creates a series of charts split by one category and then wraps the charts into
-# multiple rows as needed
+# multiple rows as needed; just wrap your variable in vars()
 
 ggplot(adult) +
   geom_point(aes(age, hours.per.week)) +
   geom_smooth(aes(age, hours.per.week)) +
-  facet_wrap(~education)
+  facet_wrap(vars(education))
 
 # facet_grid allows you to split the data by one category in the y direction and another in the x
-# syntax: facet_grid(y~x)
-# Note: you can use a "." to ignore one direction
+# syntax: facet_grid(rows = vars(...), cols = vars(...))
+# Note: you can also specify rows or cols separately
 
 ggplot(adult) +
   geom_point(aes(age, hours.per.week)) +
   geom_smooth(aes(age, hours.per.week)) +
-  facet_grid(.~race)
+  facet_grid(cols=vars(race))
 
 ggplot(adult) +
   geom_point(aes(age, hours.per.week)) +
   geom_smooth(aes(age, hours.per.week)) +
-  facet_grid(sex~race)
+  facet_grid(rows=vars(sex), cols=vars(race))
 
 ```

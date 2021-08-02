@@ -1,7 +1,7 @@
 ---
 title: "Star Wars Opinion Data"
 author: "Angela Zoss"
-date: "2/18/19"
+date: "3/23/21"
 output: html_document
 ---
 
@@ -36,7 +36,6 @@ starwars_opins_tidy <- starwars_opins %>% dplyr::select(RespondentID, starts_wit
 solo <- starwars_opins_tidy %>% dplyr::filter(Character=="Solo")
 jarjar <- starwars_opins_tidy %>% dplyr::filter(Character == "JarJar")
 combined <- bind_rows(solo, jarjar)
-
 
 ```
 
@@ -114,4 +113,13 @@ opinion.colors <- c("grey50","firebrick4","firebrick1","grey85","dodgerblue1","d
 
 ```
 
+## Advanced: Explore full dataset using new chart formatting
+
+```{r}
+
+starwars_opins_tidy.f <- starwars_opins_tidy %>% 
+         mutate(Opinion=factor(Opinion, opinion.levels))
+
+
+```
 

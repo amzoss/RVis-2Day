@@ -1,7 +1,7 @@
 ---
 title: "Star Wars Character Data"
 author: "Angela Zoss"
-date: "3/20/2019"
+date: "3/23/2021"
 output: html_document
 ---
 
@@ -36,7 +36,7 @@ starwars_chars <- starwars
 
 ```
 
-## Add a facet to the chart to create small multiples for each gender
+## Facets: Add a facet to the chart to create small multiples for each gender
 
 ```{r}
 
@@ -56,18 +56,7 @@ starwars_chars <- starwars
 
 ```
 
-## Add a linear trend line
-
-```{r}
-
-# hint: look at the options for geom_smooth
-
-
-
-```
-
-
-## Add a label to (only) the heaviest character
+## Data inheritance: Add a label to (only) the heaviest character
 
 ```{r}
 
@@ -77,9 +66,11 @@ starwars_chars <- starwars
 
 ```
 
-## Add a label to (only) the shortest character
+## Advanced: Add a linear trend line
 
 ```{r}
+
+# hint: look at the options for geom_smooth
 
 
 
