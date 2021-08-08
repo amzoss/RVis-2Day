@@ -77,7 +77,7 @@ ggplot(got, aes(x=moral,y=physical)) +
 
 ggplot(got, aes(x=moral,y=physical)) + 
   geom_point(alpha=.75) + 
-  geom_text(aes(label=label), nudge_y = -.015)
+  geom_text(aes(label=label), nudge_y = -.025)
 
 ```
 
@@ -92,15 +92,15 @@ ggplot(got, aes(x=moral,y=physical)) +
 
 ggplot(got, aes(x=moral,y=physical)) + 
   geom_point(aes(color=gender), alpha=.75) + 
-  geom_text(aes(label=label), nudge_y = -.015)
+  geom_text(aes(label=label), nudge_y = -.025)
 
 ggplot(got, aes(x=moral,y=physical)) + 
   geom_point(alpha=.75) + 
-  geom_text(aes(label=label, color=gender), nudge_y = -.015)
+  geom_text(aes(label=label, color=gender), nudge_y = -.025)
 
 ggplot(got, aes(x=moral,y=physical, color=gender)) + 
   geom_point(alpha=.75) + 
-  geom_text(aes(label=label), nudge_y = -.015)
+  geom_text(aes(label=label), nudge_y = -.025)
 
 ```
 
@@ -112,7 +112,7 @@ ggplot(got, aes(x=moral,y=physical, color=gender)) +
 
 ggplot(got, aes(x=moral,y=physical, color=gender)) + 
   geom_point(alpha=.75) + 
-  geom_text(aes(label=label), nudge_y = -.015, show.legend = FALSE)
+  geom_text(aes(label=label), nudge_y = -.025, show.legend = FALSE)
 
 ```
 
