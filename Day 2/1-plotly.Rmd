@@ -1,14 +1,17 @@
 ---
 title: "Interactive charts with plotly"
 author: "Angela Zoss"
-date: "9/14/2019"
+date: "8/8/2021"
 output: html_document
 ---
+
+Plotly is a tool that makes it easy to create interactive charts. There is a web version of plotly, as well as packages for R and Python.
+
+In R, plotly works nicely with R Markdown files, which are files that seamlessly blend R code and other visual content like text and images. R Markdown files can be compiled (or "knit") into a variety of formats. When you have interactive plotly charts, you can knit the R Markdown file to an HTML document that can be shared directly with others or hosted on a website.
 
 ```{r setup, echo=FALSE}
 knitr::opts_chunk$set(message = FALSE, warning = FALSE)
 ```
-
 
 ## Setup your environment
 
@@ -62,24 +65,30 @@ got_expl
 # building the chart natively in plotly
 # what differences do you notice?
 
+# https://plotly.com/r/text-and-annotations/#styling-text
+
 plot_ly(data = got, x = ~moral, y = ~physical, color = ~gender) %>%
   add_markers() %>%
-  add_text(textposition = "top center", text = ~label, showlegend = FALSE)
+  add_text(textposition = "bottom center", text = ~label, showlegend = FALSE)
 
 ```
 
-## Star Wars Character Data
+## Git Experience Data
 
 ```{r}
 
 # built-in data
 
-starwars_chars <- starwars
+source('data/git_experience/load_git_experience.R')
 
-sw_height <- ggplot(starwars_chars) +
-  geom_histogram(aes(height))
+git_bar <- git_experience %>%
+                   drop_na(first_vcs) %>%
+                   mutate(first_vcs = as_factor(first_vcs) %>% 
+                       fct_infreq()) %>%
+            ggplot(aes(x=first_vcs, fill=first_vcs)) +
+              geom_bar()
 
-sw_height
+git_bar
 
 ```
 
@@ -94,23 +103,99 @@ sw_height
 ```{r}
 
 # finish the plot_ly call to recreate the chart natively
-# (add variable assignments for data and x)
-  
+# note: plotly does not automatically create a count when building a bar chart
+
+# Hint: https://plotly.com/r/bar-charts/#mapping-a-color-variable
+
+git_experience %>%
+  drop_na(first_vcs) %>%
+  mutate(first_vcs = as_factor(first_vcs) %>% 
+           fct_infreq()) %>%
+  count(first_vcs) %>%
+  plot_ly(x = ~..., y = ~..., color = ~ ..., type = 'bar')
+
+```
+
+```{r}
+
+git_line <- git_experience %>% count(year_vcs, first_vcs) %>%
+  ggplot(aes(x=year_vcs, y=n, color=first_vcs)) +
+    geom_line()
+
+git_line
+
+```
+
+```{r}
+
+# use ggplotly() function to convert ggplot2 chart to interactive plotly chart
+
+
+
+```
+
+```{r}
+
+# finish the plot_ly call to recreate the chart natively
+# Note: in plotly, a line chart is a special kind of scatter plot
+
+# Hint: https://plotly.com/r/line-charts/#
+
+git_experience %>% count(year_vcs, first_vcs) %>%
+  plot_ly(x = ~..., y = ~..., color = ~..., type = 'scatter', mode = 'lines')
+
+```
+
+## Inclusiveness Index Data
+
+```{r}
+
+source('data/inclusiveness_index/load_inclusiveness_index.R')
+
+incl_hist <- ggplot(inclusiveness_index) +
+  geom_histogram(aes(Inclusiveness.index.2020))
+
+incl_hist
+
+```
+
+```{r}
+
+# use ggplotly() function to convert ggplot2 chart to interactive plotly chart
+
+
+
+```
+
+```{r}
+
+# finish the plot_ly call to recreate the chart natively
+# (add assignments for data and x)
+
+# Hint: https://plotly.com/r/histograms/
+
 plot_ly(data = ..., x = ~..., type = "histogram")
 
 ```
 
-
 ```{r}
 
-# original chart
+scatter <- inclusiveness_index %>% 
+  dplyr::select(Country, Continent, Z.score.Religion, Inclusiveness.index.2020) %>% 
+  drop_na()
 
-sw_char <- ggplot(starwars_chars, aes(height,mass)) +
-  geom_point() +
-  geom_smooth(method = "lm", se=FALSE) + 
-  geom_text(data=starwars_chars %>% dplyr::filter(mass == max(mass, na.rm=T) | height == min(height, na.rm=T)), aes(label=name), nudge_y = 50)
+most_inclusive_country <- scatter %>%
+  dplyr::filter(Inclusiveness.index.2020 == max(Inclusiveness.index.2020, na.rm=TRUE))
 
-sw_char
+incl_scatter <- ggplot(scatter, 
+                       aes(x = Z.score.Religion, 
+                           y = Inclusiveness.index.2020)) +
+                  geom_point(aes(color=Continent)) +
+                  geom_text(data = most_inclusive_country, 
+                            aes(label = Country), nudge_y = -.1) +
+                  geom_smooth(method = "lm", se=FALSE)
+
+incl_scatter
 
 ```
 
@@ -126,95 +211,12 @@ sw_char
 
 # try making this one yourself
 # hint: you can specify a new dataset for different layers, just like in ggplot2
-# also hint: you'll be adding three layers - markers, lines, text
+# also hint: you can calculate a linear model with the following code: 
+#   fitted(lm(Inclusiveness.index.2020~Z.score.Religion))
+# also also hint: you'll be adding three layers - markers, lines, text
 # which is easier - plotly or ggplot2?
 
 
-
-```
-
-## Star Wars Opinion Data
-
-```{r}
-
-# original chart
-
-# data from https://fivethirtyeight.com/features/americas-favorite-star-wars-movies-and-least-favorite-characters/
-# note: CSV has two rows of headers, so I have manually created a list of headers and am adding
-# that after loading just the data rows
-
-new_names <- read_csv('data/StarWarsNames.csv') %>% select(NewNames)
-  
-starwars_opins <- read_csv('data/StarWars.csv', skip=2, col_names=FALSE) %>% setNames(unlist(new_names))
-
-starwars_opins_tidy <- starwars_opins %>% dplyr::select(RespondentID, starts_with("Opinion")) %>% gather("Character","Opinion",-RespondentID) %>% mutate(Character=sub("Opinion","",Character)) %>% na.omit()
-
-combined <- starwars_opins_tidy %>% dplyr::filter(Character %in% c("Solo", "JarJar"))
-
-opinion.levels <- c("Unfamiliar (N/A)","Very unfavorably","Somewhat unfavorably",
-                    "Neither favorably nor unfavorably (neutral)",
-                    "Somewhat favorably","Very favorably")
-
-combined.f <- combined %>% 
-         mutate(Opinion=factor(Opinion, opinion.levels))
-
-opinion.colors <- c("grey50","firebrick4","firebrick1","grey85","dodgerblue1","dodgerblue4")
-
-sw_opin <- ggplot(combined.f) +
-  geom_bar(aes(Opinion, fill=Opinion), show.legend = FALSE) +
-  facet_wrap(vars(Character)) +
-  coord_flip() +
-  scale_fill_manual(values = opinion.colors) +
-  theme_minimal()
-
-sw_opin
-
-
-```
-
-```{r}
-
-# use ggplotly() function to convert ggplot2 chart to interactive plotly chart
-# what happens?
-
-
-```
-
-```{r}
-
-# reproducing the faceted bar chart in plotly with subplots
-
-han <- plot_ly(combined.f %>% dplyr::filter(Character == "Solo") %>% drop_na(Opinion) %>% count(Opinion)) %>%
-  add_bars(x = ~n, y = ~Opinion, orientation = 'h', color = ~Opinion, showlegend = FALSE) %>%
-  layout( xaxis = list(range = c(0, 620)),
-          annotations = list(
-  text = "Han Solo",
-  xref = "paper",
-  yref = "paper",
-  yanchor = "bottom",
-  xanchor = "center",
-  align = "center",
-  x = 0.5,
-  y = 1,
-  showarrow = FALSE
-))
-
-jarjar <- plot_ly(combined.f %>% dplyr::filter(Character == "JarJar") %>% drop_na(Opinion) %>% count(Opinion)) %>%
-  add_bars(x = ~n, y = ~Opinion, orientation = 'h', color = ~Opinion, showlegend = FALSE) %>%
-  layout( xaxis = list(range = c(0, 620)),
-          annotations = list(
-  text = "Jar Jar Binks",
-  xref = "paper",
-  yref = "paper",
-  yanchor = "bottom",
-  xanchor = "center",
-  align = "center",
-  x = 0.5,
-  y = 1,
-  showarrow = FALSE
-))
-
-subplot(han, jarjar, shareY = T)
 
 ```
 
@@ -223,6 +225,7 @@ subplot(han, jarjar, shareY = T)
 ```{r}
 
 # original chart
+# data comes from http://www.gapminder.org/
 
 gap <- read_csv("data/gapminder_avg.csv")
 names(gap) <- make.names(names(gap), unique=TRUE)
@@ -249,7 +252,7 @@ gap_plot
 
 ```{r}
 
-# reproduce the chart in plotly
+# Advanced: reproduce the chart in plotly
 
 
 ```

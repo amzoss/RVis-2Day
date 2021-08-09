@@ -1,14 +1,17 @@
 ---
 title: "Interactive charts with plotly"
 author: "Angela Zoss"
-date: "9/14/2019"
+date: "8/8/2021"
 output: html_document
 ---
+
+Plotly is a tool that makes it easy to create interactive charts. There is a web version of plotly, as well as packages for R and Python.
+
+In R, plotly works nicely with R Markdown files, which are files that seamlessly blend R code and other visual content like text and images. R Markdown files can be compiled (or "knit") into a variety of formats. When you have interactive plotly charts, you can knit the R Markdown file to an HTML document that can be shared directly with others or hosted on a website.
 
 ```{r setup, echo=FALSE}
 knitr::opts_chunk$set(message = FALSE, warning = FALSE)
 ```
-
 
 ## Setup your environment
 
@@ -42,12 +45,11 @@ got <- read_csv("data/got_ratings.csv")
 
 got_expl <- ggplot(got, aes(x=moral,y=physical, color=gender)) + 
   geom_point(alpha=.75) + 
-  geom_text(aes(label=label), nudge_y = -.015, show.legend = FALSE)
+  geom_text(aes(label=label), nudge_y = -.025, show.legend = FALSE)
 
 got_expl
 
 ```
-
 
 ```{r}
 
@@ -57,147 +59,148 @@ ggplotly(got_expl)
 
 ```{r}
 
+# Hint: https://plotly.com/r/text-and-annotations/#styling-text
+
 plot_ly(data = got, x = ~moral, y = ~physical, color = ~gender) %>%
   add_markers() %>%
-  add_text(textposition = "top center", text = ~label, showlegend = FALSE)
-
-
+  add_text(textposition = "bottom center", text = ~label, showlegend = FALSE)
 
 ```
 
-
-## Star Wars Character Data
+## Git Experience Data
 
 ```{r}
 
 # built-in data
 
-starwars_chars <- starwars
+source('data/git_experience/load_git_experience.R')
 
-sw_height <- ggplot(starwars_chars) +
-  geom_histogram(aes(height))
+git_bar <- git_experience %>%
+                   drop_na(first_vcs) %>%
+                   mutate(first_vcs = as_factor(first_vcs) %>% 
+                       fct_infreq()) %>%
+            ggplot(aes(x=first_vcs, fill=first_vcs)) +
+              geom_bar()
 
-sw_height
-
-```
-```{r}
-
-ggplotly(sw_height)
-
-```
-
-```{r}
-
-plot_ly(data = starwars_chars, x = ~height, type = "histogram")
+git_bar
 
 ```
 
 ```{r}
 
-sw_char <- ggplot(starwars_chars, aes(height,mass)) +
-  geom_point() +
-  geom_smooth(method = "lm", se=FALSE) + 
-  geom_text(data=starwars_chars %>% dplyr::filter(mass == max(mass, na.rm=T) | height == min(height, na.rm=T)), aes(label=name), nudge_y = 50)
-
-sw_char
+ggplotly(git_bar)
 
 ```
 
 ```{r}
 
-ggplotly(sw_char)
+# note: plotly does not automatically create a count when building a bar chart
+
+# Hint: https://plotly.com/r/bar-charts/#mapping-a-color-variable
+
+git_experience %>%
+  drop_na(first_vcs) %>%
+  mutate(first_vcs = as_factor(first_vcs) %>% 
+           fct_infreq()) %>%
+  count(first_vcs) %>%
+  plot_ly(x = ~first_vcs, y = ~n, color = ~ first_vcs, type = 'bar')
 
 ```
 
 ```{r}
 
-# make this one yourself
+git_line <- git_experience %>% count(year_vcs, first_vcs) %>%
+  ggplot(aes(x=year_vcs, y=n, color=first_vcs)) +
+    geom_line()
+
+git_line
+
+```
+
+```{r}
+
+ggplotly(git_line)
+
+```
+
+```{r}
+
+# Note: in plotly, a line chart is a special kind of scatter plot
+
+# Hint: https://plotly.com/r/line-charts/#
+
+git_experience %>% count(year_vcs, first_vcs) %>%
+  plot_ly(x = ~year_vcs, y = ~n, color = ~first_vcs, type = 'scatter', mode = 'lines')
+
+```
+
+## Inclusiveness Index Data
+
+```{r}
+
+source('data/inclusiveness_index/load_inclusiveness_index.R')
+
+incl_hist <- ggplot(inclusiveness_index) +
+  geom_histogram(aes(Inclusiveness.index.2020))
+
+incl_hist
+
+```
+
+```{r}
+
+ggplotly(incl_hist)
+
+```
+
+```{r}
+
+# Hint: https://plotly.com/r/histograms/
+
+plot_ly(inclusiveness_index, x = ~Inclusiveness.index.2020, type = 'histogram')
+
+```
+
+```{r}
+
+scatter <- inclusiveness_index %>% 
+  dplyr::select(Country, Continent, Z.score.Religion, Inclusiveness.index.2020) %>% 
+  drop_na()
+
+most_inclusive_country <- scatter %>%
+  dplyr::filter(Inclusiveness.index.2020 == max(Inclusiveness.index.2020, na.rm=TRUE))
+
+incl_scatter <- ggplot(scatter, 
+                       aes(x = Z.score.Religion, 
+                           y = Inclusiveness.index.2020)) +
+                  geom_point(aes(color=Continent)) +
+                  geom_text(data = most_inclusive_country, 
+                            aes(label = Country), nudge_y = -.1) +
+                  geom_smooth(method = "lm", se=FALSE)
+
+incl_scatter
+
+```
+
+```{r}
+
+ggplotly(incl_scatter)
+
+```
+
+```{r}
+
 # hint: you can specify a new dataset for different layers, just like in ggplot2
+# hint: you can calculate a linear model with the following code: 
+#   fitted(lm(Inclusiveness.index.2020~Z.score.Religion))
 
-plot_ly(data = starwars_chars %>% dplyr::select(name, mass, height) %>% na.omit(), 
-        x = ~height) %>%
-  add_markers(y = ~mass, showlegend = FALSE) %>%
-  add_lines(y = ~fitted(lm(mass~height)), showlegend = FALSE) %>%
-  add_text(data = starwars_chars %>% dplyr::filter(mass == max(mass, na.rm=T) | height == min(height, na.rm=T)), x = ~height, y = ~mass, text = ~name, textposition="top center")
-
-
-```
-
-## Star Wars Opinion Data
-
-```{r}
-
-# data from https://fivethirtyeight.com/features/americas-favorite-star-wars-movies-and-least-favorite-characters/
-# note: CSV has two rows of headers, so I have manually created a list of headers and am adding
-# that after loading just the data rows
-
-new_names <- read_csv('data/StarWarsNames.csv') %>% select(NewNames)
-  
-starwars_opins <- read_csv('data/StarWars.csv', skip=2, col_names=FALSE) %>% setNames(unlist(new_names))
-
-starwars_opins_tidy <- starwars_opins %>% dplyr::select(RespondentID, starts_with("Opinion")) %>% gather("Character","Opinion",-RespondentID) %>% mutate(Character=sub("Opinion","",Character)) %>% na.omit()
-
-combined <- starwars_opins_tidy %>% dplyr::filter(Character %in% c("Solo", "JarJar"))
-
-opinion.levels <- c("Unfamiliar (N/A)","Very unfavorably","Somewhat unfavorably",
-                    "Neither favorably nor unfavorably (neutral)",
-                    "Somewhat favorably","Very favorably")
-
-combined.f <- combined %>% 
-         mutate(Opinion=factor(Opinion, opinion.levels))
-
-opinion.colors <- c("grey50","firebrick4","firebrick1","grey85","dodgerblue1","dodgerblue4")
-
-sw_opin <- ggplot(combined.f) +
-  geom_bar(aes(Opinion, fill=Opinion), show.legend = FALSE) +
-  facet_wrap(vars(Character)) +
-  coord_flip() +
-  scale_fill_manual(values = opinion.colors) +
-  theme_minimal()
-
-sw_opin
-
-```
-
-```{r}
-
-ggplotly(sw_opin)
-
-```
-
-```{r}
-
-han <- plot_ly(combined.f %>% dplyr::filter(Character == "Solo") %>% drop_na(Opinion) %>% count(Opinion)) %>%
-  add_bars(x = ~n, y = ~Opinion, orientation = 'h', color = ~Opinion, showlegend = FALSE) %>%
-  layout( xaxis = list(range = c(0, 620)),
-          annotations = list(
-  text = "Han Solo",
-  xref = "paper",
-  yref = "paper",
-  yanchor = "bottom",
-  xanchor = "center",
-  align = "center",
-  x = 0.5,
-  y = 1,
-  showarrow = FALSE
-))
-
-jarjar <- plot_ly(combined.f %>% dplyr::filter(Character == "JarJar") %>% drop_na(Opinion) %>% count(Opinion)) %>%
-  add_bars(x = ~n, y = ~Opinion, orientation = 'h', color = ~Opinion, showlegend = FALSE) %>%
-  layout( xaxis = list(range = c(0, 620)),
-          annotations = list(
-  text = "Jar Jar Binks",
-  xref = "paper",
-  yref = "paper",
-  yanchor = "bottom",
-  xanchor = "center",
-  align = "center",
-  x = 0.5,
-  y = 1,
-  showarrow = FALSE
-))
-
-subplot(han, jarjar, shareY = T)
+plot_ly(scatter, x = ~Z.score.Religion) %>%
+  add_markers(y = ~Inclusiveness.index.2020, color = ~Continent) %>%
+  add_lines(y = ~fitted(lm(Inclusiveness.index.2020~Z.score.Religion)), 
+            showlegend = FALSE) %>%
+  add_text(data = most_inclusive_country, x = ~Z.score.Religion, 
+           y = ~Inclusiveness.index.2020, text = ~Country, textposition="bottom center",
+           showlegend = FALSE)
 
 ```
 
@@ -240,7 +243,6 @@ plot_ly(gap, x = ~Average.GDP.per.capita) %>%
 
 ```
 
-
 ## Mapping with sf
 
 ```{r}
@@ -255,7 +257,6 @@ nc_map
 
 ```
 
-
 ```{r}
 
 # use ggplotly() function to convert ggplot2 chart to interactive plotly chart
@@ -263,7 +264,6 @@ nc_map
 ggplotly(nc_map)
 
 ```
-
 
 ```{r}
 
