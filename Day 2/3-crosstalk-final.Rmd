@@ -14,7 +14,6 @@ knitr::opts_chunk$set(message = FALSE, echo=FALSE)
 ```{r library}
 
 library(tidyverse)
-#library(lubridate)
 library(DT)
 library(plotly)
 library(crosstalk)
@@ -44,7 +43,7 @@ incl_DT <- DT::datatable(shared_incl,
 
 ```
 
-```{r}
+```{r, warning=FALSE}
 
 # one feature of crosstalk is the ability to add custom filters to visualizations.
 # the options for filters are: 
@@ -60,15 +59,24 @@ incl_DT <- DT::datatable(shared_incl,
 # can be nested as needed, but you must always start with bscols(), even
 # if you only want one column.
 
-bscols(list(filter_select(id="sel_continent",
-              label="Select Continent:",
-              sharedData=shared_incl,
-              group=~Continent),
-       bscols(
-         incl_hist,
-         incl_scatter
-       ),
-       incl_DT))
+bscols(
+  list(
+    bscols(
+      filter_checkbox(id="sel_continent",
+                    label="Select Continent:",
+                    sharedData=shared_incl,
+                    group=~Continent,
+                    inline = TRUE),
+      filter_select(id="sel_subregion",
+                    label="Select Sub-region:",
+                    sharedData=shared_incl,
+                    group=~Sub.Region)
+      ),
+    bscols(
+     incl_hist,
+     incl_scatter
+    ),
+    incl_DT))
 
 # play with the different filter and chart options to create 
 # your own combinations

@@ -77,7 +77,7 @@ server <- shinyServer(function(input, output) {
                              ordered=TRUE)       
     
     ggplot(data = results) + 
-      geom_boxplot(aes(y=ratio,x=measure,color=level)) +
+      geom_boxplot(aes(y=ratio,x=measure,fill=level)) +
       scale_y_log10() +
       coord_flip() +
       geom_hline(yintercept=1) +

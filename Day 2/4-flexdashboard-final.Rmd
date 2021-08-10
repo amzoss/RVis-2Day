@@ -7,7 +7,6 @@ output:
 
 ```{r setup, include=FALSE}
 library(tidyverse)
-#library(lubridate)
 library(DT)
 library(plotly)
 library(crosstalk)
@@ -28,10 +27,16 @@ Inputs {.sidebar}
 
 ```{r}
 
-filter_select(id="sel_continent",
+filter_checkbox(id="sel_continent",
               label="Select Continent:",
               sharedData=shared_incl,
-              group=~Continent)
+              group=~Continent,
+              inline = TRUE)
+
+filter_select(id="sel_subregion",
+              label="Select Sub-region:",
+              sharedData=shared_incl,
+              group=~Sub.Region)
 
 ```
 
