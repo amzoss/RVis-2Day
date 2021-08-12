@@ -36,7 +36,7 @@ A significant portion of the course will use ggplot2 and other tidyverse package
     -   [ggplot2: Elegant Graphs for Data Analysis](http://ggplot2.org/book/)
     -   [R for Data Science book, Data Visualization chapter](http://r4ds.had.co.nz/data-visualisation.html)
     -   [R for Data Science book, Graphics for Communication chapter](http://r4ds.had.co.nz/graphics-for-communication.html)
-    -   [ggplot2 Cheatsheet](http://bit.ly/ggplot2-cheatsheet)
+    -   [ggplot2 Cheatsheet](https://www.rstudio.com/resources/cheatsheets/)
 
 -   Shiny Resources
 
