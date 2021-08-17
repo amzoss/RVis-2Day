@@ -32,8 +32,8 @@ got <- read_csv("data/got_ratings.csv")
 
 # Remember the basic steps:
 # - set the data (main function)
-# - map variables to aesthetics using aes() -> start with x and y in main function
 # - choose a shape layer
+# - map variables to aesthetics using aes() -> start with x and y in main function
 
 
 
@@ -54,7 +54,7 @@ got <- read_csv("data/got_ratings.csv")
 
 ```{r}
 
-# hint: check https://ggplot2.tidyverse.org/reference/#section-layer-geoms for all geom options
+# hint: check https://ggplot2.tidyverse.org/reference/#section-geoms for all geom options
 
 
 
