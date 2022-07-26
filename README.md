@@ -1,6 +1,10 @@
 # Visualization for Data Science in R
 
-This repository contains files for a two-day course on Visualization for Data Science in R, offered during [Data Matters](http://datamatters.org) 2021. The course description and activities are listed below. Additional details are available on the [pre-work](PreWork) page.
+This repository contains files for a two-day course on Visualization for Data Science in R, offered during [Data Matters](http://datamatters.org) 2022. The course description and activities are listed below. 
+
+See additional details on the [pre-work](PreWork) page to prepare for the course.
+
+Course exercises and slides are available from the [GitHub repository](https://github.com/amzoss/RVis-2Day).
 
 ## Summary
 
@@ -53,3 +57,17 @@ A significant portion of the course will use ggplot2 and other tidyverse package
 
     -   [Shiny Gallery](https://shiny.rstudio.com/gallery/)
     -   [Statistics Education Shiny Apps](http://www2.stat.duke.edu/~mc301/shinyed/)
+    
+-   Resources Mentioned, Data Matters 2021
+
+    -   [Kyle Chan paper and mapping example](https://github.com/kylechanpols/hkmocn_paper)
+    -   [Angela Zoss dissertation example](https://github.com/amzoss/netvislit)
+    -   [Angela Zoss basic charts example](https://github.com/amzoss/netvistasks)
+    -   [esquisse package, drag-and-drop ggplot2 builder](https://github.com/dreamRs/esquisse)
+    -   [Plotly web interface](https://plotly.com/)
+    -   [Exploratory interactive R project builder](https://exploratory.io/)
+    -   [Angela Zoss additional examples for Plotly, Crosstalk, etc.](https://www.angelazoss.com/Apr2021VizTell/)
+    -   [HTML Widgets gallery](http://gallery.htmlwidgets.org/)
+    -   [HTML Widgets showcase](http://www.htmlwidgets.org/showcase_leaflet.html)
+    -   [Crosstalk-compatible HTML widgets](https://rstudio.github.io/crosstalk/widgets.html)
+    -   [TIER Protocol for project organization](https://www.projecttier.org/tier-protocol/specifications-3-0/#overview-of-the-documentation)
