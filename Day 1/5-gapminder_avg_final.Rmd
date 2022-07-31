@@ -26,6 +26,10 @@ names(gap) <- c("country","gdp","life.exp","pop","region","color")
 
 ```
 
+## Try to reproduce this graphic
+
+![](images/gapminder-goal.png)
+
 ```{r}
 
 ggplot(gap, aes(x=gdp, y=life.exp)) +
