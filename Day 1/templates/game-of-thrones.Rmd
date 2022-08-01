@@ -1,8 +1,8 @@
 ---
 title: "Game of Thromes Character Ratings"
 author: "Angela Zoss"
-date: "3/23/2021"
-output: html_document
+date: "8/1/2022"
+output: github_document
 ---
 
 ## Setup your environment
@@ -22,7 +22,7 @@ library(tidyverse)
 # data comes from https://int.nyt.com/newsgraphics/2017/2017-07-17-got-matrix/mean.json
 # data based on ratings using tool at https://www.nytimes.com/interactive/2017/08/09/upshot/game-of-thrones-chart.html
 
-got <- read_csv("data/got_ratings.csv")
+got <- read_csv("../data/got_ratings.csv")
 
 ```
 
@@ -35,9 +35,11 @@ got <- read_csv("data/got_ratings.csv")
 # - choose a shape layer
 # - map variables to aesthetics using aes() -> start with x and y in main function
 
-
+ggplot(got, aes(x=moral,y=physical)) + 
+  geom_point()
 
 ```
+
 
 ## Set the alpha (transparency) of all points to .75
 
@@ -46,7 +48,8 @@ got <- read_csv("data/got_ratings.csv")
 # check ?geom_point to see names of the different options available
 # where should the new option go? what layer? inside or outside of aesthetics?
 
-
+ggplot(got, aes(x=moral,y=physical)) + 
+  geom_point(alpha=.75)
 
 ```
 
@@ -56,7 +59,15 @@ got <- read_csv("data/got_ratings.csv")
 
 # hint: check https://ggplot2.tidyverse.org/reference/#section-geoms for all geom options
 
+# wrong way: aes() in geom_point does not carry down; has to be in ggplot() or in both geom layers
 
+#ggplot(got) +
+#  geom_point(aes(x=moral,y=physical)) + 
+#  geom_text(aes(label=label))
+
+ggplot(got, aes(x=moral,y=physical)) + 
+  geom_point(alpha=.75) + 
+  geom_text(aes(label=label))
 
 ```
 
@@ -67,7 +78,9 @@ got <- read_csv("data/got_ratings.csv")
 # hint: look at ?geom_text for an option that might change the position slightly
 # where should the new option go? what layer? inside or outside of aesthetics?
 
-
+ggplot(got, aes(x=moral,y=physical)) + 
+  geom_point(alpha=.75) + 
+  geom_text(aes(label=label), nudge_y = -.025)
 
 ```
 
@@ -80,7 +93,17 @@ got <- read_csv("data/got_ratings.csv")
 # - labels only
 # - both
 
+ggplot(got, aes(x=moral,y=physical)) + 
+  geom_point(aes(color=gender), alpha=.75) + 
+  geom_text(aes(label=label), nudge_y = -.025)
 
+ggplot(got, aes(x=moral,y=physical)) + 
+  geom_point(alpha=.75) + 
+  geom_text(aes(label=label, color=gender), nudge_y = -.025)
+
+ggplot(got, aes(x=moral,y=physical, color=gender)) + 
+  geom_point(alpha=.75) + 
+  geom_text(aes(label=label), nudge_y = -.025)
 
 ```
 
@@ -90,7 +113,9 @@ got <- read_csv("data/got_ratings.csv")
 
 # hint: there is another property for the geom_text layer that might help
 
-
+ggplot(got, aes(x=moral,y=physical, color=gender)) + 
+  geom_point(alpha=.75) + 
+  geom_text(aes(label=label), nudge_y = -.025, show.legend = FALSE)
 
 ```
 
