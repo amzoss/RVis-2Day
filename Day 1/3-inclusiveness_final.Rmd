@@ -21,7 +21,7 @@ library(tidyverse)
 
 # load using included script file
 
-source('data/inclusiveness_index/load_inclusiveness_index.R')
+source('../data/inclusiveness_index/load_inclusiveness_index.R')
 
 ```
 
@@ -34,10 +34,17 @@ View(inclusiveness_index)
 ```
 
 
-## Create a bar chart to explore the data coverage across continents
+## Create a bar chart to explore the data coverage across `Continent`
 
 
 ```{r}
+
+# Remember the basic steps:
+# - set the data (main function)
+# - choose a shape layer
+# - map variables to aesthetics using aes()
+
+# Note: for a bar chart, you just need to specify the x-axis
 
 ggplot(data = inclusiveness_index,
        mapping = aes(x = Continent)) +
@@ -96,10 +103,10 @@ ggplot(data = inclusiveness_index,
 
 ```{r}
 
-  ggplot(data = inclusiveness_index,
-         mapping = aes(x = Z.score.Religion,
-                       y = Inclusiveness.index.2020,
-                       color=Continent)) +
-    geom_point() 
+ggplot(data = inclusiveness_index,
+       mapping = aes(x = Z.score.Religion,
+                     y = Inclusiveness.index.2020,
+                     color=Continent)) +
+  geom_point() 
 
 ```

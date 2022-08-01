@@ -21,7 +21,7 @@ library(tidyverse)
 
 # data comes from http://www.gapminder.org/
 
-gap <- read_csv("data/gapminder_avg.csv")
+gap <- read_csv("../data/gapminder_avg.csv")
 names(gap) <- c("country","gdp","life.exp","pop","region","color")
 
 ```

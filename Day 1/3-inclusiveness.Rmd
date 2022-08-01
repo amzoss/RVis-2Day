@@ -21,7 +21,7 @@ library(tidyverse)
 
 # load using included script file
 
-source('data/inclusiveness_index/load_inclusiveness_index.R')
+source('../data/inclusiveness_index/load_inclusiveness_index.R')
 
 
 ```

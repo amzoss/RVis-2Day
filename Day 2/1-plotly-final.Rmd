@@ -41,7 +41,7 @@ library(sf)
 # data comes from https://int.nyt.com/newsgraphics/2017/2017-07-17-got-matrix/mean.json
 # data based on ratings using tool at https://www.nytimes.com/interactive/2017/08/09/upshot/game-of-thrones-chart.html
 
-got <- read_csv("data/got_ratings.csv")
+got <- read_csv("../data/got_ratings.csv")
 
 got_expl <- ggplot(got, aes(x=moral,y=physical, color=gender)) + 
   geom_point(alpha=.75) + 
@@ -73,7 +73,7 @@ plot_ly(data = got, x = ~moral, y = ~physical, color = ~gender) %>%
 
 # built-in data
 
-source('data/git_experience/load_git_experience.R')
+source('../data/git_experience/load_git_experience.R')
 
 git_bar <- git_experience %>%
                    drop_na(first_vcs) %>%
@@ -138,7 +138,7 @@ git_experience %>% count(year_vcs, first_vcs) %>%
 
 ```{r}
 
-source('data/inclusiveness_index/load_inclusiveness_index.R')
+source('../data/inclusiveness_index/load_inclusiveness_index.R')
 
 incl_hist <- ggplot(inclusiveness_index) +
   geom_histogram(aes(Inclusiveness.index.2020))
@@ -210,7 +210,7 @@ plot_ly(scatter, x = ~Z.score.Religion) %>%
 
 # data comes from http://www.gapminder.org/
 
-gap <- read_csv("data/gapminder_avg.csv")
+gap <- read_csv("../data/gapminder_avg.csv")
 names(gap) <- make.names(names(gap), unique=TRUE)
 
 gap_plot <- ggplot(gap, aes(x=Average.GDP.per.capita, y=Average.Life.expectancy.at.birth)) +
