@@ -1,7 +1,7 @@
 ---
 title: "Inclusiveness Index Data"
 author: "Angela Zoss"
-date: "8/7/2021"
+date: "8/1/2022"
 output: html_document
 ---
 
@@ -23,123 +23,83 @@ library(tidyverse)
 
 source('data/inclusiveness_index/load_inclusiveness_index.R')
 
+```
+
+## Preview the data
+
+```{r}
+
+View(inclusiveness_index)
 
 ```
 
-## Create a plot to explore the distribution of the 2020 Inclusive Index scores
+
+## Create a bar chart to explore the data coverage across continents
+
+
+```{r}
+
+ggplot(data = inclusiveness_index,
+       mapping = aes(x = Continent)) +
+  geom_bar()
+
+```
+
+## Add a new aesthetics mapping to fill the bars according to `Index.categories.2020`
+
+```{r}
+
+ggplot(data = inclusiveness_index,
+       mapping = aes(x = Continent,
+                     fill = Index.categories.2020)) +
+  geom_bar()
+
+```
+
+
+## Create a histogram to explore the distribution of the 2020 Inclusive Index scores
 
 ```{r}
 
 # hint: Inclusiveness.index.2020 is numerical; 
 # look for geoms that do a good job of summarizing numerical variables
 
-ggplot(inclusiveness_index) +
-  geom_histogram(aes(Inclusiveness.index.2020))
-
-ggplot(inclusiveness_index) +
-  geom_density(aes(Inclusiveness.index.2020))
+ggplot(data = inclusiveness_index, 
+       mapping = aes(x = Inclusiveness.index.2020)) +
+  geom_histogram()
 
 ```
 
-## Facets: Add a facet to the chart to create small multiples for each continent
+## Create a histogram to explore the distribution of the 2020 Inclusive Index scores
 
 ```{r}
 
-# hint: try facet_wrap
-
-ggplot(inclusiveness_index) +
-  geom_histogram(aes(Inclusiveness.index.2020)) + 
-  facet_wrap(vars(Continent))
+ggplot(data = inclusiveness_index, 
+       mapping = aes(x = Inclusiveness.index.2020,
+                     fill = Index.categories.2020)) +
+  geom_histogram()
 
 ```
 
-## Create a new plot to compare the Z-score for Religion to the 2020 Inclusiveness Index
+## Create a scatter plot comparing `Z.score.Religion` to `Inclusiveness.index.2020`
 
 ```{r}
 
-# what geom is best for two numerical variables?
-
-ggplot(inclusiveness_index, 
-       aes(x = Z.score.Religion, 
-           y = Inclusiveness.index.2020)) +
-  geom_point()
+ggplot(data = inclusiveness_index,
+       mapping = aes(x = Z.score.Religion,
+                     y = Inclusiveness.index.2020)) +
+  geom_point() 
 
 ```
+
+## Add a new aesthetics mapping to color the points by `Continent`
 
 ```{r}
 
-# Cleaning up the data: limiting the columns and removing NAs
-
-scatter <- inclusiveness_index %>% 
-  dplyr::select(Country, Continent, Z.score.Religion, Inclusiveness.index.2020) %>% 
-  drop_na()
-
-
-```
-
-
-## Data inheritance: Add a label to (only) the most inclusive country
-
-```{r}
-
-# hint: you can use "data=" in a geom layer to use different data for that layer 
-
-most_inclusive_country <- scatter %>%
-  dplyr::filter(Inclusiveness.index.2020 > 1.2)
-
-most_inclusive_country <- scatter %>%
-  dplyr::filter(Inclusiveness.index.2020 == max(Inclusiveness.index.2020, na.rm=TRUE))
-
-ggplot(scatter, 
-       aes(x = Z.score.Religion, 
-           y = Inclusiveness.index.2020)) +
-  geom_point() +
-  geom_text(data = most_inclusive_country, aes(label = Country), nudge_y = -.1)
+  ggplot(data = inclusiveness_index,
+         mapping = aes(x = Z.score.Religion,
+                       y = Inclusiveness.index.2020,
+                       color=Continent)) +
+    geom_point() 
 
 ```
-
-## Advanced: Add a linear trend line
-
-```{r}
-
-# hint: look at the options for geom_smooth
-
-ggplot(scatter, 
-       aes(x = Z.score.Religion, 
-           y = Inclusiveness.index.2020)) +
-  geom_point() +
-  geom_text(data = most_inclusive_country, aes(label = Country), nudge_y = -.1) +
-  geom_smooth(method = "lm", se=FALSE)
-
-```
-
-## Advanced: Color (just) the points by Continent
-
-```{r}
-
-ggplot(scatter, 
-       aes(x = Z.score.Religion, 
-           y = Inclusiveness.index.2020)) +
-  geom_point(aes(color=Continent)) +
-  geom_text(data = most_inclusive_country, aes(label = Country), nudge_y = -.1) +
-  geom_smooth(method = "lm", se=FALSE)
-
-
-```
-
-## Advanced: Separate and color the linear trend line by Continent
-
-```{r}
-
-ggplot(scatter, 
-       aes(x = Z.score.Religion, 
-           y = Inclusiveness.index.2020,
-           color=Continent)) +
-  geom_point() +
-  geom_text(data = most_inclusive_country, aes(label = Country), nudge_y = -.1) +
-  geom_smooth(method = "lm", se=FALSE) +
-  facet_wrap(vars(Continent))
-
-
-```
-
