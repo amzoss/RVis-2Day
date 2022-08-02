@@ -1,7 +1,7 @@
 ---
 title: "Inclusiveness Index Data"
 author: "Angela Zoss"
-date: "8/7/2021"
+date: "8/1/2022"
 output: html_document
 ---
 
@@ -23,71 +23,32 @@ library(tidyverse)
 
 source('../data/inclusiveness_index/load_inclusiveness_index.R')
 
-
 ```
 
-## Create a plot to explore the distribution of the 2020 Inclusive Index scores
+## Preview the data
 
 ```{r}
 
-# hint: Inclusiveness.index.2020 is numerical; 
-# look for geoms that do a good job of summarizing numerical variables
-
+View(inclusiveness_index)
 
 ```
 
-## Facets: Add a facet to the chart to create small multiples for each continent
+## Create a bar chart to explore the data coverage across `Continent`
 
 ```{r}
 
-# hint: try facet_wrap
+# Remember the basic steps:
+# - set the data (main function)
+# - choose a shape layer
+# - map variables to aesthetics using aes()
 
-
-```
-
-## Create a new plot to compare the Z-score for Religion to the 2020 Inclusiveness Index
-
-```{r}
-
-# what geom is best for two numerical variables?
-
-
-```
-
-```{r}
-
-# Cleaning up the data: limiting the columns and removing NAs
-
-scatter <- inclusiveness_index %>% 
-  dplyr::select(Country, Continent, Z.score.Religion, Inclusiveness.index.2020) %>% 
-  drop_na()
-
-
-```
-
-
-## Data inheritance: Add a label to (only) the most inclusive country
-
-```{r}
-
-# hint: you can use "data=" in a geom layer to use different data for that layer 
-
-most_inclusive_country <- 
-  
-
-```
-
-## Advanced: Add a linear trend line
-
-```{r}
-
-# hint: look at the options for geom_smooth
+# Note: for a bar chart, you just need to specify the x-axis
 
 
 
 ```
 
-## Advanced: Color (just) the points by Continent
+## Add a new aesthetics mapping to *fill* the bars according to `Index.categories.2020`
 
 ```{r}
 
@@ -95,10 +56,44 @@ most_inclusive_country <-
 
 ```
 
-## Advanced: Separate and color the linear trend line by Continent
+## Create a histogram to explore the distribution of `Inclusiveness.index.2020`
 
 ```{r}
 
+
+
+```
+
+## Add a new aesthetics mapping to *fill* the bins according to `Index.categories.2020`
+
+```{r}
+
+
+
+```
+
+## Create a scatter plot comparing `Z.score.Religion` to `Inclusiveness.index.2020`
+
+```{r}
+
+
+
+```
+
+## Add a new aesthetics mapping to *color* the points by `Continent`
+
+
+```{r}
+
+
+
+```
+
+## Advanced: Split scatterplot into multiple charts, one per Continent
+
+```{r}
+
+# Hint: check the help page for facet_wrap()
 
 
 

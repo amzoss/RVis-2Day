@@ -33,9 +33,7 @@ View(inclusiveness_index)
 
 ```
 
-
 ## Create a bar chart to explore the data coverage across `Continent`
-
 
 ```{r}
 
@@ -52,7 +50,7 @@ ggplot(data = inclusiveness_index,
 
 ```
 
-## Add a new aesthetics mapping to fill the bars according to `Index.categories.2020`
+## Add a new aesthetics mapping to *fill* the bars according to `Index.categories.2020`
 
 ```{r}
 
@@ -64,12 +62,9 @@ ggplot(data = inclusiveness_index,
 ```
 
 
-## Create a histogram to explore the distribution of the 2020 Inclusive Index scores
+## Create a histogram to explore the distribution of `Inclusiveness.index.2020`
 
 ```{r}
-
-# hint: Inclusiveness.index.2020 is numerical; 
-# look for geoms that do a good job of summarizing numerical variables
 
 ggplot(data = inclusiveness_index, 
        mapping = aes(x = Inclusiveness.index.2020)) +
@@ -77,7 +72,7 @@ ggplot(data = inclusiveness_index,
 
 ```
 
-## Create a histogram to explore the distribution of the 2020 Inclusive Index scores
+## Add a new aesthetics mapping to *fill* the bins according to `Index.categories.2020`
 
 ```{r}
 
@@ -99,7 +94,7 @@ ggplot(data = inclusiveness_index,
 
 ```
 
-## Add a new aesthetics mapping to color the points by `Continent`
+## Add a new aesthetics mapping to *color* the points by `Continent`
 
 ```{r}
 
