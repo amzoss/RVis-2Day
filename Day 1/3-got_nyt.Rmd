@@ -1,7 +1,7 @@
 ---
 title: "Game of Thromes Character Ratings"
 author: "Angela Zoss"
-date: "3/23/2021"
+date: "8/1/2022"
 output: html_document
 ---
 
@@ -26,20 +26,15 @@ got <- read_csv("../data/got_ratings.csv")
 
 ```
 
-## Create a basic plot
+## Create a scatterplot of `moral` vs. `physical`
 
 ```{r}
-
-# Remember the basic steps:
-# - set the data (main function)
-# - choose a shape layer
-# - map variables to aesthetics using aes() -> start with x and y in main function
 
 
 
 ```
 
-## Set the alpha (transparency) of all points to .75
+## Set the alpha aesthetic (which controls transparency) for all points to .75
 
 ```{r}
 
@@ -50,7 +45,7 @@ got <- read_csv("../data/got_ratings.csv")
 
 ```
 
-## Add labels
+## Add a new geom that will display labels for each point
 
 ```{r}
 
@@ -60,7 +55,7 @@ got <- read_csv("../data/got_ratings.csv")
 
 ```
 
-## Fix label overlap
+## Adjust label position to limit overlap with points
 
 ```{r}
 

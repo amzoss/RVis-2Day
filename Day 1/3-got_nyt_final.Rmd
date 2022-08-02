@@ -37,7 +37,7 @@ ggplot(data = got,
 ```
 
 
-## Set the alpha aesthetic (transparency) of all points to .75
+## Set the alpha aesthetic (which controls transparency) for all points to .75
 
 ```{r}
 
