@@ -26,11 +26,10 @@ source('../data/inclusiveness_index/load_inclusiveness_index.R')
 
 ```{r}
 
-color_scatter <-  ggplot(data = inclusiveness_index,
-         mapping = aes(x = Z.score.Religion,
-                       y = Inclusiveness.index.2020,
-                       color=Continent)) +
-    geom_point() 
+color_scatter <-  ggplot(data = inclusiveness_index) +
+  geom_point(mapping = aes(x = Z.score.Religion,
+                           y = Inclusiveness.index.2020,
+                           color=Continent))
 
 color_scatter
 
