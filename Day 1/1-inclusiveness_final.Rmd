@@ -110,3 +110,18 @@ ggplot(data = inclusiveness_index,
   geom_point() 
 
 ```
+
+## Advanced: Split scatterplot into multiple charts, one per Continent
+
+```{r}
+
+# Hint: check the help page for facet_wrap()
+
+ggplot(data = inclusiveness_index,
+       mapping = aes(x = Z.score.Religion,
+                     y = Inclusiveness.index.2020,
+                     color=Continent)) +
+  geom_point() +
+  facet_wrap(vars(Continent))
+
+```
