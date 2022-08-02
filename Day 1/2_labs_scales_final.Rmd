@@ -1,7 +1,7 @@
 ---
 title: "Practicing Labels and Scales"
 author: "Angela Zoss"
-date: "10/24/2019"
+date: "8/1/2022"
 output: html_document
 ---
 
@@ -120,6 +120,7 @@ color_scatter +
   scale_color_manual(values=colors)
 
 ```
+
 ## Practice Reference Lines
 
 ```{r}
@@ -214,8 +215,8 @@ ggsave("Figs/2-letter_page.png", width=6.5, height=4.25)
 # caption are both cut off. Let's adjust the base font size for the chart.
 # We do that by modifying the "base_size" property of our theme.
 
-# This may look strange in RStudio, but that's not a good indicator of how 
-# it will save.
+# In the line where you call a built-in theme, you can set a new value for the
+# "base_size" property, which uses 11 as a default. Try something smaller.
 
 color_scatter +
   labels +
@@ -225,8 +226,11 @@ color_scatter +
   theme_minimal(base_size=10) +
   theme(panel.grid.minor = element_blank())
 
-# This version has the right number of pixels for our letter paper,
-# and the text is a more appropriate size.
+# The result may look strange when you preview in RStudio, but that's not a good 
+# indicator of how it will save.
+
+# Now repeat the previous ggsave() call. This version should have the right number 
+# of pixels for our letter paper, and the text should be a more appropriate size.
 
 ggsave("Figs/3-small_base.png", width=6.5, height=4.25)
 

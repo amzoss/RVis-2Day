@@ -1,7 +1,7 @@
 ---
 title: "Practicing Labels and Scales"
 author: "Angela Zoss"
-date: "10/24/2019"
+date: "8/1/2022"
 output: html_document
 ---
 
@@ -13,32 +13,26 @@ library(tidyverse)
 
 ```
 
-## Model chart
-
-![scatterplot of characters from Game of Thrones, rated based on morality and physical attractiveness.](images/nyt_got.png)
-
 ## Load data
 
-```{r, message=FALSE}
+```{r}
 
 # load using included script file
 
-# data comes from https://int.nyt.com/newsgraphics/2017/2017-07-17-got-matrix/mean.json
-# data based on ratings using tool at https://www.nytimes.com/interactive/2017/08/09/upshot/game-of-thrones-chart.html
-
-got <- read_csv("../data/got_ratings.csv")
+source('../data/inclusiveness_index/load_inclusiveness_index.R')
 
 ```
 
 
 ```{r}
 
-got_plot <- ggplot(got, aes(x=moral,y=physical, color=gender)) + 
-              geom_point(alpha=.75) + 
-              geom_text(aes(label=label), nudge_y = -.025, show.legend = FALSE) +
-              coord_cartesian(clip="off")
+color_scatter <-  ggplot(data = inclusiveness_index,
+         mapping = aes(x = Z.score.Religion,
+                       y = Inclusiveness.index.2020,
+                       color=Continent)) +
+    geom_point() 
 
-got_plot
+color_scatter
 
 ```
 
@@ -54,16 +48,16 @@ got_plot
 # https://ggplot2.tidyverse.org/reference/labs.html
 
 # Update the previous chart to add/modify labels for the following chart elements 
-# and aesthetics: title, x, y, color
+# and aesthetics: title, x, y, alt, and caption
 
 labels <- labs()
 
-got_plot +
+color_scatter +
   labels
 
 ```
 
-## Practice Axis Scales
+## Practice Color Scales
 
 ```{r}
 
@@ -75,70 +69,51 @@ got_plot +
 # 1. the word "scale"
 # 2. the name of the aesthetic you want to modify (e.g., "x", "y", "size", "fill")
 # 3. the data type (either "discrete" or "continuous") or a specific pre-defined
-#    transformation
+#    transformation (e.g., "log10", "reverse", "manual")
 
-# In the above plot, we want to specify that both the x and y axis should 
-# go from 0 to 1. For that, we would build scales to edit the x and y axis,
-# which are both mapped to continuous variables. For the x axis, you specify:
+# In the above plot, we want to adjust the colors associated with the  
+# Continents. For that, we would use a scales to edit the color aesthetic,
+# which is mapped to a discrete (or categorical) variable. For manually specifying
+# new colors, you can use:
 # 1. "scale"
-# 2. "x"
-# 3. "continuous
+# 2. "color"
+# 3. "manual"
 
 # Review the scale documentation: 
-# https://ggplot2.tidyverse.org/reference/scale_continuous.html
+# https://ggplot2.tidyverse.org/reference/scale_manual.html
 
 # First, add the scale as a new layer, separating each part with "_".
 
-# Next, look in the documentation for something that will change the
-# start and end points of the axis. Set the points to 0 and 1 for both axes.
+#color_scatter +
+#  labels +
+#  scale_color_manual()
 
-got_plot +
-  labels +
-  # add scales for x and y axis
-
-```
-
-```{r}
-
-# In the target visualization, the characters "Night King" and "Mountain" are
-# in the bottom-left corner instead of the top left corner. Scales can also control
-# the direction of the axis. Check out the scales functions and find one that
-# will flip the y axis.
-
-# https://ggplot2.tidyverse.org/reference/index.html#section-scales
-
-# Once you find a new function for the y axis, use that one instead of the 
-# generic "scale_y_continuous" function we used earlier. Does it work right
-# away? If not, what else might you have to change?
-
-
-```
-
-## Practice Color Scales
-
-```{r}
+# This code will generate an error, since you haven't chosen any new colors yet.
 
 # For plots with a light background (e.g., white or grey), it's helpful to
 # use dark colors for chart components so they will show up well against
-# the background. We can use scales to manually select two darker colors
-# for our character gender values.
-
-# Review https://ggplot2.tidyverse.org/reference/scale_manual.html
+# the background. We can manually select a palette of darker colors
+# for our Continent values.
 
 # To assign specific colors to each category, you can make a list of colors --
 # either R built-in color names or color specifications using the rgb() function.
 
-# To print a list of all valid color names in R, use colors()
+# To print a list of all valid color names in R, use: 
 
-# First, build a list of two color names to use in the plot.
+#colors()
+
+# Build a list of five color names to use in the plot.
 
 colors <- c()
 
 # Next, add a manual fill scale to the chart and set the values to
 # your new colors vector.
 
+# Next, inside your manual fill scale, set the "values" to
+# your new colors vector.
 
 ```
+
 ## Practice Reference Lines
 
 ```{r}
@@ -150,7 +125,7 @@ colors <- c()
 # Review: https://ggplot2.tidyverse.org/reference/geom_abline.html
 
 # Add two reference lines (one horizontal, one vertical) positioned exactly
-# in the middle of each axis.
+# at the zero values for the x and y axis.
 
 
 
@@ -173,8 +148,9 @@ colors <- c()
 
 ```{r}
 
-# We can continue to customize the theme using theme(). Let's remove the 
-# gridlines (panel.grid) and the axis text (axis.text).
+# We can continue to customize the theme using theme(). Let's remove the thin
+# lines that show up in between the axis tick marks - a.k.a. minor gridlines 
+# (in ggplot2 themes, panel.grid.minor).
 
 # To remove elements, set them equal to element_blank().
 
@@ -184,3 +160,48 @@ colors <- c()
 
 ```
 
+### Save with defaults
+
+```{r}
+
+# The ggsave() function allows you to save the most recent chart out to a file.
+# Call ggsave(), giving it a path to the file you want to create.
+# With no details, the output will vary based on your current graphics device
+# (e.g., previewing it in R Markdown vs. knitting the file).
+
+
+
+```
+
+### Save for letter page
+
+```{r}
+# Let's use a good size for fitting across a letter page - maybe a width of 6.5
+# and a height of 4.25. Call ggsave again, adding these values.
+
+
+```
+
+### Update plot base font size for resized version
+
+```{r}
+# Unfortunately, on my machine the text is too big now. The title and
+# caption are both cut off. Let's adjust the base font size for the chart.
+# We do that by modifying the "base_size" property of our theme.
+
+# In the line where you call a built-in theme, you can set a new value for the
+# "base_size" property, which uses 11 as a default. Try something smaller.
+
+
+
+
+
+# The result may look strange when you preview in RStudio, but that's not a good 
+# indicator of how it will save.
+
+# Now repeat the previous ggsave() call. This version should have the right number 
+# of pixels for our letter paper, and the text should be a more appropriate size.
+
+
+
+```
