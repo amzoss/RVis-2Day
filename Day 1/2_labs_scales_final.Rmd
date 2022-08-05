@@ -1,0 +1,236 @@
+---
+title: "Practicing Labels and Scales"
+author: "Angela Zoss"
+date: "8/1/2022"
+output: html_document
+---
+
+## Load packages
+
+```{r}
+
+library(tidyverse)
+
+```
+
+## Load data
+
+```{r}
+
+# load using included script file
+
+source('../data/inclusiveness_index/load_inclusiveness_index.R')
+
+```
+
+
+```{r}
+
+color_scatter <-  ggplot(data = inclusiveness_index) +
+  geom_point(mapping = aes(x = Z.score.Religion,
+                           y = Inclusiveness.index.2020,
+                           color=Continent)) 
+
+color_scatter
+
+```
+
+## Practice Labels
+
+```{r}
+
+# To improve this plot so it is a bit more ready for publication, we're going to add
+# a layer called labs(), which allows us to edit labels on the chart like the 
+# main title, axis titles, and legend titles.
+
+# Review:
+# https://ggplot2.tidyverse.org/reference/labs.html
+
+# Update the previous chart to add/modify labels for the following chart elements 
+# and aesthetics: title, x, y, color
+
+labels <- labs(title="Comparing Religious Inclusiveness to Overall Inclusiveness, By Continent",
+           x="Z-score, Religion",
+           y="Overall Inclusiveness",
+           color="Continent",
+           alt="A colored scatterplot showing a positive but weak correlation between religious inclusiveness and overall inclusiveness.",
+           caption="Menendian, Elsheikh, & Gambhir, 2020 Inclusiveness Index: Measuring Global Inclusion and Marginality, 
+           (Berkeley, CA: Othering & Belonging Institute, 2021), https://belonging.berkeley.edu/inclusivenessindex.")
+
+color_scatter +
+  labels
+
+```
+
+## Practice Color Scales
+
+```{r}
+
+# Labels only get us so far. For the text inside the chart elements like
+# the axes and the legends, we have to use layers called "scales".
+
+# Picking the right name of the scale can be tricky. There are three main
+# components of the scale name:
+# 1. the word "scale"
+# 2. the name of the aesthetic you want to modify (e.g., "x", "y", "size", "fill")
+# 3. the data type (either "discrete" or "continuous") or a specific pre-defined
+#    transformation (e.g., "log10", "reverse", "manual")
+
+# In the above plot, we want to adjust the colors associated with the  
+# Continents. For that, we would use a scales to edit the color aesthetic,
+# which is mapped to a discrete (or categorical) variable. For manually specifying
+# new colors, you can use:
+# 1. "scale"
+# 2. "color"
+# 3. "manual"
+
+# Review the scale documentation: 
+# https://ggplot2.tidyverse.org/reference/scale_manual.html
+
+# First, add the scale as a new layer, separating each part with "_".
+
+#color_scatter +
+#  labels +
+#  scale_color_manual()
+
+# This code will generate an error, since you haven't chosen any new colors yet.
+
+# For plots with a light background (e.g., white or grey), it's helpful to
+# use dark colors for chart components so they will show up well against
+# the background. We can manually select a palette of darker colors
+# for our Continent values.
+
+# To assign specific colors to each category, you can make a list of colors --
+# either R built-in color names or color specifications using the rgb() function.
+
+# To print a list of all valid color names in R, use: 
+
+#colors()
+
+# Build a list of five color names to use in the plot.
+
+colors <- c("lightsalmon2", "limegreen", "violetred2", "royalblue", "purple2")
+
+# Next, inside your manual fill scale, set the "values" to
+# your new colors vector.
+
+color_scatter +
+  labels +
+  scale_color_manual(values=colors)
+
+```
+
+## Practice Reference Lines
+
+```{r}
+
+# The original chart has arrows dividing the chart into four quadrants.
+# In ggplot2, elements like this can be created using reference lines, which
+# are actually special geom layers.
+
+# Review: https://ggplot2.tidyverse.org/reference/geom_abline.html
+
+# Add two reference lines (one horizontal, one vertical) positioned exactly
+# at the zero values for the x and y axis.
+
+color_scatter +
+  labels +
+  scale_color_manual(values=colors) +
+  geom_hline(yintercept = 0) +
+  geom_vline(xintercept = 0)
+
+
+```
+
+
+## Practice Themes
+
+```{r}
+
+# The original chart has a very simple background: no color, no plot borders, 
+# no gridlines.
+# Explore the built-in ggplot2 themes to find one that will remove some of the
+# extra plot elements.
+
+# https://ggplot2.tidyverse.org/reference/index.html#section-themes
+
+
+# Explanation: theme_minimal() still has gridlines, but it's pretty close. 
+# theme_void() gets rid of everything, including some things we probably want to 
+# keep (like the chart and axis titles). Let's stick with theme_minimal().
+
+color_scatter +
+  labels +
+  scale_color_manual(values=colors) +
+  geom_hline(yintercept = 0) +
+  geom_vline(xintercept = 0) +
+  theme_minimal()
+
+```
+
+```{r}
+
+# We can continue to customize the theme using theme(). Let's remove the thin
+# lines that show up in between the axis tick marks - a.k.a. minor gridlines 
+# (in ggplot2 themes, panel.grid.minor).
+
+# To remove elements, set them equal to element_blank().
+
+# Review: https://ggplot2.tidyverse.org/reference/theme.html
+
+color_scatter +
+  labels +
+  scale_color_manual(values=colors) +
+  geom_hline(yintercept = 0) +
+  geom_vline(xintercept = 0) +
+  theme_minimal() +
+  theme(panel.grid.minor = element_blank())
+
+
+```
+
+### Save with defaults
+
+```{r}
+# With no details, the output will vary based on your current graphics device
+
+ggsave("Figs/1-simple_save.png")
+
+```
+
+### Save for letter page
+
+```{r}
+# Let's use a good size for fitting across a letter page
+
+ggsave("Figs/2-letter_page.png", width=6.5, height=4.25)
+
+```
+
+### Update plot base font size for resized version
+
+```{r}
+# Unfortunately, on my machine the text is too big now. The title and
+# caption are both cut off. Let's adjust the base font size for the chart.
+# We do that by modifying the "base_size" property of our theme.
+
+# In the line where you call a built-in theme, you can set a new value for the
+# "base_size" property, which uses 11 as a default. Try something smaller.
+
+color_scatter +
+  labels +
+  scale_color_manual(values=colors) +
+  geom_hline(yintercept = 0) +
+  geom_vline(xintercept = 0) +
+  theme_minimal(base_size=10) +
+  theme(panel.grid.minor = element_blank())
+
+# The result may look strange when you preview in RStudio, but that's not a good 
+# indicator of how it will save.
+
+# Now repeat the previous ggsave() call. This version should have the right number 
+# of pixels for our letter paper, and the text should be a more appropriate size.
+
+ggsave("Figs/3-small_base.png", width=6.5, height=4.25)
+
+```

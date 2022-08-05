@@ -1,0 +1,117 @@
+---
+title: "Game of Thromes Character Ratings"
+author: "Angela Zoss"
+date: "8/1/2022"
+output: html_document
+---
+
+## Setup your environment
+
+```{r}
+
+# Load required libraries
+
+library(tidyverse)
+
+```
+
+## Load your data
+
+```{r}
+
+# data comes from https://int.nyt.com/newsgraphics/2017/2017-07-17-got-matrix/mean.json
+# data based on ratings using tool at https://www.nytimes.com/interactive/2017/08/09/upshot/game-of-thrones-chart.html
+
+got <- read_csv("../data/got_ratings.csv")
+
+```
+
+## Create a scatterplot of `moral` vs. `physical`
+
+```{r}
+
+ggplot(data = got, 
+       mapping = aes(x=moral,y=physical)) + 
+  geom_point()
+
+```
+
+
+## Set the alpha aesthetic (which controls transparency) for all points to .75
+
+```{r}
+
+# check ?geom_point to see names of the different options available
+# where should the new option go? what layer? inside or outside of aesthetics?
+
+ggplot(got, aes(x=moral,y=physical)) + 
+  geom_point(alpha=.75)
+
+```
+
+## Add a new geom that will display labels for each point
+
+```{r}
+
+# hint: check https://ggplot2.tidyverse.org/reference/#section-geoms for all geom options
+
+# wrong way: aes() in geom_point does not carry down; has to be in ggplot() or in both geom layers
+
+#ggplot(got) +
+#  geom_point(aes(x=moral,y=physical)) + 
+#  geom_text(aes(label=label))
+
+ggplot(got, aes(x=moral,y=physical)) + 
+  geom_point(alpha=.75) + 
+  geom_text(aes(label=label))
+
+```
+
+## Adjust label position to limit overlap with points
+
+```{r}
+
+# hint: look at ?geom_text for an option that might change the position slightly
+# where should the new option go? what layer? inside or outside of aesthetics?
+
+ggplot(got, aes(x=moral,y=physical)) + 
+  geom_point(alpha=.75) + 
+  geom_text(aes(label=label), nudge_y = -.025)
+
+```
+
+## Inheritance: Add colors
+
+```{r}
+
+# add gender as a color three different ways:
+# - points only
+# - labels only
+# - both
+
+ggplot(got, aes(x=moral,y=physical)) + 
+  geom_point(aes(color=gender), alpha=.75) + 
+  geom_text(aes(label=label), nudge_y = -.025)
+
+ggplot(got, aes(x=moral,y=physical)) + 
+  geom_point(alpha=.75) + 
+  geom_text(aes(label=label, color=gender), nudge_y = -.025)
+
+ggplot(got, aes(x=moral,y=physical, color=gender)) + 
+  geom_point(alpha=.75) + 
+  geom_text(aes(label=label), nudge_y = -.025)
+
+```
+
+## Turn off legend for text layer
+
+```{r}
+
+# hint: there is another property for the geom_text layer that might help
+
+ggplot(got, aes(x=moral,y=physical, color=gender)) + 
+  geom_point(alpha=.75) + 
+  geom_text(aes(label=label), nudge_y = -.025, show.legend = FALSE)
+
+```
+

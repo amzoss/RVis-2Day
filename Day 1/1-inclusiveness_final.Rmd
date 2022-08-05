@@ -1,0 +1,115 @@
+---
+title: "Inclusiveness Index Data"
+author: "Angela Zoss"
+date: "8/1/2022"
+output: html_document
+---
+
+## Setup your environment
+
+```{r}
+
+# Load required libraries
+
+library(tidyverse)
+
+```
+
+## Load your data
+
+```{r}
+
+# load using included script file
+
+source('../data/inclusiveness_index/load_inclusiveness_index.R')
+
+```
+
+## Preview the data
+
+```{r}
+
+View(inclusiveness_index)
+
+```
+
+## Create a bar chart to explore the data coverage across `Continent`
+
+```{r}
+
+# Remember the basic steps:
+# - set the data (main function)
+# - choose a shape layer
+# - map variables to aesthetics using aes()
+
+# Note: for a bar chart, you just need to specify the x-axis
+
+ggplot(data = inclusiveness_index) +
+  geom_bar(mapping = aes(x = Continent))
+
+```
+
+## Add a new aesthetics mapping to *fill* the bars according to `Index.categories.2020`
+
+```{r}
+
+ggplot(data = inclusiveness_index) +
+  geom_bar(mapping = aes(x = Continent,
+                         fill = Index.categories.2020))
+
+```
+
+
+## Create a histogram to explore the distribution of `Inclusiveness.index.2020`
+
+```{r}
+
+ggplot(data = inclusiveness_index) +
+  geom_histogram(mapping = aes(x = Inclusiveness.index.2020))
+
+```
+
+## Add a new aesthetics mapping to *fill* the bins according to `Index.categories.2020`
+
+```{r}
+
+ggplot(data = inclusiveness_index) +
+  geom_histogram(mapping = aes(x = Inclusiveness.index.2020,
+                               fill = Index.categories.2020))
+
+```
+
+## Create a scatter plot comparing `Z.score.Religion` to `Inclusiveness.index.2020`
+
+```{r}
+
+ggplot(data = inclusiveness_index) +
+  geom_point(mapping = aes(x = Z.score.Religion,
+                           y = Inclusiveness.index.2020)) 
+
+```
+
+## Add a new aesthetics mapping to *color* the points by `Continent`
+
+```{r}
+
+ggplot(data = inclusiveness_index) +
+  geom_point(mapping = aes(x = Z.score.Religion,
+                           y = Inclusiveness.index.2020,
+                           color=Continent)) 
+
+```
+
+## Advanced: Split scatterplot into multiple charts, one per Continent
+
+```{r}
+
+# Hint: check the help page for facet_wrap()
+
+ggplot(data = inclusiveness_index) +
+  geom_point(mapping = aes(x = Z.score.Religion,
+                           y = Inclusiveness.index.2020,
+                           color=Continent)) +
+  facet_wrap(vars(Continent))
+
+```
