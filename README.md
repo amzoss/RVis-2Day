@@ -29,7 +29,7 @@ As indicated above, this course assumes basic familiarity with R — e.g., R syn
 
 We will use [RStudio](https://www.rstudio.com/) to interact with R, and all exercises will be distributed in [R Markdown](https://rmarkdown.rstudio.com/) files (rather than simple R script files). This allows us to combine R code with non-code elements and promotes a [literate programming](https://en.wikipedia.org/wiki/Literate_programming) approach to research.
 
-A significant portion of the course will use ggplot2 and other tidyverse packages to create visualizations, but prior experience with those packages is not required. In order to participate in class exercises, participants will need a computer where you have installed: current versions of R, RStudio, and the following packages: tidyverse, knitr, shiny, plotly, crosstalk, flexdashboard, maps, mapproj, and sf. Permissions to install packages on the fly would be useful. 
+A significant portion of the course will use ggplot2 and other tidyverse packages to create visualizations, but prior experience with those packages is not required. In order to participate in class exercises, participants will need a computer where you have installed: current versions of R, RStudio, and the following packages: tidyverse, readxl, markdown, knitr, shiny, plotly, maps, mapproj, and sf. Permissions to install packages on the fly would be useful. 
 
 ## Resources
 

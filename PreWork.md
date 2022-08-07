@@ -16,9 +16,6 @@ In order to participate in class exercises, participants will need a computer wh
 * knitr
 * shiny
 * plotly
-* DT
-* crosstalk
-* flexdashboard
 * maps
 * mapproj
 * sf
