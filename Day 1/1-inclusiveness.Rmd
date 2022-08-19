@@ -27,7 +27,7 @@ source('../data/inclusiveness_index/load_inclusiveness_index.R')
 
 ## Preview the data
 
-```{r}
+```{r, eval=F}
 
 View(inclusiveness_index)
 
