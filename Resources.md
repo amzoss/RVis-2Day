@@ -1,3 +1,9 @@
+<style>
+a {
+font-weight: 500;
+}
+</style>
+
 # Resources Mentioned
 
 ## Resources Mentioned, Data Matters 2022

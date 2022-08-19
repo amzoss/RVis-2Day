@@ -1,3 +1,9 @@
+<style>
+a {
+font-weight: 500;
+}
+</style>
+
 # Pre-Work for Visualization for Data Science in R
 
 Welcome to "Visualization in Data Science using R," a two-day course on using R for visualization. 
