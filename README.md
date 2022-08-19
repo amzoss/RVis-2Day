@@ -58,4 +58,4 @@ A significant portion of the course will use ggplot2 and other tidyverse package
     -   [Shiny Gallery](https://shiny.rstudio.com/gallery/)
     -   [Statistics Education Shiny Apps](http://www2.stat.duke.edu/~mc301/shinyed/)
     
-<a href="Resources" class="buttons">Additional Resources Mentioned in Class</a>
+[**Additional Resources Mentioned in Class**](Resources)
