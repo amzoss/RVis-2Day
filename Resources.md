@@ -8,6 +8,8 @@ font-weight: 500;
 
 ## Resources Mentioned, Data Matters 2022
 
+[**Extra code created in class**](https://gist.github.com/amzoss/12888cbc8f5684b59e291ef69d36a8ad)
+
 ### Books
 
 -   [ggplot2 book](https://ggplot2-book.org/)
