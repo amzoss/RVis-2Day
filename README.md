@@ -6,7 +6,7 @@ font-weight: 500;
 
 # Visualization for Data Science in R
 
-This repository contains files for a two-day course on Visualization for Data Science in R, offered during [Data Matters](http://datamatters.org) 2022. The course description and activities are listed below. 
+This repository contains files for a two-day course on Visualization for Data Science in R, offered during [Data Matters](http://datamatters.org) in spring 2023. The course description and activities are listed below. 
 
 See additional details on the [pre-work](PreWork) page to prepare for the course.
 
@@ -27,7 +27,7 @@ The course will take a project-based approach to learning best practices for vis
 * Introduction to visualization in R
 * Using ggplot2 for publication-ready graphics
 * Applying common graphic design principles to ggplot2 visualizations
-* Adding interactivity to visualizations through R Markdown, HTML widgets, and Shiny applications
+* Adding interactivity to visualizations through R Markdown and HTML widgets
 
 ## Prerequisite and Requirements
 
@@ -35,7 +35,7 @@ As indicated above, this course assumes basic familiarity with R — e.g., R syn
 
 We will use [RStudio](https://www.rstudio.com/) to interact with R, and all exercises will be distributed in [R Markdown](https://rmarkdown.rstudio.com/) files (rather than simple R script files). This allows us to combine R code with non-code elements and promotes a [literate programming](https://en.wikipedia.org/wiki/Literate_programming) approach to research.
 
-A significant portion of the course will use ggplot2 and other tidyverse packages to create visualizations, but prior experience with those packages is not required. In order to participate in class exercises, participants will need a computer where you have installed: current versions of R, RStudio, and the following packages: tidyverse, readxl, markdown, knitr, shiny, plotly, maps, mapproj, and sf. Permissions to install packages on the fly would be useful. 
+A significant portion of the course will use ggplot2 and other tidyverse packages to create visualizations, but prior experience with those packages is not required. In order to participate in class exercises, participants should have installed current versions of R, RStudio, and the following packages: tidyverse, markdown, knitr, readxl, plotly, maps, mapproj, and sf. Permissions to install packages on the fly will be useful.
 
 ## Resources
 
@@ -47,21 +47,5 @@ A significant portion of the course will use ggplot2 and other tidyverse package
     -   [R for Data Science book, Data Visualization chapter](http://r4ds.had.co.nz/data-visualisation.html)
     -   [R for Data Science book, Graphics for Communication chapter](http://r4ds.had.co.nz/graphics-for-communication.html)
     -   [ggplot2 Cheatsheet](https://www.rstudio.com/resources/cheatsheets/)
-
--   Shiny Resources
-
-    -   [Shiny Written Tutorial](http://shiny.rstudio.com/tutorial/)
-    -   [Shiny Layout Guide](http://shiny.rstudio.com/articles/layout-guide.html)
-    -   [Shiny Widget Gallery](http://shiny.rstudio.com/gallery/widget-gallery.html)
-    -   [Shiny HTML Tags Glossary](http://shiny.rstudio.com/articles/tag-glossary.html)
-    -   [Shiny Apps](http://www.shinyapps.io/)
-    -   [Shiny Articles](http://shiny.rstudio.com/articles/)
-    -   [Shiny Funtions Reference](https://shiny.rstudio.com/reference/shiny/latest/)
-    -   [Shiny Cheatsheet](https://www.rstudio.com/wp-content/uploads/2016/01/shiny-cheatsheet.pdf)
-
--   Example Shiny Apps
-
-    -   [Shiny Gallery](https://shiny.rstudio.com/gallery/)
-    -   [Statistics Education Shiny Apps](http://www2.stat.duke.edu/~mc301/shinyed/)
     
 [**Additional Resources Mentioned in Class**](Resources)
