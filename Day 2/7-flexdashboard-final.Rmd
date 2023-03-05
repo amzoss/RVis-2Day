@@ -1,0 +1,79 @@
+---
+title: "Flexdashboard"
+output: 
+  flexdashboard::flex_dashboard:
+    orientation: rows
+---
+
+```{r setup, include=FALSE}
+library(tidyverse)
+library(DT)
+library(plotly)
+library(crosstalk)
+
+source('data/inclusiveness_index/load_inclusiveness_index.R')
+
+# Wrap data frame in SharedData
+shared_incl <- SharedData$new(inclusiveness_index, ~Country.Code)
+
+```
+
+<!-- check out https://matt-dray.github.io/earl18-crosstalk/04_leaflet-flexdash-dt-crosstalk.html -->
+
+Inputs {.sidebar}
+-----------------------------------------------------------------------
+
+### Set Your Filters
+
+```{r}
+
+filter_checkbox(id="sel_continent",
+              label="Select Continent:",
+              sharedData=shared_incl,
+              group=~Continent,
+              inline = TRUE)
+
+filter_select(id="sel_subregion",
+              label="Select Sub-region:",
+              sharedData=shared_incl,
+              group=~Sub.Region)
+
+```
+
+### About flexdashboard
+
+Flexdashboard is a library that takes R Markdown documents and turns them into a website. You can build up different website layout elements like pages, panels, rows, and columns. In each part of your website, you can use a blend of text/image content and R code, just like in normal R Markdown documents. A flexdashboard document can be compiled (or "knit") to an HTML file that can then be shared as a file or published as a website.
+
+Row
+-----------------------------------------------------------------------
+
+### {data-width=500}
+    
+```{r}
+
+plot_ly(shared_incl, x = ~Inclusiveness.index.2020, type = 'histogram')
+
+```
+
+### {data-width=500}
+```{r}
+
+plot_ly(shared_incl, x = ~Z.score.Religion, y = ~Inclusiveness.index.2020, color = ~Continent)
+
+```
+
+Row
+-----------------------------------------------------------------------
+
+### {}
+    
+```{r}
+
+DT::datatable(shared_incl, 
+                options = list(
+              pageLength = 5,
+              lengthMenu = c(5, 10, 15, 20)
+            ))
+
+```
+   

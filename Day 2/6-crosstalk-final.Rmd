@@ -1,0 +1,85 @@
+---
+title: "Crosstalk"
+author: "Angela Zoss"
+date: "8/8/2021"
+output: html_document
+---
+
+Crosstalk is a package that allows html-based widgets to talk to each other in an R Markdown document. Examples of HTML widgets include interactive charts, maps, and data tables. Crosstalk connects these components to each other by having them pull from a shared dataset. Crosstalk also offers a few interactive filter functions. For basic data exploration, Crosstalk may offer an easier alternative than Shiny, and the output of Crosstalk is simple HTML, which does not require a special server for sharing like Shiny apps do. Simply knit the RMarkdown file into an HTML file, then share the HTML file or host it on a website.
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(message = FALSE, echo=FALSE)
+```
+
+```{r library}
+
+library(tidyverse)
+library(DT)
+library(plotly)
+library(crosstalk)
+
+```
+
+```{r data}
+
+source('data/inclusiveness_index/load_inclusiveness_index.R')
+
+# Wrap data frame in SharedData
+shared_incl <- SharedData$new(inclusiveness_index, ~Country.Code)
+
+```
+
+```{r}
+
+incl_hist <- plot_ly(shared_incl, x = ~Inclusiveness.index.2020, type = 'histogram')
+
+incl_scatter <- plot_ly(shared_incl, x = ~Z.score.Religion, y = ~Inclusiveness.index.2020, color = ~Continent)
+
+incl_DT <- DT::datatable(shared_incl, 
+                options = list(
+              pageLength = 5,
+              lengthMenu = c(5, 10, 15, 20)
+            ))
+
+```
+
+```{r, warning=FALSE}
+
+# one feature of crosstalk is the ability to add custom filters to visualizations.
+# the options for filters are: 
+# - filter_checkbox() # good for a small number of categories
+# - filter_slider() # good for numbers, dates
+# - filter_select() # good for a larger number of categories, but works like
+#     the checkbox because you can still select multiple categories
+
+# crosstalk can arrange elements in both rows and columns. To put two elements
+# in a row together, use bscols() and separate each element with a comma.
+# to put two elements in the same column (vertically), use list() and
+# separate each element with a comma. Rows, columns, and individual elements
+# can be nested as needed, but you must always start with bscols(), even
+# if you only want one column.
+
+bscols(
+  list(
+    bscols(
+      filter_checkbox(id="sel_continent",
+                    label="Select Continent:",
+                    sharedData=shared_incl,
+                    group=~Continent,
+                    inline = TRUE),
+      filter_select(id="sel_subregion",
+                    label="Select Sub-region:",
+                    sharedData=shared_incl,
+                    group=~Sub.Region)
+      ),
+    bscols(
+     incl_hist,
+     incl_scatter
+    ),
+    incl_DT))
+
+# play with the different filter and chart options to create 
+# your own combinations
+
+```
+
