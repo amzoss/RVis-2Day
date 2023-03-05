@@ -32,7 +32,7 @@ library(mapproj)
 library(sf)
 
 library(here)
-here::i_am("Day 2/2-plotly-final.Rmd")
+here::i_am("Day 2/4-plotly-final.Rmd")
 
 ```
 
