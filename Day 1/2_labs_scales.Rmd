@@ -161,7 +161,7 @@ colors <- c()
 
 ```
 
-### Save with defaults
+## Save with defaults
 
 ```{r}
 
@@ -174,7 +174,7 @@ colors <- c()
 
 ```
 
-### Save for letter page
+## Save for letter page
 
 ```{r}
 # Let's use a good size for fitting across a letter page - maybe a width of 6.5
@@ -183,7 +183,7 @@ colors <- c()
 
 ```
 
-### Update plot base font size for resized version
+## Update plot base font size for resized version
 
 ```{r}
 # Unfortunately, on my machine the text is too big now. The title and
