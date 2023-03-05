@@ -1,0 +1,294 @@
+---
+title: "Practicing categorical variables"
+author: "Angela Zoss"
+date: "3/5/2023"
+output: html_document
+---
+
+## Load packages
+
+```{r}
+
+library(tidyverse)
+library(here)
+here::i_am("Day 2/3-chart-types-final.Rmd")
+
+```
+
+## Bob Ross dataset
+
+### Load data
+
+```{r, message=FALSE}
+
+# Data from: https://github.com/fivethirtyeight/data/tree/master/bob-ross
+
+bob_ross <- read_csv("data/elements-by-episode.csv") %>%
+  gather(key="tag",value="true/false", -EPISODE, -TITLE) %>%
+  dplyr::filter(`true/false` == 1) %>%
+  dplyr::select(-`true/false`) %>%
+  rename("id" = "EPISODE", "title" = "TITLE") %>%
+  mutate(id_temp = str_remove(str_replace(id,"E",","),"S")) %>%
+  separate(id_temp, c("season","episode"))
+
+# review dataset
+head(bob_ross, 10)
+
+```
+
+### Practice Bar Charts
+
+```{r}
+
+# Review geom_bar and geom_col:
+# https://ggplot2.tidyverse.org/reference/geom_bar.html
+
+# create basic bar chart, with each bar as a season and different colors for tags
+
+ggplot(bob_ross, aes(x=season, fill=tag)) +
+  geom_bar()
+
+# see a problem? hint: we don't normally use separate colors for this many tags.
+# try getting rid of the legend for now.
+
+ggplot(bob_ross, aes(x=season, fill=tag)) +
+  geom_bar(show.legend = FALSE)
+
+
+```
+
+```{r}
+
+# The visualization would work better with fewer tags.
+# Create a list of at most 5 tags to focus on.
+# (You can look at the data frame to see the different options for tag values.)
+
+selected_tags <- c("BARN","BUSHES","CLOUDS","MOUNTAIN","OCEAN")
+
+# Now filter the data to include only the selected tags.
+
+bob_ross_sel <- bob_ross %>% dplyr::filter(tag %in% selected_tags)
+
+# Now use the filtered data in the chart.
+
+ggplot(bob_ross_sel, aes(x=season, fill=tag)) +
+  geom_bar()
+
+
+```
+
+```{r}
+
+# Using a stacked bar chart makes it hard to see how each tag changes over time.
+# It's possible that a grouped bar chart would show the data better.
+# Read the geom_bar documentation to figure out how to have side-by-side bars.
+# (Hint: look for information about position.)
+
+ggplot(bob_ross_sel, aes(x=season, fill=tag)) +
+  geom_bar(position = "dodge")
+
+# There is one additional option for bar charts - stacked charts that are
+# scaled to show 100% for each group. Try this option as well.
+
+ggplot(bob_ross_sel, aes(x=season, fill=tag)) +
+  geom_bar(position = "fill")
+
+# As we learn about ggplot2, it might not be clear whether to look for options
+# like this in the geom documentation or in a scale. For bar charts,
+# it might help to think about grouped and 100% stacked bars as alternate
+# chart types, which means you might expect them to be part of the geom.
+
+```
+
+```{r}
+
+# There are two ways to create bar charts - geom_bar and geom_col. For geom_bar,
+# ggplot2 counts up the number of tags for you. For geom_col, you need to
+# provide both the x value (the season) and the y value (the count).
+
+# Original with geom_bar
+
+ggplot(bob_ross_sel, aes(x=season, fill=tag)) +
+  geom_bar()
+
+# Calculate the count separately
+
+bob_ross_count <- bob_ross_sel %>%
+  group_by(season, tag) %>%
+  summarize(num_episodes = n())
+
+# Reproduce the chart with geom_col
+
+ggplot(bob_ross_count, 
+       aes(x=season, y=num_episodes, fill=tag)) +
+  geom_col()
+
+
+```
+
+
+## Movies Dataset
+
+### Load data
+
+```{r, message=FALSE}
+
+# data from https://github.com/fivethirtyeight/data/tree/master/bechdel
+
+movies <- read_csv("data/movies.csv", na="#N/A") 
+
+# review dataset
+head(movies, 10)
+
+```
+
+### Practice Line Charts
+
+```{r}
+
+# Review geom_line:
+# https://ggplot2.tidyverse.org/reference/geom_path.html
+
+# create basic line chart, with year on the x axis and the `budget_2013$` column
+# on the y axis
+
+ggplot(movies,
+       aes(x=year,y=`budget_2013$`)) +
+  geom_line()
+
+# see a problem? what do you think is happening, based on the documentation above?
+
+```
+
+```{r}
+
+# A line chart is very literal; unlike a bar chart, it can't deal automatically
+# with datasets that have multiple data points for each x value. Instead, it will
+# basically sort a dataset by year, then create a line that passes through every single
+# data point. 
+
+# What kind of dataset do we really want for a line chart? A dataset with one y value
+# for each x value.
+
+# For this dataset, let's calculate average budget for each year before creating the chart.
+
+movies_budget_year <- movies %>%
+  group_by(year) %>%
+  summarize(avg_budget=mean(`budget_2013$`))
+
+# Now, create a line chart with the new dataset.
+
+ggplot(movies_budget_year,
+       aes(x=year,y=avg_budget)) +
+  geom_line()
+
+```
+
+```{r}
+
+# If we want multiple lines, we'll need a slightly different dataset. We need two datapoints
+# per year, one for each line. Let's create a dataset that includes the "binary" column, which
+# explains whether a movie passes the Bechdel test.
+
+movies_budget_year_test <- movies %>%
+  group_by(year, binary) %>%
+  summarize(avg_budget=mean(`budget_2013$`))
+
+# Now, create a line chart with the new dataset, using the new binary column to color the lines.
+
+ggplot(movies_budget_year_test,
+       aes(x=year,y=avg_budget, color=binary)) +
+  geom_line()
+
+```
+
+### Practice Box Plots
+
+```{r}
+
+# Review geom_boxplot:
+# https://ggplot2.tidyverse.org/reference/geom_boxplot.html
+
+# create basic (single) boxplot, with the `domgross_2013$` column on the y axis
+
+ggplot(movies,
+       aes(y=`domgross_2013$`)) +
+  geom_boxplot()
+
+
+```
+
+```{r}
+
+# As you can see, ggplot2 generates all of the data it needs for the boxplot just from
+# a single, numerical variable. If you want multiple boxplots, you can add a categorical
+# variable to the x axis.
+
+# Add the binary variable to the x axis of the previous plot.
+
+ggplot(movies,
+       aes(x=binary, y=`domgross_2013$`)) +
+  geom_boxplot()
+
+
+```
+
+```{r}
+
+# Sometimes it's desirable to use a separate color for each boxplot. Edit the previous
+# chart to add a different fill for each boxplot.
+
+ggplot(movies,
+       aes(fill=binary, y=`domgross_2013$`)) +
+  geom_boxplot()
+
+# Did you notice any change to your x axis? If so, what do you think happened? Can you
+# fix it so it goes back to the previous x axis, while keeping the fill?
+
+ggplot(movies,
+       aes(x=binary, y=`domgross_2013$`, fill=binary)) +
+  geom_boxplot()
+
+```
+
+```{r}
+
+# Fill is one option for adding color into a chart. Charts can also have a "color" aesthetic.
+
+# Create a chart that uses binary for color instead of fill. What is the difference?
+
+ggplot(movies,
+       aes(x=binary, y=`domgross_2013$`, color=binary)) +
+  geom_boxplot()
+
+```
+
+### Practice Scatter Plots and Heatmaps
+
+```{r}
+
+# Review geom_boxplot:
+# https://ggplot2.tidyverse.org/reference/geom_point.html
+
+# Create a basic scatter plot, with the `intgross_2013$` on the x axis and 
+# `domgross_2013$` column on the y axis
+
+ggplot(movies,
+       aes(x=`intgross_2013$`, y=`domgross_2013$`)) +
+  geom_point()
+
+```
+
+```{r}
+
+# This scatterplot has a lot of overlap in the data pattern. One way to address that is
+# to use a different geom, the geom_bin2d(), to create a heatmap of the data instead.
+
+# Update the previous chart to use geom_bid2d() instead of geom_point()
+
+ggplot(movies,
+       aes(x=`intgross_2013$`, y=`domgross_2013$`)) +
+  geom_bin2d()
+
+```
+
