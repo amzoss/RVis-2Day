@@ -10,6 +10,7 @@ output: html_document
 ```{r}
 
 library(tidyverse)
+library(colorspace)
 library(here)
 here::i_am("Day 1/2_labs_scales.Rmd")
 
@@ -58,11 +59,13 @@ color_scatter +
 
 ```
 
-## Practice Color Scales
+## Review slides on scales
+
+## Practice Changing the Axes with Scales
 
 ```{r}
 
-# Labels only get us so far. For the text inside the chart elements like
+# Labels only get us so far. To change the text inside the chart elements like
 # the axes and the legends, we have to use layers called "scales".
 
 # Picking the right name of the scale can be tricky. There are three main
@@ -72,10 +75,86 @@ color_scatter +
 # 3. the data type (either "discrete" or "continuous") or a specific pre-defined
 #    transformation (e.g., "log10", "reverse", "manual")
 
+# For the third element, you have to decide if you need a generic scale or a 
+# scale with a built-in transformation. First, try a transformation scale. A
+# couple of options are "log10" and "reverse". Pick one of the axes (x or y),
+# then create a scale function to try one of those transformations. If you
+# want to tranform both axes, you need to add separate scales for each.
+
+color_scatter +
+  labels +
+  scale__________()
+
+```
+
+```{r}
+
+# The generic versions of scales are a way you can replace the defaults for those
+# aesthetics without doing any transformations. First, construct a generic
+# scale for one of the axes without adding any arguments. You should see the 
+# original chart with no changes.
+
+color_scatter +
+  labels +
+  ____________
+
+# Now, you can use the scale to modify parts of the axis like:
+# * the start and end value of the axis - "limits"
+# * which tick marks show up - "breaks"
+# * the text that appears next to the tick marks - "labels"
+
+# Play with these options. For example, change the limits to expand or
+# contract the plot. Change the breaks so you see more or fewer tick marks.
+# For each of these options, you'll need to construct a vector of the values
+# you want to use: e.g., limits=c(-2,2)
+
+color_scatter +
+  labels +
+  ____________
+
+```
+
+## Practice Color Scales
+
+```{r}
+
+# We also use scales to change the color in charts.
 # In the above plot, we want to adjust the colors associated with the  
-# Continents. For that, we would use a scales to edit the color aesthetic,
-# which is mapped to a discrete (or categorical) variable. For manually specifying
-# new colors, you can use:
+# Continents. For that, we would use a scale to edit the color aesthetic,
+# which is mapped to a discrete (or categorical) variable. 
+
+# There are a lot of pre-existing color palettes that help us make good choices
+# about color in plots. One example is 'colorspace,' and you can see the available
+# palettes using:
+
+# library("colorspace")
+# hcl_palettes(plot = TRUE)
+
+# Each package has its own way of adding palettes to the chart, but most
+# follow the convention that there are different palettes for discrete
+# and continuous variables. Color space also offers three kinds of color
+# palettes: qualitative, sequential, and diverging. Discrete variables usually
+# match well with qualitative scales, though there are times when it's
+# okay to use sequential or even diverging instead.
+
+# Use hcl_palettes(plot = TRUE) to identify a palette. Then construct the scale
+# function that makes sense for the aesthetic we're using, the type of variable 
+# we have, and the type of palette you want to use.
+
+color_scatter +
+  labels +
+  ____________
+
+```
+
+
+```{r}
+
+# You can also specify colors manually. Remember, though, it's easier to choose 
+# poor colors than good colors, so most of the time I'd suggest using color 
+# packages instead of choosing colors manually.
+
+# For manually specifying new colors, you can use:
 # 1. "scale"
 # 2. "color"
 # 3. "manual"
@@ -105,21 +184,45 @@ color_scatter +
 
 # Build a list of five color names to use in the plot.
 
-colors <- c()
-
-# Next, add a manual fill scale to the chart and set the values to
-# your new colors vector.
+continent_colors <- c()
 
 # Next, inside your manual fill scale, set the "values" to
 # your new colors vector.
 
+color_scatter +
+  labels +
+  ____________
+
 ```
 
+```{r}
+# If you are going to use a manual color scale, it can be even better to use
+# a named list. The chart will stay true to the names and not the order of the
+# colors. This can be really handy if one of your charts is missing data from
+# one of the categories.
+
+named_colors <- continent_colors
+names(named_colors) <- levels(inclusiveness_index$Continent)
+
+filtered_color_scatter <- ggplot(data = inclusiveness_index %>% 
+                                   filter(Continent != "Africa")) +
+  geom_point(mapping = aes(x = Z.score.Religion,
+                           y = Inclusiveness.index.2020,
+                           color=Continent)) 
+
+filtered_color_scatter +
+  scale_color_manual(values=continent_colors)
+
+filtered_color_scatter +
+  scale_color_manual(values=named_colors)
+
+
+```
 ## Practice Reference Lines
 
 ```{r}
 
-# The original chart has arrows dividing the chart into four quadrants.
+# Scatterplots sometimes have bold lines dividing the chart into four quadrants.
 # In ggplot2, elements like this can be created using reference lines, which
 # are actually special geom layers.
 
@@ -133,16 +236,18 @@ colors <- c()
 ```
 
 
+## Review slides on themes
+
 ## Practice Themes
 
 ```{r}
 
-# The original chart has a very simple background: no color, no plot borders, 
-# no gridlines.
-# Explore the built-in ggplot2 themes to find one that will remove some of the
-# extra plot elements.
+# Themes govern a large amount of the default appearance of a chart.
+# Explore the built-in ggplot2 themes to see how they influence the chart
+# appearance.
 
 # https://ggplot2.tidyverse.org/reference/index.html#section-themes
+
 
 
 ```
@@ -161,48 +266,3 @@ colors <- c()
 
 ```
 
-## Save with defaults
-
-```{r}
-
-# The ggsave() function allows you to save the most recent chart out to a file.
-# Call ggsave(), giving it a path to the file you want to create.
-# With no details, the output will vary based on your current graphics device
-# (e.g., previewing it in R Markdown vs. knitting the file).
-
-
-
-```
-
-## Save for letter page
-
-```{r}
-# Let's use a good size for fitting across a letter page - maybe a width of 6.5
-# and a height of 4.25. Call ggsave again, adding these values.
-
-
-```
-
-## Update plot base font size for resized version
-
-```{r}
-# Unfortunately, on my machine the text is too big now. The title and
-# caption are both cut off. Let's adjust the base font size for the chart.
-# We do that by modifying the "base_size" property of our theme.
-
-# In the line where you call a built-in theme, you can set a new value for the
-# "base_size" property, which uses 11 as a default. Try something smaller.
-
-
-
-
-
-# The result may look strange when you preview in RStudio, but that's not a good 
-# indicator of how it will save.
-
-# Now repeat the previous ggsave() call. This version should have the right number 
-# of pixels for our letter paper, and the text should be a more appropriate size.
-
-
-
-```
