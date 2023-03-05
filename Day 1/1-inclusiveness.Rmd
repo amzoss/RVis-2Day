@@ -60,6 +60,8 @@ View(inclusiveness_index)
 
 ## Create a histogram to explore the distribution of `Inclusiveness.index.2020`
 
+Before we start, what is the difference between a bar chart and a histogram?
+
 ```{r}
 
 
@@ -91,6 +93,8 @@ View(inclusiveness_index)
 
 ```
 
+## Review slides on creating repeated charts
+
 ## Advanced: Split scatterplot into multiple charts, one per Continent
 
 ```{r}
@@ -101,3 +105,42 @@ View(inclusiveness_index)
 
 ```
 
+## Review slides on helpful data manipulation
+
+## Advanced: Bar charts, column charts, and calculations
+
+```{r}
+
+# geom_bar() has a summary function built in
+
+ggplot(data = inclusiveness_index) +
+  geom_bar(mapping = aes(x = Continent))
+
+```
+
+```{r}
+
+# Use count() to create a tibble with the same summarized data from the bar chart.
+
+
+
+```
+
+```{r}
+
+# geom_col() creates a bar chart, but instead of summarizing the data for you it
+# takes both an x value and a y value. Use the data from the count() summary
+# and the geom_col() shape layer to create a bar chart this other way.
+
+
+
+```
+
+```{r}
+
+# Now calculate a different summary number for each continent: average inclusiveness index.
+# Visualize the results with geom_col().
+
+
+
+```
