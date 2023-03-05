@@ -1,11 +1,7 @@
 ggplot2 Templates
 ================
 Angela Zoss
-3/23/2021
-
-``` r
-knitr::opts_chunk$set(error = TRUE)
-```
+3/5/2023
 
 ## Setup your environment
 
@@ -13,35 +9,17 @@ knitr::opts_chunk$set(error = TRUE)
 # Load required libraries
 
 library(tidyverse)
+library(here)
+here::i_am("templates/templates.Rmd")
 ```
-
-    ## ── Attaching packages ─────────────────────────────────────── tidyverse 1.3.2 ──
-    ## ✔ ggplot2 3.3.6     ✔ purrr   0.3.4
-    ## ✔ tibble  3.1.8     ✔ dplyr   1.0.9
-    ## ✔ tidyr   1.2.0     ✔ stringr 1.4.0
-    ## ✔ readr   2.1.2     ✔ forcats 0.5.1
-    ## ── Conflicts ────────────────────────────────────────── tidyverse_conflicts() ──
-    ## ✖ dplyr::filter() masks stats::filter()
-    ## ✖ dplyr::lag()    masks stats::lag()
 
 ## Load your data
 
 ``` r
 # data comes from https://www.kaggle.com/uciml/adult-census-income
 
-# adding a few settings to correct the data types of a couple of the columns
-
-adult <- read_csv("../data/adult.csv", na="?")
+adult <- read_csv(here("data","adult.csv"), na="?")
 ```
-
-    ## Rows: 32561 Columns: 15
-    ## ── Column specification ────────────────────────────────────────────────────────
-    ## Delimiter: ","
-    ## chr (9): workclass, education, marital.status, occupation, relationship, rac...
-    ## dbl (6): age, fnlwgt, education.num, capital.gain, capital.loss, hours.per.week
-    ## 
-    ## ℹ Use `spec()` to retrieve the full column specification for this data.
-    ## ℹ Specify the column types or set `show_col_types = FALSE` to quiet this message.
 
 ## Try a few charts
 
@@ -103,7 +81,8 @@ ggplot(adult) +
   geom_col(aes(sex, capital.loss), stat="summary", fun="mean")
 ```
 
-    ## Warning: Ignoring unknown parameters: stat, fun
+    ## Warning in geom_col(aes(sex, capital.loss), stat = "summary", fun = "mean"):
+    ## Ignoring unknown parameters: `stat` and `fun`
 
 ![](templates_files/figure-gfm/unnamed-chunk-5-2.png)<!-- -->
 
@@ -255,7 +234,7 @@ ggplot(adult) +
   geom_smooth(aes(x=age, y=capital.loss))
 ```
 
-    ## `geom_smooth()` using method = 'gam' and formula 'y ~ s(x, bs = "cs")'
+    ## `geom_smooth()` using method = 'gam' and formula = 'y ~ s(x, bs = "cs")'
 
 ![](templates_files/figure-gfm/unnamed-chunk-10-4.png)<!-- -->
 
@@ -264,7 +243,7 @@ ggplot(adult) +
   geom_smooth(aes(x=age, y=capital.loss), method = "lm")
 ```
 
-    ## `geom_smooth()` using formula 'y ~ x'
+    ## `geom_smooth()` using formula = 'y ~ x'
 
 ![](templates_files/figure-gfm/unnamed-chunk-10-5.png)<!-- -->
 
@@ -538,6 +517,9 @@ ggplot(adult) +
   geom_bar(aes(sex)) +
   geom_text(aes(sex, label=..count..), stat="count", nudge_y = 1000)
 ```
+
+    ## Warning: The dot-dot notation (`..count..`) was deprecated in ggplot2 3.4.0.
+    ## ℹ Please use `after_stat(count)` instead.
 
 ![](templates_files/figure-gfm/unnamed-chunk-20-2.png)<!-- -->
 
@@ -818,7 +800,7 @@ ggplot(adult) +
   facet_wrap(vars(education))
 ```
 
-    ## `geom_smooth()` using method = 'gam' and formula 'y ~ s(x, bs = "cs")'
+    ## `geom_smooth()` using method = 'gam' and formula = 'y ~ s(x, bs = "cs")'
 
 ![](templates_files/figure-gfm/unnamed-chunk-27-1.png)<!-- -->
 
@@ -833,7 +815,7 @@ ggplot(adult) +
   facet_grid(cols=vars(race))
 ```
 
-    ## `geom_smooth()` using method = 'gam' and formula 'y ~ s(x, bs = "cs")'
+    ## `geom_smooth()` using method = 'gam' and formula = 'y ~ s(x, bs = "cs")'
 
 ![](templates_files/figure-gfm/unnamed-chunk-27-2.png)<!-- -->
 
@@ -844,6 +826,6 @@ ggplot(adult) +
   facet_grid(rows=vars(sex), cols=vars(race))
 ```
 
-    ## `geom_smooth()` using method = 'gam' and formula 'y ~ s(x, bs = "cs")'
+    ## `geom_smooth()` using method = 'gam' and formula = 'y ~ s(x, bs = "cs")'
 
 ![](templates_files/figure-gfm/unnamed-chunk-27-3.png)<!-- -->

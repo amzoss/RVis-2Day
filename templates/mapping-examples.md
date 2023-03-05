@@ -1,7 +1,7 @@
 Mapping in R
 ================
 Angela Zoss
-3/23/2021
+3/5/2023
 
 ## Setup your environment
 
@@ -9,38 +9,19 @@ Angela Zoss
 # Load required libraries
 
 library(tidyverse)
-```
 
-    ## ── Attaching packages ─────────────────────────────────────── tidyverse 1.3.2 ──
-    ## ✔ ggplot2 3.3.6     ✔ purrr   0.3.4
-    ## ✔ tibble  3.1.8     ✔ dplyr   1.0.9
-    ## ✔ tidyr   1.2.0     ✔ stringr 1.4.0
-    ## ✔ readr   2.1.2     ✔ forcats 0.5.1
-    ## ── Conflicts ────────────────────────────────────────── tidyverse_conflicts() ──
-    ## ✖ dplyr::filter() masks stats::filter()
-    ## ✖ dplyr::lag()    masks stats::lag()
-
-``` r
 #install.packages("maps")
 library(maps)
-```
 
-    ## 
-    ## Attaching package: 'maps'
-    ## 
-    ## The following object is masked from 'package:purrr':
-    ## 
-    ##     map
-
-``` r
 #install.packages("mapproj")
 library(mapproj)
 
 #install.packages("sf")
 library(sf)
-```
 
-    ## Linking to GEOS 3.10.2, GDAL 3.4.2, PROJ 8.2.1; sf_use_s2() is TRUE
+library(here)
+here::i_am("templates/mapping-examples.Rmd")
+```
 
 ## Using sf
 
@@ -93,17 +74,8 @@ ggplot(county_map) +
 
 ``` r
 # load in building data from a csv file
-point_locations <- read_csv("../data/Calaveras-County-Government-Offices.csv")
+point_locations <- read_csv(here("data", "Calaveras-County-Government-Offices.csv"))
 ```
-
-    ## Rows: 35 Columns: 5
-    ## ── Column specification ────────────────────────────────────────────────────────
-    ## Delimiter: ","
-    ## chr (3): Place, Category, Address
-    ## dbl (2): Longitude, Latitude
-    ## 
-    ## ℹ Use `spec()` to retrieve the full column specification for this data.
-    ## ℹ Specify the column types or set `show_col_types = FALSE` to quiet this message.
 
 ``` r
 # color definitions; change these to change the look of the map
@@ -118,7 +90,7 @@ dot_transparency <- 0.5 #can change this if the dots are too light or dark
 # three different ggplot pieces; one for all the counties, one for calaveras, and one for the lat/lon points
 map_counties <- geom_polygon(data = county_map, aes(x = long, y = lat, group=group), fill=default_county_color, color=default_county_border)
 
-map_calaveras <- geom_polygon(data = county_map[county_map$subregion=="calaveras",], aes(x = long, y = lat, group=group), fill=cal_county_color, color = cal_county_border, size=1)
+map_calaveras <- geom_polygon(data = county_map[county_map$subregion=="calaveras",], aes(x = long, y = lat, group=group), fill=cal_county_color, color = cal_county_border, linewidth=1)
 
 map_points <- geom_point(data=point_locations, aes(x=Longitude, y=Latitude), color=dot_color, size=dot_size, alpha=dot_transparency)
 
@@ -128,21 +100,21 @@ mp <- mp + map_counties
 mp
 ```
 
-![](mapping-examples_files/figure-gfm/unnamed-chunk-5-1.png)<!-- -->
+![](mapping-examples_files/figure-gfm/unnamed-chunk-6-1.png)<!-- -->
 
 ``` r
 mp <- mp + map_calaveras
 mp
 ```
 
-![](mapping-examples_files/figure-gfm/unnamed-chunk-5-2.png)<!-- -->
+![](mapping-examples_files/figure-gfm/unnamed-chunk-6-2.png)<!-- -->
 
 ``` r
 mp <- mp + map_points
 mp
 ```
 
-![](mapping-examples_files/figure-gfm/unnamed-chunk-5-3.png)<!-- -->
+![](mapping-examples_files/figure-gfm/unnamed-chunk-6-3.png)<!-- -->
 
 ``` r
 # so far, the map is just displaying as if it's normal x/y data; we can add a
@@ -153,7 +125,7 @@ mp <- mp + coord_map()
 mp
 ```
 
-![](mapping-examples_files/figure-gfm/unnamed-chunk-5-4.png)<!-- -->
+![](mapping-examples_files/figure-gfm/unnamed-chunk-6-4.png)<!-- -->
 
 ``` r
 # optional: can zoom into map, using these long/lat as the new boundaries
@@ -168,31 +140,22 @@ mp <- mp + coord_map(xlim=c(zoom_long_left,zoom_long_right),
                      ylim=c(zoom_lat_bottom,zoom_lat_top))
 ```
 
-    ## Coordinate system already present. Adding new coordinate system, which will replace the existing one.
+    ## Coordinate system already present. Adding new coordinate system, which will
+    ## replace the existing one.
 
 ``` r
 mp
 ```
 
-![](mapping-examples_files/figure-gfm/unnamed-chunk-5-5.png)<!-- -->
+![](mapping-examples_files/figure-gfm/unnamed-chunk-6-5.png)<!-- -->
 
 ## El Niño measurements
 
 ``` r
-elnino <- read_csv("../data/elnino.csv", na=c(".",NA), 
+elnino <- read_csv(here("data", "elnino.csv"), na=c(".",NA), 
                    col_types = cols(Date = col_date(format="%y%m%d"),
-                                    Humidity = col_double())) %>% 
-  type_convert()
-```
+                                    Humidity = col_double()))
 
-    ## Warning: `type_convert()` only converts columns of type 'character'.
-    ## - `df` has no columns of type 'character'
-
-    ## 
-    ## ── Column specification ────────────────────────────────────────────────────────
-    ## cols()
-
-``` r
 elnino$Longitude <- ifelse(elnino$Longitude < 0, 360+elnino$Longitude,elnino$Longitude)
 
 # load in the data for each county in California; 
@@ -223,7 +186,7 @@ mp <- mp + map_countries
 mp
 ```
 
-![](mapping-examples_files/figure-gfm/unnamed-chunk-6-1.png)<!-- -->
+![](mapping-examples_files/figure-gfm/unnamed-chunk-7-1.png)<!-- -->
 
 ``` r
 # add coord_map to show polygons in Mercator projection
@@ -231,20 +194,20 @@ mp <- mp + coord_map()
 mp
 ```
 
-![](mapping-examples_files/figure-gfm/unnamed-chunk-6-2.png)<!-- -->
+![](mapping-examples_files/figure-gfm/unnamed-chunk-7-2.png)<!-- -->
 
 ``` r
 # try alternative data overlays
 mp + map_buoys
 ```
 
-![](mapping-examples_files/figure-gfm/unnamed-chunk-6-3.png)<!-- -->
+![](mapping-examples_files/figure-gfm/unnamed-chunk-7-3.png)<!-- -->
 
 ``` r
 mp + map_bin2d
 ```
 
-![](mapping-examples_files/figure-gfm/unnamed-chunk-6-4.png)<!-- -->
+![](mapping-examples_files/figure-gfm/unnamed-chunk-7-4.png)<!-- -->
 
 ``` r
 # example from ggplot2 cheatsheet
@@ -270,4 +233,4 @@ ggplot(data, aes(fill = murder)) +
   coord_map(projection = "azequalarea")
 ```
 
-![](mapping-examples_files/figure-gfm/unnamed-chunk-7-1.png)<!-- -->
+![](mapping-examples_files/figure-gfm/unnamed-chunk-8-1.png)<!-- -->

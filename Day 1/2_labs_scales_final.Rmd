@@ -1,7 +1,7 @@
 ---
 title: "Practicing Labels and Scales"
 author: "Angela Zoss"
-date: "8/1/2022"
+date: "3/5/2023"
 output: html_document
 ---
 
@@ -10,6 +10,8 @@ output: html_document
 ```{r}
 
 library(tidyverse)
+library(here)
+here::i_am("Day 1/2_labs_scales_final.Rmd")
 
 ```
 
@@ -19,7 +21,7 @@ library(tidyverse)
 
 # load using included script file
 
-source('../data/inclusiveness_index/load_inclusiveness_index.R')
+source(here("data", "inclusiveness_index", "load_inclusiveness_index.R"))
 
 ```
 
@@ -194,7 +196,7 @@ color_scatter +
 ```{r}
 # With no details, the output will vary based on your current graphics device
 
-ggsave("Figs/1-simple_save.png")
+ggsave(here("Day 1", "Figs", "1-simple_save.png"))
 
 ```
 
@@ -203,7 +205,7 @@ ggsave("Figs/1-simple_save.png")
 ```{r}
 # Let's use a good size for fitting across a letter page
 
-ggsave("Figs/2-letter_page.png", width=6.5, height=4.25)
+ggsave(here("Day 1", "Figs", "2-letter_page.png"), width=6.5, height=4.25)
 
 ```
 
@@ -231,6 +233,6 @@ color_scatter +
 # Now repeat the previous ggsave() call. This version should have the right number 
 # of pixels for our letter paper, and the text should be a more appropriate size.
 
-ggsave("Figs/3-small_base.png", width=6.5, height=4.25)
+ggsave(here("Day 1", "Figs", "3-small_base.png"), width=6.5, height=4.25)
 
 ```

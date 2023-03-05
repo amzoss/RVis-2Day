@@ -1,7 +1,7 @@
 ---
 title: "Gapminder Average"
 author: "Angela Zoss"
-date: "9/7/2018"
+date: "3/5/2023"
 output: html_document
 ---
 
@@ -12,6 +12,8 @@ output: html_document
 # Load required libraries
 
 library(tidyverse)
+library(here)
+here::i_am("Day 2/1-gapminder_avg_final.Rmd")
 
 ```
 
@@ -21,7 +23,7 @@ library(tidyverse)
 
 # data comes from http://www.gapminder.org/
 
-gap <- read_csv("../data/gapminder_avg.csv")
+gap <- read_csv(here("data", "gapminder_avg.csv"))
 names(gap) <- c("country","gdp","life.exp","pop","region","color")
 
 ```

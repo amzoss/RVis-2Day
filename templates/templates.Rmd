@@ -1,33 +1,33 @@
 ---
 title: "ggplot2 Templates"
 author: "Angela Zoss"
-date: "3/23/2021"
+date: "3/5/2023"
 output: github_document
 ---
 
-```{r setup}
+```{r setup, include=FALSE}
 knitr::opts_chunk$set(error = TRUE)
 ```
 
 ## Setup your environment
 
-```{r}
+```{r, message=FALSE}
 
 # Load required libraries
 
 library(tidyverse)
+library(here)
+here::i_am("templates/templates.Rmd")
 
 ```
 
 ## Load your data
 
-```{r}
+```{r, message=FALSE}
 
 # data comes from https://www.kaggle.com/uciml/adult-census-income
 
-# adding a few settings to correct the data types of a couple of the columns
-
-adult <- read_csv("../data/adult.csv", na="?")
+adult <- read_csv(here("data","adult.csv"), na="?")
 
 ```
 

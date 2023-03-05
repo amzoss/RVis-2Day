@@ -1,13 +1,13 @@
 ---
 title: "Mapping in R"
 author: "Angela Zoss"
-date: "3/23/2021"
+date: "3/5/2023"
 output: github_document
 ---
 
 ## Setup your environment
 
-```{r}
+```{r, message = FALSE}
 
 # Load required libraries
 
@@ -22,7 +22,11 @@ library(mapproj)
 #install.packages("sf")
 library(sf)
 
+library(here)
+here::i_am("templates/mapping-examples.Rmd")
+
 ```
+
 ## Using sf
 
 ```{r}
@@ -75,10 +79,14 @@ ggplot(county_map) +
 
 ## Buildings in Calaveras County, CA
 
-```{r}
+```{r, message=FALSE}
 
 # load in building data from a csv file
-point_locations <- read_csv("../data/Calaveras-County-Government-Offices.csv")
+point_locations <- read_csv(here("data", "Calaveras-County-Government-Offices.csv"))
+
+```
+
+```{r}
 
 # color definitions; change these to change the look of the map
 default_county_color <- "white"
@@ -92,7 +100,7 @@ dot_transparency <- 0.5 #can change this if the dots are too light or dark
 # three different ggplot pieces; one for all the counties, one for calaveras, and one for the lat/lon points
 map_counties <- geom_polygon(data = county_map, aes(x = long, y = lat, group=group), fill=default_county_color, color=default_county_border)
 
-map_calaveras <- geom_polygon(data = county_map[county_map$subregion=="calaveras",], aes(x = long, y = lat, group=group), fill=cal_county_color, color = cal_county_border, size=1)
+map_calaveras <- geom_polygon(data = county_map[county_map$subregion=="calaveras",], aes(x = long, y = lat, group=group), fill=cal_county_color, color = cal_county_border, linewidth=1)
 
 map_points <- geom_point(data=point_locations, aes(x=Longitude, y=Latitude), color=dot_color, size=dot_size, alpha=dot_transparency)
 
@@ -132,10 +140,9 @@ mp
 
 ```{r}
 
-elnino <- read_csv("../data/elnino.csv", na=c(".",NA), 
+elnino <- read_csv(here("data", "elnino.csv"), na=c(".",NA), 
                    col_types = cols(Date = col_date(format="%y%m%d"),
-                                    Humidity = col_double())) %>% 
-  type_convert()
+                                    Humidity = col_double()))
 
 elnino$Longitude <- ifelse(elnino$Longitude < 0, 360+elnino$Longitude,elnino$Longitude)
 

@@ -1,7 +1,7 @@
 Output
 ================
 Angela Zoss
-3/23/2021
+3/5/2023
 
 ## Setup your environment
 
@@ -9,12 +9,14 @@ Angela Zoss
 # Load required libraries
 
 library(tidyverse)
+library(here)
+here::i_am("templates/output-examples.Rmd")
 ```
 
 ## Load your data
 
 ``` r
-gap <- read_csv("../data/gapminder_avg.csv")
+gap <- read_csv(here("data","gapminder_avg.csv"))
 names(gap) <- make.names(names(gap), unique=TRUE)
 ```
 
@@ -38,9 +40,9 @@ ggplot(gap, aes(x=Average.GDP.per.capita, y=Average.Life.expectancy.at.birth)) +
 ### Save with defaults
 
 ``` r
-# On my machine, this creates a file 2156 pixels wide and 1332 tall; 
+# On my machine, this created a file 2100 pixels wide and 2100 tall; 
 # that may be different on your machine
-ggsave("Figs/1-simple_save.png")
+ggsave(here("templates", "Figs", "1-simple_save.png"))
 ```
 
 ![](Figs/1-simple_save.png)
@@ -50,7 +52,7 @@ ggsave("Figs/1-simple_save.png")
 ``` r
 # Try setting width and height
 # This uses a default unit of inches and a default dpi of 300
-ggsave("Figs/2-ratio_save.png", width=3, height=2)
+ggsave(here("templates", "Figs", "2-ratio_save.png"), width=3, height=2)
 ```
 
 ![](Figs/2-ratio_save.png)
@@ -60,7 +62,7 @@ ggsave("Figs/2-ratio_save.png", width=3, height=2)
 ``` r
 # That's pretty small, and on my machine text is way too large; 
 # let's make it big enough to fit across a letter page
-ggsave("Figs/3-ratio_save2.png", width=6.5, height=4.25)
+ggsave(here("templates", "Figs", "3-ratio_save2.png"), width=6.5, height=4.25)
 ```
 
 ![](Figs/3-ratio_save2.png)
@@ -69,7 +71,7 @@ ggsave("Figs/3-ratio_save2.png", width=6.5, height=4.25)
 
 ``` r
 # What if we need a big version for a poster?
-ggsave("Figs/4-big_save.png", width=12, height=9)
+ggsave(here("templates", "Figs","4-big_save.png"), width=12, height=9)
 ```
 
 ![](Figs/4-big_save.png)
@@ -94,7 +96,7 @@ ggplot(gap, aes(x=Average.GDP.per.capita, y=Average.Life.expectancy.at.birth)) +
 
 ``` r
 # This has a nice high resolution, and the text is a more reasonable size
-ggsave("Figs/5-big_base.png", width=12, height=9)
+ggsave(here("templates", "Figs", "5-big_base.png"), width=12, height=9)
 ```
 
 ![](Figs/5-big_base.png)
@@ -117,7 +119,7 @@ ggplot(gap, aes(x=Average.GDP.per.capita, y=Average.Life.expectancy.at.birth)) +
 ![](output-examples_files/figure-gfm/unnamed-chunk-9-1.png)<!-- -->
 
 ``` r
-ggsave("Figs/6-big_labels.png", width=12, height=9)
+ggsave(here("templates", "Figs", "6-big_labels.png"), width=12, height=9)
 ```
 
 ![](Figs/6-big_labels.png)

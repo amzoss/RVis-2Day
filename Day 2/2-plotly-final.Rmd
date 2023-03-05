@@ -31,6 +31,8 @@ library(mapproj)
 #install.packages("sf")
 library(sf)
 
+library(here)
+here::i_am("Day 2/2-plotly-final.Rmd")
 
 ```
 
@@ -76,7 +78,7 @@ plot_ly(
 
 ```{r}
 
-source('../data/inclusiveness_index/load_inclusiveness_index.R')
+source(here("data", "inclusiveness_index", "load_inclusiveness_index.R"))
 
 ```
 
@@ -331,7 +333,7 @@ incl_scatter_labs
 
 ```{r}
 
-got <- read_csv("../data/got_ratings.csv")
+got <- read_csv(here("data","got_ratings.csv"))
 
 got_expl <- ggplot(got, aes(x=moral,y=physical, color=gender)) + 
   geom_point(alpha=.75) + 
@@ -368,7 +370,7 @@ plot_ly(data = got, x = ~moral, y = ~physical, color = ~gender, type = "scatter"
 
 # data comes from http://www.gapminder.org/
 
-gap <- read_csv("../data/gapminder_avg.csv")
+gap <- read_csv(here("data","gapminder_avg.csv"))
 names(gap) <- c("country","gdp","life.exp","pop","region","color")
 
 gap_plot <- ggplot(gap, aes(x=gdp, y=life.exp)) +

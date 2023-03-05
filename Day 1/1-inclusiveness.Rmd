@@ -1,7 +1,7 @@
 ---
 title: "Inclusiveness Index Data"
 author: "Angela Zoss"
-date: "8/1/2022"
+date: "3/5/2023"
 output: html_document
 ---
 
@@ -12,6 +12,8 @@ output: html_document
 # Load required libraries
 
 library(tidyverse)
+library(here)
+here::i_am("Day 1/1-inclusiveness.Rmd")
 
 ```
 
@@ -21,7 +23,7 @@ library(tidyverse)
 
 # load using included script file
 
-source('../data/inclusiveness_index/load_inclusiveness_index.R')
+source(here("data", "inclusiveness_index", "load_inclusiveness_index.R"))
 
 ```
 
