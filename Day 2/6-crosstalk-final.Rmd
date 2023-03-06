@@ -1,7 +1,7 @@
 ---
 title: "Crosstalk"
 author: "Angela Zoss"
-date: "8/8/2021"
+date: "3/5/2023"
 output: html_document
 ---
 
@@ -17,12 +17,14 @@ library(tidyverse)
 library(DT)
 library(plotly)
 library(crosstalk)
+library(here)
+here::i_am("Day 2/6-crosstalk-final.Rmd")
 
 ```
 
 ```{r data}
 
-source('data/inclusiveness_index/load_inclusiveness_index.R')
+source(here("data","inclusiveness_index", "load_inclusiveness_index.R"))
 
 # Wrap data frame in SharedData
 shared_incl <- SharedData$new(inclusiveness_index, ~Country.Code)

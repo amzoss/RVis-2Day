@@ -1,7 +1,7 @@
 ---
 title: "DT"
 author: "Angela Zoss"
-date: "8/8/2021"
+date: "3/5/2023"
 output: html_document
 ---
 
@@ -15,12 +15,14 @@ knitr::opts_chunk$set(message = FALSE)
 
 library(tidyverse)
 library(DT)
+library(here)
+here::i_am("Day 2/5-datatables-final.Rmd")
 
 ```
 
 ```{r data, echo=FALSE}
 
-source('data/inclusiveness_index/load_inclusiveness_index.R')
+source(here("data","inclusiveness_index", "load_inclusiveness_index.R"))
 
 ```
 

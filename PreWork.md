@@ -25,6 +25,9 @@ In order to participate in class exercises, participants will need a computer wh
 * mapproj
 * sf
 * colorspace
+* dt
+* crosstalk
+* flexdashboard
 * here
 
 Note: this helpful guide to [Installing Packages in RStudio](http://derekogle.com/IFAR/supplements/installations/InstallPackagesRStudio.html) describes the process for installing packages once you have installed R and RStudio. Just copy each of the package names listed above into the install packages dialog box, either one at a time or in a long list.

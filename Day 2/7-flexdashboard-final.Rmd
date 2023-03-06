@@ -1,17 +1,25 @@
 ---
 title: "Flexdashboard"
+author: "Angela Zoss"
+date: "3/5/2023"
 output: 
   flexdashboard::flex_dashboard:
     orientation: rows
 ---
 
 ```{r setup, include=FALSE}
+
+# this block sets up the environment but won't be visible in the dashboard
+
 library(tidyverse)
 library(DT)
 library(plotly)
 library(crosstalk)
+library(flexdashboard)
+library(here)
+here::i_am("Day 2/7-flexdashboard-final.Rmd")
 
-source('data/inclusiveness_index/load_inclusiveness_index.R')
+source(here("data","inclusiveness_index", "load_inclusiveness_index.R"))
 
 # Wrap data frame in SharedData
 shared_incl <- SharedData$new(inclusiveness_index, ~Country.Code)
@@ -19,6 +27,9 @@ shared_incl <- SharedData$new(inclusiveness_index, ~Country.Code)
 ```
 
 <!-- check out https://matt-dray.github.io/earl18-crosstalk/04_leaflet-flexdash-dt-crosstalk.html -->
+
+Page 1
+=================
 
 Inputs {.sidebar}
 -----------------------------------------------------------------------
@@ -77,3 +88,5 @@ DT::datatable(shared_incl,
 
 ```
    
+Page 2
+=================
