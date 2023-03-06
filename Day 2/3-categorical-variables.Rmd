@@ -1,0 +1,329 @@
+---
+title: "Practicing categorical variables"
+author: "Angela Zoss"
+date: "3/5/2023"
+output: html_document
+---
+
+## Load packages
+
+```{r}
+
+library(tidyverse)
+library(colorspace)
+library(readxl)
+library(here)
+here::i_am("Day 2/3-categorical-variables.Rmd")
+
+```
+
+## Load your data
+
+```{r}
+
+# We're going to load this dataset in a different way this time. We're going to
+# leave some of the factors out of it so we can practice making them ourselves.
+
+inclusiveness_index_unfactored <- 
+  read_excel(here("data", "inclusiveness_index", "global_data_for_website_2020.xlsx"),
+             na="9999") %>%
+  rename_with(~ str_remove_all(.x, "[(|)]") %>% str_replace_all("[-| ]", ".")) %>%
+  dplyr::filter(Continent != "Antarctica") 
+
+```
+
+## Add factors based on data meaning (natural ordering)
+
+```{r}
+
+# The Index.categories.2020 variable is a categorical variable with a natural
+# ordering: High to Low (or High to No data). 
+
+# See what a plot looks like when we just use the data without creating a factor.
+
+ggplot(data = inclusiveness_index_unfactored) +
+  geom_bar(mapping = aes(x = Continent,
+                         fill = Index.categories.2020)) +
+  scale_fill_discrete_sequential(palette = "Purple-Blue")
+
+```
+
+```{r}
+# To ensure the variable is always displayed with the correct order, first determine 
+# the order by looking at the possible values. Then create a vector with the 
+# correct order and use that vector to set new levels for the factor.
+
+unique(inclusiveness_index_unfactored$Index.categories.2020)
+
+index_cat_levels <- c(___________)
+
+inclusiveness_index_factored_natural <- inclusiveness_index_unfactored %>% 
+  mutate(Index.categories.2020 = Index.categories.2020 %>% as_factor() %>% 
+           fct_relevel(___________))
+
+```
+
+```{r}
+
+# And here is exactly the same chart again, just using the modified dataset.
+
+ggplot(data = ____________) +
+  geom_bar(mapping = aes(x = Continent,
+                         fill = Index.categories.2020)) +
+  scale_fill_discrete_sequential(palette = "Purple-Blue")
+
+
+```
+
+## Add factors based on data patterns
+
+```{r}
+
+# Let's look again at this bar chart showing average inclusiveness index by
+# continent. What do you think about the order of the bars?
+
+inclusiveness_index_factored_natural %>% 
+  drop_na(Inclusiveness.index.2020) %>%
+  group_by(Continent) %>% 
+  summarise(avg_inclusiveness = mean(Inclusiveness.index.2020)) %>%
+  ggplot(mapping = aes(x = Continent, y = avg_inclusiveness)) +
+  geom_col()
+
+```
+
+```{r}
+
+# For a chart like this, ordering the bars by highest to lowest can make it easier
+# to see the patterns in the data. For this kind of factor, though, we don't
+# necessarily want to make a permanent change to the dataset. The order of the 
+# continents that makes sense for this chart may not make sense for other views
+# of the data.
+
+# In cases like these, we can create a factor as part of the data processing
+# and then pipe it right into the chart, instead of storing that factor as
+# part of the data frame.
+
+inclusiveness_index_factored_natural %>% 
+  drop_na(Inclusiveness.index.2020) %>%
+  group_by(Continent) %>% 
+  summarise(avg_inclusiveness = mean(Inclusiveness.index.2020)) %>%
+  mutate(Continent = Continent %>% as_factor() %>% ________________) %>%
+  ggplot(mapping = aes(x = Continent, y = avg_inclusiveness)) +
+  geom_col()
+
+```
+
+## Rotating a plot with long names
+
+```{r}
+
+# This plot shows the inclusiveness index for European countries,
+# without the null values. But you'll have to take my word for it!
+
+inclusiveness_index_factored_natural %>% 
+  drop_na(Inclusiveness.index.2020) %>%
+  dplyr::filter(Continent == "Europe") %>%
+  ggplot(mapping = aes(x = Country, y = Inclusiveness.index.2020)) +
+  geom_col()
+
+```
+
+```{r}
+
+# Let's go ahead and flip the axes so we can see the labels.
+
+inclusiveness_index_factored_natural %>% 
+  drop_na(Inclusiveness.index.2020) %>%
+  dplyr::filter(Continent == "Europe") %>%
+  ggplot...
+
+```
+
+
+```{r}
+
+# Now we can also sort the bars based on the inclusiveness index by 
+# creating a factor on Country. Remember, the axes "start" from the
+# bottom left-hand corner, so what would normally be on the left on the
+# x axis will be on the bottom on the y axis.
+
+
+inclusiveness_index_factored_natural %>% 
+  drop_na(Inclusiveness.index.2020) %>%
+  dplyr::filter(Continent == "Europe") %>%
+  mutate(____________) %>%
+  ggplot...
+
+```
+
+## Additional charts for categorical data
+
+### Pie Chart
+
+```{r}
+
+# A pie chart works a lot like a bar chart. It takes one categorical variable
+# and one number. But ggplot2 struggles a bit to visualize pie charts because
+# they don't operate on a normal x-y coordinate plane.
+
+# The first stage of a pie chart is actually a stacked bar chart with one bar.
+# Here we've used the y aesthetic, so the bar is horizontal. We don't actually
+# have to specify a variable for y, though, because we don't want multiple bars
+# along the y axis. We just want one. So we can give it a single value, like
+# "".
+
+# Then we fill the bar with the variable we want to use for our different
+# pie wedges. Here we're using index categories.
+
+inclusiveness_index_factored_natural %>%
+  ggplot(aes(y = "", fill = Index.categories.2020)) +
+    geom_bar(position=position_fill(), color="#cccccc") +
+    scale_fill_discrete_sequential(palette = "Purple-Blue")
+
+
+```
+
+```{r}
+
+# The final step in the pie chart is to change the coordinate system. The default
+# coordinate system for a bar chart is Cartesian. We can use a coord_polar() layer
+# to change this to a polar coordinate system, which starts at the "12:00" position
+# and rotaties one way or the other. We specify "direction = -1" to have it rotate
+# counter-clockwise, putting the dark blue color on the left and the gray color
+# on the right. This is just personal preference - I like the largest wedge on the
+# right.
+
+# At this point, you can adjust the theme of the plot to get it to look better, but
+# ggplot2 doesn't have great support for making pie charts look nice.
+
+inclusiveness_index_factored_natural %>%
+  ggplot(aes(y = "", fill = Index.categories.2020)) +
+    geom_bar(position=position_fill(), color="#cccccc") +
+    coord_polar(direction = -1) +
+    scale_fill_discrete_sequential(palette = "Purple-Blue")
+
+```
+
+
+### Heat Map
+
+```{r}
+
+# When you have two categorical variables you want to show in the same plot,
+# you can add color to a bar chart, but that's not always the most effective
+# way to explore the data. For example, stacked bars make it easy to compare
+# the bar segments on the bottom and the overall heights of the bars, but the
+# values in the middle are very different to compare. 
+
+# One alternative to stacked bars is a heat map, or a table where you place
+# each categorical variable on one axis, and then the cell at the intersection
+# of those categories is colored to show a numerical value. Take the example
+# below, where we are splitting the data up into continents and index categories
+# and then using color to show how many data points there are in each bin.
+
+inclusiveness_index_factored_natural %>% 
+    count(Continent, Index.categories.2020) %>%
+  ggplot(aes(x = Continent, y = Index.categories.2020, fill = n)) +
+    geom_tile() 
+
+```
+
+```{r}
+
+# Another reason heat maps may be more effective is if the data you are trying
+# to show includes both postivie and negative numbers, or numbers that shouldn't
+# be added together. Stacked bar charts strongly suggest that the sum of the
+# numbers in the bar is meaningful, that it's important to know the total. That
+# isn't true for the dataset below, where we have calculated the average
+# inclusiveness index and other sub-indices for the various continents. Not only
+# are there negative values in this dataset, but it is not meaningful to add
+# up the averages of the different indices. 
+
+# This heat map breaks down the data so we can see on average how the countries
+# in each continent compare on the different sub-indices, as well as the overall
+# inclusiveness index.
+
+inclusiveness_index_factored_natural %>%
+  pivot_longer(cols = c(Inclusiveness.index.2020, starts_with("Z")), 
+               names_to = "index_name",
+               values_to = "index_values",
+               values_drop_na = TRUE) %>%
+  group_by(Continent, index_name) %>%
+  summarise(mean_incl_ind = mean(index_values), .groups="drop") %>%
+  mutate(index_name = index_name %>%
+           as_factor() %>%
+           fct_reorder(mean_incl_ind),
+         Continent = Continent %>%
+           as_factor() %>%
+           fct_reorder(mean_incl_ind) %>%
+           fct_rev()) %>%
+  ggplot(aes(y = index_name, x = Continent, fill = mean_incl_ind)) +
+    geom_tile() +
+    scale_fill_distiller(type="div", palette = 3, 
+                         limits=c(-.8,.8), 
+                         direction = -1)
+
+```
+
+### Dumbbell plot
+
+```{r}
+
+# Another limitation of bar charts is when you want to make direct numerical
+# comparisons across series. The heatmap can show two continents next to each
+# other, but it's hard to directly compare shades of colors to see data patterns.
+# On the other hand, even side by side bar charts can make it hard to see these
+# patterns. 
+
+# Imagine we want to compare Asia and Europe in terms of the number of
+# countries in each index category.
+
+# The first plot groups all of the segments by continent, which makes it easy 
+# to compare different Index categories within a single continent. This plot
+# shows a version of a bar chart we haven't talked about - a grouped bar chart,
+# which you create in ggplot2 with "position = position_dodge()".
+
+
+ggplot(
+  inclusiveness_index_factored_natural %>% 
+    dplyr::filter(Continent %in% c("Asia", "Europe")),
+  mapping = aes(x = Continent, fill = Index.categories.2020)) +
+  geom_bar(position = position_dodge()) +
+  scale_fill_discrete_sequential(palette = "Purple-Blue")
+
+```
+
+```{r}
+# What if we want to bring more attention to the difference between continents for 
+# each category? We could always switch which category is the primary division on 
+# the x axis and which is represented by color.
+
+ggplot(
+  inclusiveness_index_factored_natural %>% 
+    dplyr::filter(Continent %in% c("Asia", "Europe")),
+  mapping = aes(fill = Continent, x = Index.categories.2020)) +
+  geom_bar(position = position_dodge())
+
+```
+
+```{r}
+# This improves our ability to compare the continents directly because the bars 
+# are directly next to each other. The amount of space the bars take up is still 
+# pretty large, though. If we combine this chart with something like a scatter plot, 
+# we get one last variation: a dumbbell plot,
+
+# With a dumbbell plot, we use a circle to represent the data values, just like 
+# the lollipop. Instead of having a line that extends all the way to the axis, 
+# though, we use a line to connect the two dots in each category of Inclusiveness 
+# Index.
+
+ggplot(
+  inclusiveness_index_factored_natural %>% 
+    dplyr::filter(Continent %in% c("Asia", "Europe")) %>%
+    count(Continent, Index.categories.2020),
+  mapping = aes(x = Index.categories.2020, y=n)) +
+  geom_line(aes(group=Index.categories.2020), color="#555555", linewidth=1) +
+  geom_point(aes(color = Continent), size=6)
+
+```
+
