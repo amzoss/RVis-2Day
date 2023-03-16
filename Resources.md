@@ -6,6 +6,10 @@ font-weight: 500;
 
 # Resources Mentioned
 
+## Resources Mentioned, Data Matters Spring 2023
+
+[**Advanced Game of Thrones Exercise**](https://gist.github.com/amzoss/f9e94e16914e2d04a8fc48810519dc3c)
+
 ## Resources Mentioned, Data Matters 2022
 
 [**Extra code created in class**](https://gist.github.com/amzoss/12888cbc8f5684b59e291ef69d36a8ad)
