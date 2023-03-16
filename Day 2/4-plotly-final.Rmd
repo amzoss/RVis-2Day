@@ -311,8 +311,8 @@ plot_ly(inclusiveness_index,
 
 ```{r}
 
-# Remember the edits we made to the theme from yesterday? Here is that code
-# again, with one change to the color scale. This makes a publication-ready
+# This is a modification of the basic scatterplot we made yesterday. Adding some
+# changes to geoms, theme, and color palette makes a publication-ready
 # version of the plotly plot.
 
 incl_scatter_labs <- ggplot(data = inclusiveness_index) +

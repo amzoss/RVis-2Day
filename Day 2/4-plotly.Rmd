@@ -154,10 +154,10 @@ incl_bar_col
 # function can take a series of categorical variables and calculate the count
 # for each combination of the values in the columns.
 
-incl_bar_data <- inclusiveness_index %>%
+incl_bar_data_color <- inclusiveness_index %>%
   count(Continent, Index.categories.2020)
 
-incl_bar_data
+incl_bar_data_color
 
 ```
 
@@ -178,7 +178,7 @@ plot_ly(_______________) %>%
 # in the reverse order. We can adjust that by modifying the order of the factor
 # in the dataset.
 
-incl_bar_data_rev <- incl_bar_data %>%
+incl_bar_data_rev <- incl_bar_data_color %>%
   mutate(Index.categories.2020 = fct_rev(Index.categories.2020))
 
 ```
@@ -290,8 +290,8 @@ incl_scatter
 
 ```{r}
 
-# Remember the edits we made to the theme from yesterday? Here is that code
-# again, with one change to the color scale. This makes a publication-ready
+# This is a modification of the basic scatterplot we made yesterday. Adding some
+# changes to geoms, theme, and color palette makes a publication-ready
 # version of the plotly plot.
 
 incl_scatter_labs <- ggplot(data = inclusiveness_index) +

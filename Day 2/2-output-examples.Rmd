@@ -54,7 +54,7 @@ ggplot(gap, aes(x=Average.GDP.per.capita, y=Average.Life.expectancy.at.birth)) +
 ggsave(here("templates", "Figs", "1-simple_save.png"))
 ```
 
-![](Figs/1-simple_save.png)
+![](../templates/Figs/1-simple_save.png)
 
 ### Save with smaller width and height
 
@@ -64,7 +64,7 @@ ggsave(here("templates", "Figs", "1-simple_save.png"))
 ggsave(here("templates", "Figs", "2-ratio_save.png"), width=3, height=2)
 ```
 
-![](Figs/2-ratio_save.png)
+![](../templates/Figs/2-ratio_save.png)
 
 ### Save for letter page
 
@@ -74,7 +74,7 @@ ggsave(here("templates", "Figs", "2-ratio_save.png"), width=3, height=2)
 ggsave(here("templates", "Figs", "3-ratio_save2.png"), width=6.5, height=4.25)
 ```
 
-![](Figs/3-ratio_save2.png)
+![](../templates/Figs/3-ratio_save2.png)
 
 ### Save large version
 
@@ -83,7 +83,7 @@ ggsave(here("templates", "Figs", "3-ratio_save2.png"), width=6.5, height=4.25)
 ggsave(here("templates", "Figs","4-big_save.png"), width=12, height=9)
 ```
 
-![](Figs/4-big_save.png)
+![](../templates/Figs/4-big_save.png)
 
 ### Update plot base font size for large version
 
@@ -104,7 +104,7 @@ ggplot(gap, aes(x=Average.GDP.per.capita, y=Average.Life.expectancy.at.birth)) +
 ggsave(here("templates", "Figs", "5-big_base.png"), width=12, height=9)
 ```
 
-![](Figs/5-big_base.png)
+![](../templates/Figs/5-big_base.png)
 
 ### Update plot label size for large version
 
@@ -124,4 +124,4 @@ ggsave(here("templates", "Figs", "6-big_labels.png"), width=12, height=9)
 
 ```
 
-![](Figs/6-big_labels.png)
+![](../templates/Figs/6-big_labels.png)
