@@ -35,7 +35,7 @@ Mac users without Xcode already installed may see a prompt to install Xcode or t
 
 ## Course Logistics
 
-I will be sharing datasets and code using [GitHub](https://github.com/), but you will not have to have a GitHub account or a git installation on your laptop to participate in the course. It will be easy to download the files from the GitHub website and open them in RStudio.
+I will be sharing datasets and code using [this course's GitHub repository](https://github.com/amzoss/RVis-2Day), but you will not have to have a GitHub account or a git installation on your laptop to participate in the course. We will walk through downloading the files from the GitHub website and opening them in RStudio.
 
 For this course I will be using [RMarkdown](https://rmarkdown.rstudio.com/) files* rather than simple R scripts. RMarkdown is a way of interweaving R code with other kinds of descriptive content -- text, links, images. When you only use R scripts in RStudio, the plots show up in the plot window, which only shows one plot at a time. RMarkdown allows us to create separate code "chunks" for different plots, and each plot will appear immediately below its code chunk. 
 
