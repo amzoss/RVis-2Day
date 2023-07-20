@@ -22,15 +22,6 @@ knitr::opts_chunk$set(message = FALSE, warning = FALSE)
 library(tidyverse)
 library(plotly)
 
-#install.packages("maps")
-library(maps)
-
-#install.packages("mapproj")
-library(mapproj)
-
-#install.packages("sf")
-library(sf)
-
 library(here)
 here::i_am("Day 2/4-plotly-final.Rmd")
 
@@ -414,32 +405,3 @@ plot_ly(gap, x = ~gdp, y = ~life.exp, size = ~pop, color = ~region, type = "scat
 
 ```
 
-## Mapping with sf
-
-```{r}
-
-nc <- system.file("gpkg/nc.gpkg", package="sf") %>% read_sf() %>% st_transform(32119)
-
-nc_map <- ggplot(nc) +
-  geom_sf(aes(fill=BIR74)) +
-    scale_fill_gradientn(colors = sf.colors())
-
-nc_map
-
-```
-
-```{r}
-
-# use ggplotly() function to convert ggplot2 chart to interactive plotly chart
-
-ggplotly(nc_map)
-
-```
-
-```{r}
-
-nc2 <- sf::st_read(system.file("shape/nc.shp", package = "sf"), quiet = TRUE)
-
-plot_ly(nc2, split=~NAME, color = ~BIR74, showlegend=F)
-
-```

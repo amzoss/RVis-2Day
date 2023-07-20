@@ -6,7 +6,7 @@ font-weight: 500;
 
 # Visualization for Data Science in R
 
-This repository contains files for a two-day course on Visualization for Data Science in R, offered during [Data Matters](http://datamatters.org) in spring 2023. The course description and activities are listed below. 
+This repository contains files for a two-day course on Visualization for Data Science in R, offered during [Data Matters](http://datamatters.org) in the summer of 2023. The course description and activities are listed below. 
 
 See additional details on the [pre-work](PreWork) page to prepare for the course.
 
@@ -35,7 +35,7 @@ As indicated above, this course assumes basic familiarity with R — e.g., R syn
 
 We will use [RStudio](https://www.rstudio.com/) to interact with R, and all exercises will be distributed in [R Markdown](https://rmarkdown.rstudio.com/) files (rather than simple R script files). This allows us to combine R code with non-code elements and promotes a [literate programming](https://en.wikipedia.org/wiki/Literate_programming) approach to research.
 
-A significant portion of the course will use ggplot2 and other tidyverse packages to create visualizations, but prior experience with those packages is not required. In order to participate in class exercises, participants should have installed current versions of R, RStudio, and the following packages: tidyverse, markdown, knitr, readxl, plotly, maps, mapproj, sf, colorspace, dt, crosstalk, flexdashboard, and here. Permissions to install packages on the fly will be useful.
+A significant portion of the course will use ggplot2 and other tidyverse packages to create visualizations, but prior experience with those packages is not required. In order to participate in class exercises, participants should have installed current versions of R, RStudio, and the following packages: tidyverse, markdown, knitr, readxl, plotly, colorspace, dt, crosstalk, flexdashboard, and here. Permissions to install packages on the fly will be useful.
 
 ## Resources
 

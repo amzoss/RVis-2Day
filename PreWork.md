@@ -21,21 +21,17 @@ In order to participate in class exercises, participants will need a computer wh
 * knitr
 * readxl
 * plotly
-* maps
-* mapproj
-* sf
 * colorspace
 * dt
 * crosstalk
 * flexdashboard
 * here
 
-Note: this helpful guide to [Installing Packages in RStudio](http://derekogle.com/IFAR/supplements/installations/InstallPackagesRStudio.html) describes the process for installing packages once you have installed R and RStudio. Just copy each of the package names listed above into the install packages dialog box, either one at a time or in a long list.
+This helpful guide to [Installing Packages in RStudio](http://derekogle.com/IFAR/supplements/installations/InstallPackagesRStudio.html) describes the process for installing packages once you have installed R and RStudio. Just copy each of the package names listed above into the install packages dialog box, either one at a time or in a long list.
 
 Having appropriate user permissions to install packages on the fly would be useful. 
 
-(Note: Mac users without Xcode already installed may see a prompt to install Xcode or the ["command line tools"](https://mac.install.guide/commandlinetools/7.html) to compile some packages from source. You should go ahead and do that -- at least the command line tools. This is often a large installation, though, so it may take a bit of time.)
-
+Mac users without Xcode already installed may see a prompt to install Xcode or the ["command line tools"](https://mac.install.guide/commandlinetools/7.html) to compile some packages from source. You should go ahead and do that -- at least the command line tools. This is often a large installation, though, so it may take a bit of time.
 
 ## Course Logistics
 
