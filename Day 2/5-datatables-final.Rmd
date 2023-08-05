@@ -1,11 +1,15 @@
 ---
 title: "DT"
 author: "Angela Zoss"
-date: "3/5/2023"
-output: html_document
+date: "8/5/2023"
+output: 
+  html_document
 ---
 
 DT is a package that displays data frames in a user-friendly way. It works especially well inside R Markdown documents, which can incorporate "HTML widgets," or little chunks of website that get built from the R script, incorporating datasets and analyses in really interesting ways.
+
+For best results, use knitr to create a fully styled version of this page, rather
+than executing individual code chunks.
 
 ```{r setup, include=FALSE}
 knitr::opts_chunk$set(message = FALSE)
@@ -34,11 +38,22 @@ DT::datatable(inclusiveness_index)
 
 ```
 
+## Constraining the size
+
+```{r}
+
+DT::datatable(inclusiveness_index,
+   options = list(scrollX = TRUE))
+
+```
+
 ## Changing DT style with classes
 
 ```{r styled}
 
-DT::datatable(inclusiveness_index, class = 'cell-border stripe')
+DT::datatable(inclusiveness_index, 
+              class = 'cell-border stripe',
+              options = list(scrollX = TRUE))
 
 ```
 
@@ -46,10 +61,13 @@ DT::datatable(inclusiveness_index, class = 'cell-border stripe')
 
 ```{r change-defaults}
 
-DT::datatable(inclusiveness_index, options = list(
-  pageLength = 5,
-  lengthMenu = c(5, 10, 15, 20)
-))
+DT::datatable(inclusiveness_index, 
+              options = list(
+                scrollX = TRUE,
+                pageLength = 5,
+                lengthMenu = c(5, 10, 15, 20)
+                )
+              )
 
 ```
 
@@ -60,6 +78,7 @@ DT::datatable(inclusiveness_index, options = list(
 DT::datatable(inclusiveness_index, 
               filter = 'top', 
               options = list(
+  scrollX = TRUE,
   pageLength = 5,
   lengthMenu = c(5, 10, 15, 20)
 ))
@@ -75,6 +94,7 @@ DT::datatable(inclusiveness_index,
 DT::datatable(inclusiveness_index, 
               filter = 'top', 
               options = list(
+  scrollX = TRUE,
   pageLength = 5,
   lengthMenu = c(5, 10, 15, 20),
   dom = 'ltip'
