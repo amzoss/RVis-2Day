@@ -1,11 +1,14 @@
 ---
 title: "Crosstalk"
 author: "Angela Zoss"
-date: "3/5/2023"
+date: "8/5/2023"
 output: html_document
 ---
 
 Crosstalk is a package that allows html-based widgets to talk to each other in an R Markdown document. Examples of HTML widgets include interactive charts, maps, and data tables. Crosstalk connects these components to each other by having them pull from a shared dataset. Crosstalk also offers a few interactive filter functions. For basic data exploration, Crosstalk may offer an easier alternative than Shiny, and the output of Crosstalk is simple HTML, which does not require a special server for sharing like Shiny apps do. Simply knit the RMarkdown file into an HTML file, then share the HTML file or host it on a website.
+
+For best results, use knitr to create a fully styled version of this page, rather
+than executing individual code chunks.
 
 ```{r setup, include=FALSE}
 knitr::opts_chunk$set(message = FALSE, echo=FALSE)
@@ -39,8 +42,9 @@ incl_scatter <- plot_ly(shared_incl, x = ~Z.score.Religion, y = ~Inclusiveness.i
 
 incl_DT <- DT::datatable(shared_incl, 
                 options = list(
-              pageLength = 5,
-              lengthMenu = c(5, 10, 15, 20)
+                  scrollX = TRUE,
+                  pageLength = 5,
+                  lengthMenu = c(5, 10, 15, 20)
             ))
 
 ```
