@@ -1,7 +1,7 @@
 ---
 title: "Practicing Labels and Scales"
 author: "Angela Zoss"
-date: "3/5/2023"
+date: "8/5/2023"
 output: html_document
 ---
 
@@ -11,6 +11,7 @@ output: html_document
 
 library(tidyverse)
 library(colorspace)
+library(RColorBrewer)
 library(here)
 here::i_am("Day 1/2_labs_scales.Rmd")
 
@@ -29,10 +30,10 @@ source(here("data", "inclusiveness_index", "load_inclusiveness_index.R"))
 
 ```{r}
 
-color_scatter <-  ggplot(data = inclusiveness_index) +
+color_scatter <-  ggplot(data = inclusiveness_index %>% drop_na(Z.score.Religion, Inclusiveness.index.2020)) +
   geom_point(mapping = aes(x = Z.score.Religion,
                            y = Inclusiveness.index.2020,
-                           color=Continent))
+                           color=Continent)) 
 
 color_scatter
 
@@ -104,7 +105,9 @@ color_scatter +
 # * the text that appears next to the tick marks - "labels"
 
 # Play with these options. For example, change the limits to expand or
-# contract the plot. Change the breaks so you see more or fewer tick marks.
+# contract the plot. (Note: if you have data that fall outside your limits,
+# you'll get a warning saying that some rows contain missing values.)
+# Change the breaks to see more or fewer tick marks.
 # For each of these options, you'll need to construct a vector of the values
 # you want to use: e.g., limits=c(-2,2)
 
@@ -124,22 +127,26 @@ color_scatter +
 # which is mapped to a discrete (or categorical) variable. 
 
 # There are a lot of pre-existing color palettes that help us make good choices
-# about color in plots. One example is 'colorspace,' and you can see the available
-# palettes using:
+# about color in plots. 
 
-# library("colorspace")
-# hcl_palettes(plot = TRUE)
+# One example is the ColorBrewer (https://colorbrewer2.org) palettes, which
+# are built into ggplot2. You can see the available palettes using: 
 
-# Each package has its own way of adding palettes to the chart, but most
-# follow the convention that there are different palettes for discrete
-# and continuous variables. Color space also offers three kinds of color
-# palettes: qualitative, sequential, and diverging. Discrete variables usually
-# match well with qualitative scales, though there are times when it's
-# okay to use sequential or even diverging instead.
+# RColorBrewer::display.brewer.all()
 
-# Use hcl_palettes(plot = TRUE) to identify a palette. Then construct the scale
-# function that makes sense for the aesthetic we're using, the type of variable 
-# we have, and the type of palette you want to use.
+# Different color packages will have different ways of adding palettes to the 
+# chart, but most follow the convention that there are different palettes for 
+# discrete and continuous variables. Discrete variables usually match well with 
+# qualitative (non-sequential) palettes, though there are times when it's
+# okay to use sequential or even diverging palettes instead.
+
+# To construct a scale function to color by a discrete variable using ColorBrewer 
+# palettes, you'll start with 'scale', then add the aesthetic (fill or color), 
+# then add "brewer". If you are coloring by a continuous variable, use 'scale', 
+# the aesthetic, then 'distiller.' Inside the scale, specify the palette with
+# 'palette = "NameOfPalette"'.
+
+# Below, add a scale to color the points by a ColorBrewer palette of your choice.
 
 color_scatter +
   labels +
@@ -149,6 +156,8 @@ color_scatter +
 
 
 ```{r}
+
+# Advanced topic: Custom colors and color vision deficiency
 
 # You can also specify colors manually. Remember, though, it's easier to choose 
 # poor colors than good colors, so most of the time I'd suggest using color 
@@ -176,18 +185,28 @@ color_scatter +
 # for our Continent values.
 
 # To assign specific colors to each category, you can make a list of colors --
-# either R built-in color names or color specifications using the rgb() function.
+# either R built-in color names, hexadecimal color values, or RGB color 
+# specifications using the rgb() function and three numbers between 0 and 1.
 
 # To print a list of all valid color names in R, use: 
 
 #colors()
 
-# Build a list of five color names to use in the plot.
+# Build a list of five colors to use in the plot.
 
 continent_colors <- c()
 
+# Using the colorspace package, we can also test this palette against different 
+# types of color vision deficiency.
+
+continent_colors_d <- deutan(continent_colors)
+continent_colors_p <- protan(continent_colors)
+continent_colors_t <- tritan(continent_colors)
+
 # Next, inside your manual fill scale, set the "values" to
-# your new colors vector.
+# your new colors vector. (Try the original colors as well
+# as the ones transformed for different types of color vision
+# deficiency.)
 
 color_scatter +
   labels +
@@ -196,24 +215,40 @@ color_scatter +
 ```
 
 ```{r}
-# If you are going to use a manual color scale, it can be even better to use
-# a named list. The chart will stay true to the names and not the order of the
-# colors. This can be really handy if one of your charts is missing data from
-# one of the categories.
+# If you are going to use the same color scale for many plots, it can be even 
+# better to store the palette as a named vector, where the names are the categories
+# in your data and the vector items are the colors. The chart will stay true to 
+# the names and not the order of the colors. This can be really handy if one of 
+# your charts is missing data from one of the categories.
 
-named_colors <- continent_colors
+# You can still use this method even with ColorBrewer palettes. Just use
+# RColorBrewer::brewer.pal() to export the correct colors. Add "n = " to specify 
+# how many total colors you want and "name = " to specify the palette name.
+# Next, add names to the color vector. Finally, instead of using scale_color_brewer(), 
+# use scale_color_manual() where values is equal to the named vector.
+
+brewer_palette <- brewer.pal(n = ___, name = ___)
+
+named_colors <- brewer_palette
 names(named_colors) <- levels(inclusiveness_index$Continent)
 
 filtered_color_scatter <- ggplot(data = inclusiveness_index %>% 
+                                   drop_na(Z.score.Religion, Inclusiveness.index.2020) %>%
                                    filter(Continent != "Africa")) +
   geom_point(mapping = aes(x = Z.score.Religion,
                            y = Inclusiveness.index.2020,
                            color=Continent)) 
 
-filtered_color_scatter +
-  scale_color_manual(values=continent_colors)
+color_scatter +
+  labs(title="All five continents with original ColorBrewer palette.") +
+  scale_color_manual(values=brewer_palette)
 
 filtered_color_scatter +
+  labs(title="Only four continents with original ColorBrewer palette.") +
+  scale_color_manual(values=brewer_palette)
+
+filtered_color_scatter +
+  labs(title="Only four continents with named color vector.") +
   scale_color_manual(values=named_colors)
 
 
@@ -243,11 +278,17 @@ filtered_color_scatter +
 
 ```{r}
 
-# Themes govern a large amount of the default appearance of a chart.
+# Themes govern a large amount of the default appearance of a chart - mostly
+# the parts of the chart outside the actual coordinate space.
 # Explore the built-in ggplot2 themes to see how they influence the chart
 # appearance.
 
 # https://ggplot2.tidyverse.org/reference/index.html#section-themes
+
+# Advice: theme_minimal() is a nice starting point because the gray
+# background that comes with the default theme reduces contrast between
+# the background and the foreground elements. With the small points in the
+# scatterplot, high contrast is especially important.
 
 
 
@@ -259,7 +300,9 @@ filtered_color_scatter +
 # lines that show up in between the axis tick marks - a.k.a. minor gridlines 
 # (in ggplot2 themes, panel.grid.minor).
 
-# To remove elements, set them equal to element_blank().
+# To remove elements, set them equal to element_blank(). To modify elements,
+# you have to find the right element function (e.g., element_text(), element_line())
+# and then override the properties.
 
 # Review: https://ggplot2.tidyverse.org/reference/theme.html
 
@@ -267,3 +310,15 @@ filtered_color_scatter +
 
 ```
 
+```{r}
+
+# Once we start modifying the theme, the possibilities are nearly endless.
+# You can set things like the font, the background colors, the spacing and position
+# of elements, etc.
+
+# Let's move the legend position to the top and change all text to use a mono-spaced
+# font: 'family="mono"'.
+
+
+
+```
