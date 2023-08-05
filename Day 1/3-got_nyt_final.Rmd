@@ -117,3 +117,35 @@ ggplot(got, aes(x=moral,y=physical, color=gender)) +
 
 ```
 
+## Change the theme
+
+```{r}
+# Try to find a theme closer to the NYT chart;
+# see https://ggplot2.tidyverse.org/reference/#section-themes for built-in themes
+
+ggplot(got, aes(x=moral,y=physical, color=gender)) + 
+  geom_point(alpha=.75) + 
+  geom_text(aes(label=label), nudge_y = -.025, show.legend = FALSE) +
+  theme_minimal()
+
+```
+
+## Add reference lines
+
+```{r}
+# hint: there are special geoms for straight lines;
+# check https://ggplot2.tidyverse.org/reference/#section-layer-geoms for all geom options
+
+# hint: look at how ggplot2 is layering the plot; rearrange layers as needed
+
+ggplot(got, aes(x=moral,y=physical, color=gender)) + 
+  scale_y_reverse() +
+  geom_hline(yintercept=.5) +
+  geom_vline(xintercept=.5)+ 
+  geom_point(aes())  + 
+  geom_text(aes(label=label), nudge_y = -.025, show.legend = FALSE) +
+  theme_minimal()
+
+```
+
+For more customizations, see https://gist.github.com/amzoss/f9e94e16914e2d04a8fc48810519dc3c
