@@ -281,9 +281,8 @@ incl_scatter
 
 ```{r}
 
-# This is a modification of the basic scatterplot we made yesterday. Adding some
-# changes to geoms, theme, and color palette makes a publication-ready
-# version of the plotly plot.
+# Adding some changes to geoms, theme, and color palette, we can make a ggplot,
+# publication-ready chart that looks like the plotly defaults.
 
 incl_scatter_labs <- ggplot(data = inclusiveness_index) +
   geom_point(mapping = aes(x = Z.score.Religion,
