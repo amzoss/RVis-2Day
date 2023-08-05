@@ -22,10 +22,18 @@ In order to participate in class exercises, participants will need a computer wh
 * readxl
 * plotly
 * colorspace
-* dt
+* RColorBrewer
+* DT
 * crosstalk
 * flexdashboard
 * here
+
+You can use this line of code to install these packages:
+
+```
+install.packages(c("tidyverse", "markdown", "knitr", "readxl", "plotly", 
+"colorspace", "RColorBrewer", "DT", "crosstalk", "flexdashboard", "here"))
+```
 
 This helpful guide to [Installing Packages in RStudio](http://derekogle.com/IFAR/supplements/installations/InstallPackagesRStudio.html) describes the process for installing packages once you have installed R and RStudio. Just copy each of the package names listed above into the install packages dialog box, either one at a time or in a long list.
 
