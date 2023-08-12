@@ -9,7 +9,7 @@ font-weight: 500;
 ## Resources Mentioned, Data Matters Fall 2023
 
 - [Additional code samples generated in class](CodeSamplesFall2023)
-- [https://plotly.com/r/pie-charts/](Pie charts in Plotly)
+- [Pie charts in Plotly](https://plotly.com/r/pie-charts/)
 - [HTML Widgets Gallery](http://gallery.htmlwidgets.org/)
 - Books:
     - *Visual Display of Quantitative Information* by Edward Tufte
