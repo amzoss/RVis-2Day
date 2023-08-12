@@ -18,7 +18,7 @@ font-weight: 500;
     - Combining charts
         - `patchwork` - [The Composer of Plots • patchwork](https://patchwork.data-imaginist.com/)
         - `cowplot` - [Arranging plots in a grid • cowplot](https://wilkelab.org/cowplot/articles/plot_grid.html)
-        - `gridExtra` - small explaination here: [4.5 The grid Package | Mastering Software Development in R](https://bookdown.org/rdpeng/RProgDA/the-grid-package.html)
+        - `gridExtra` - small explaination here: [4.5 The grid Package \| Mastering Software Development in R](https://bookdown.org/rdpeng/RProgDA/the-grid-package.html)
     - `ggthemes` - [package:ggthemes • All Your Figure Are Belong To Us](https://yutannihilation.github.io/allYourFigureAreBelongToUs/ggthemes/) more themes for `ggplot`, used by many newspaper graphics teams
     - `ggplot` geoms that I use most as an Epidemiologist
         - `geom_linerange` - [Vertical intervals: lines, crossbars & errorbars — geom\_crossbar • ggplot2](https://ggplot2.tidyverse.org/reference/geom_linerange.html)
