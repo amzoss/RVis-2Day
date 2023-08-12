@@ -9,7 +9,7 @@ font-weight: 500;
 ## Resources Mentioned, Data Matters Fall 2023
 
 - [Additional code samples generated in class](CodeSamplesFall2023)
-- [https://plotly.com/r/pie-charts/](Pie charts in Plotly
+- [https://plotly.com/r/pie-charts/](Pie charts in Plotly)
 - [HTML Widgets Gallery](http://gallery.htmlwidgets.org/)
 - Books:
     - *Visual Display of Quantitative Information* by Edward Tufte
@@ -23,7 +23,6 @@ font-weight: 500;
     - `ggplot` geoms that I use most as an Epidemiologist
         - `geom_linerange` - [Vertical intervals: lines, crossbars & errorbars — geom\_crossbar • ggplot2](https://ggplot2.tidyverse.org/reference/geom_linerange.html)
         - `coord_flip` - [Cartesian coordinates with x and y flipped — coord\_flip • ggplot2](https://ggplot2.tidyverse.org/reference/coord_flip.html)
-- The `ggplot` cheat sheet - [https://www.maths.usyd.edu.au/u/UG/SM/STAT3022/r/current/Misc/data-visualization-2.1.pdf](https://www.maths.usyd.edu.au/u/UG/SM/STAT3022/r/current/Misc/data-visualization-2.1.pdf)
 - and lastly, the savior of all programmers, StackOverflow (and sometimes Reddit, although that is much less trustworthy sometimes)
 
 ## Resources Mentioned, Data Matters Spring 2023
