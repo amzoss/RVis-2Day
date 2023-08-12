@@ -1,7 +1,7 @@
 ---
 title: "Output"
 author: "Angela Zoss"
-date: "3/5/2023"
+date: "8/12/2023"
 output: github_document
 ---
 
@@ -25,8 +25,8 @@ here::i_am("Day 2/2-output-examples.Rmd")
 
 ```{r}
 
-gap <- read_csv(here("data","gapminder_avg.csv"))
-names(gap) <- make.names(names(gap), unique=TRUE)
+gap <- read_csv(here("data", "gapminder_avg.csv"))
+names(gap) <- c("country","gdp","life.exp","pop","region","color")
 
 ```
 
@@ -36,14 +36,15 @@ names(gap) <- make.names(names(gap), unique=TRUE)
 
 ```{r}
 
-ggplot(gap, aes(x=Average.GDP.per.capita, y=Average.Life.expectancy.at.birth)) +
-  geom_point(aes(size=Average.Total.population, color=Region)) +
-  scale_x_log10() + 
-  labs(x="Average GDP per capita (log 10)", y="Average life expectancy at birth", title="Averages across all years of the traditional Gapminder dataset") +
+ggplot(gap, aes(x=gdp, y=life.exp)) +
+  geom_point(aes(size=pop, color=region)) +
+  scale_x_log10(breaks=c(1000,10000)) + 
+  labs(x="Average GDP per capita (log 10)", y="Average life expectancy at birth", title="Averages across all years of the traditional Gapminder dataset", color="Region") +
   scale_size_continuous(name="Average total population", breaks=c(7500000,75000000,750000000),labels=c("7.5 million","75 million","750 million")) +
   geom_smooth(method="lm", se=FALSE, color="gray50") +
-  geom_text(data=gap %>% filter(Average.Total.population>200000000), aes(label=Country)) +
+  geom_text(data=gap %>% filter(pop>200000000), aes(label=country)) +
   theme_bw()
+
 ```
 
 ### Save with defaults
@@ -76,10 +77,36 @@ ggsave(here("templates", "Figs", "3-ratio_save2.png"), width=6.5, height=4.25)
 
 ![](../templates/Figs/3-ratio_save2.png)
 
+```{r}
+# If you get the plot to a proportion that looks right for your purposes,
+# you may want to save the plot as a PDF instead of a more restricted image 
+# format like PNG or JPG. The PDF file should be a "vector" file, which means
+# that it will scale up or down and still look crisp and sharp.
+
+ggsave(here("templates", "Figs", "3-ratio_save2.pdf"), width=6.5, height=4.25)
+
+# SVG is another vector format, and it can be even easier to edit outside of
+# R. For example, you can import an SVG into PowerPoint, and if you right-click
+# on it and select "Convert to Shape", it will create individual, editable shapes
+# for all of the chart components.
+
+# If you want to save as an SVG file, you need the package svglite.
+
+# install.packages("svglite")
+# library(svglite)
+# ggsave(here("templates", "Figs", "3-ratio_save2.svg"), width=6.5, height=4.25)
+
+# NOTE: for either PDF or SVG files, you may be more restricted where you can
+# embed them. Not every publication format will treat PDFs and SVGs as images.
+# 
+
+```
+
+
 ### Save large version
 
 ```{r}
-# What if we need a big version for a poster?
+# What if we need a big version for a poster and can't use a PDF image?
 ggsave(here("templates", "Figs","4-big_save.png"), width=12, height=9)
 ```
 
@@ -91,13 +118,13 @@ ggsave(here("templates", "Figs","4-big_save.png"), width=12, height=9)
 # Plenty of pixels, but the text is now way too small!
 
 # This will look very strange in RStudio, but be patient!
-ggplot(gap, aes(x=Average.GDP.per.capita, y=Average.Life.expectancy.at.birth)) +
-  geom_point(aes(size=Average.Total.population, color=Region)) +
-  scale_x_log10() + 
-  labs(x="Average GDP per capita (log 10)", y="Average life expectancy at birth", title="Averages across all years of the traditional Gapminder dataset") +
+ggplot(gap, aes(x=gdp, y=life.exp)) +
+  geom_point(aes(size=pop, color=region)) +
+  scale_x_log10(breaks=c(1000,10000)) + 
+  labs(x="Average GDP per capita (log 10)", y="Average life expectancy at birth", title="Averages across all years of the traditional Gapminder dataset", color="Region") +
   scale_size_continuous(name="Average total population", breaks=c(7500000,75000000,750000000),labels=c("7.5 million","75 million","750 million")) +
   geom_smooth(method="lm", se=FALSE, color="gray50") +
-  geom_text(data=gap %>% filter(Average.Total.population>200000000), aes(label=Country)) +
+  geom_text(data=gap %>% filter(pop>200000000), aes(label=country)) +
   theme_bw(base_size=20)
 
 # This has a nice high resolution, and the text is a more reasonable size
@@ -111,13 +138,13 @@ ggsave(here("templates", "Figs", "5-big_base.png"), width=12, height=9)
 ```{r}
 # Note: base_size scales everything up except for the geom_text layer
 # can change that size separately
-ggplot(gap, aes(x=Average.GDP.per.capita, y=Average.Life.expectancy.at.birth)) +
-  geom_point(aes(size=Average.Total.population, color=Region)) +
-  scale_x_log10() + 
-  labs(x="Average GDP per capita (log 10)", y="Average life expectancy at birth", title="Averages across all years of the traditional Gapminder dataset") +
+ggplot(gap, aes(x=gdp, y=life.exp)) +
+  geom_point(aes(size=pop, color=region)) +
+  scale_x_log10(breaks=c(1000,10000)) + 
+  labs(x="Average GDP per capita (log 10)", y="Average life expectancy at birth", title="Averages across all years of the traditional Gapminder dataset", color="Region") +
   scale_size_continuous(name="Average total population", breaks=c(7500000,75000000,750000000),labels=c("7.5 million","75 million","750 million")) +
   geom_smooth(method="lm", se=FALSE, color="gray50") +
-  geom_text(data=gap %>% filter(Average.Total.population>200000000), aes(label=Country), size=10) +
+  geom_text(data=gap %>% filter(pop>200000000), aes(label=country), size=10) +
   theme_bw(base_size=20)
 
 ggsave(here("templates", "Figs", "6-big_labels.png"), width=12, height=9)

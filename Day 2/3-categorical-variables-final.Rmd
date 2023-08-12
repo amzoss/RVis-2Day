@@ -10,7 +10,6 @@ output: html_document
 ```{r}
 
 library(tidyverse)
-library(colorspace)
 library(readxl)
 library(here)
 here::i_am("Day 2/3-categorical-variables-final.Rmd")
@@ -44,7 +43,7 @@ inclusiveness_index_unfactored <-
 ggplot(data = inclusiveness_index_unfactored) +
   geom_bar(mapping = aes(x = Continent,
                          fill = Index.categories.2020)) +
-  scale_fill_discrete_sequential(palette = "Purple-Blue")
+  scale_fill_brewer(palette = "BuPu")
 
 ```
 
@@ -70,7 +69,7 @@ inclusiveness_index_factored_natural <- inclusiveness_index_unfactored %>%
 ggplot(data = inclusiveness_index_factored_natural) +
   geom_bar(mapping = aes(x = Continent,
                          fill = Index.categories.2020)) +
-  scale_fill_discrete_sequential(palette = "Purple-Blue")
+  scale_fill_brewer(palette = "BuPu")
 
 
 ```
@@ -190,7 +189,7 @@ inclusiveness_index_factored_natural %>%
 inclusiveness_index_factored_natural %>%
   ggplot(aes(y = "", fill = Index.categories.2020)) +
     geom_bar(position=position_fill(), color="#cccccc") +
-    scale_fill_discrete_sequential(palette = "Purple-Blue")
+  scale_fill_brewer(palette = "BuPu")
 
 
 ```
@@ -212,7 +211,7 @@ inclusiveness_index_factored_natural %>%
   ggplot(aes(y = "", fill = Index.categories.2020)) +
     geom_bar(position=position_fill(), color="#cccccc") +
     coord_polar(direction = -1) +
-    scale_fill_discrete_sequential(palette = "Purple-Blue")
+  scale_fill_brewer(palette = "BuPu")
 
 ```
 
@@ -301,7 +300,7 @@ ggplot(
     dplyr::filter(Continent %in% c("Asia", "Europe")),
   mapping = aes(x = Continent, fill = Index.categories.2020)) +
   geom_bar(position = position_dodge()) +
-  scale_fill_discrete_sequential(palette = "Purple-Blue")
+  scale_fill_brewer(palette = "BuPu")
 
 ```
 

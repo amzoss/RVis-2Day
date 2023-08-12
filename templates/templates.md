@@ -1,7 +1,7 @@
 ggplot2 Templates
 ================
 Angela Zoss
-3/5/2023
+8/12/2023
 
 ## Setup your environment
 
@@ -515,11 +515,8 @@ ggplot(adult) +
 
 ggplot(adult) +
   geom_bar(aes(sex)) +
-  geom_text(aes(sex, label=..count..), stat="count", nudge_y = 1000)
+  geom_text(aes(sex, label=after_stat(count)), stat="count", nudge_y = 1000)
 ```
-
-    ## Warning: The dot-dot notation (`..count..`) was deprecated in ggplot2 3.4.0.
-    ## ℹ Please use `after_stat(count)` instead.
 
 ![](templates_files/figure-gfm/unnamed-chunk-20-2.png)<!-- -->
 
@@ -527,7 +524,7 @@ ggplot(adult) +
 # geom_label is like geom_text, but it formats the label differently
 ggplot(adult) +
   geom_bar(aes(sex)) +
-  geom_label(aes(sex, label=..count..), stat="count", nudge_y = 1000)
+  geom_label(aes(sex, label=after_stat(count)), stat="count", nudge_y = 1000)
 ```
 
 ![](templates_files/figure-gfm/unnamed-chunk-20-3.png)<!-- -->

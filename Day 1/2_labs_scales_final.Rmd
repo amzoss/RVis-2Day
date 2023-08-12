@@ -260,6 +260,8 @@ filtered_color_scatter <- ggplot(data = inclusiveness_index %>%
                            y = Inclusiveness.index.2020,
                            color=Continent)) 
 
+filtered_color_scatter
+
 color_scatter +
   labs(title="All five continents with original ColorBrewer palette.") +
   scale_color_manual(values=brewer_palette)

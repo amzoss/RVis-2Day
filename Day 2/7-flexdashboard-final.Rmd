@@ -82,8 +82,9 @@ Row
 
 DT::datatable(shared_incl, 
                 options = list(
-              pageLength = 5,
-              lengthMenu = c(5, 10, 15, 20)
+                  scrollX = TRUE,
+                  pageLength = 5,
+                  lengthMenu = c(5, 10, 15, 20)
             ))
 
 ```

@@ -38,8 +38,8 @@ names(gap) <- c("country","gdp","life.exp","pop","region","color")
 
 ggplot(gap, aes(x=gdp, y=life.exp)) +
   geom_point(aes(size=pop, color=region)) +
-  scale_x_log10() + 
-  labs(x="Average GDP per capita (log 10)", y="Average life expectancy at birth", title="Averages across all years of the traditional Gapminder dataset") +
+  scale_x_log10(breaks=c(1000,10000)) + 
+  labs(x="Average GDP per capita (log 10)", y="Average life expectancy at birth", title="Averages across all years of the traditional Gapminder dataset", color="Region") +
   scale_size_continuous(name="Average total population", breaks=c(7500000,75000000,750000000),labels=c("7.5 million","75 million","750 million")) +
   geom_smooth(method="lm", se=FALSE, color="gray50") +
   geom_text(data=gap %>% filter(pop>200000000), aes(label=country)) +

@@ -148,8 +148,8 @@ inclusiveness_index %>% count(Continent)
 # and the geom_col() shape layer to create a bar chart this other way.
 
 inclusiveness_index %>% count(Continent) %>%
-  ggplot(mapping = aes(x = Continent, y = n)) +
-  geom_col()
+  ggplot() +
+  geom_col(mapping = aes(x = Continent, y = n))
 
 ```
 
@@ -160,8 +160,8 @@ inclusiveness_index %>% count(Continent) %>%
 
 inclusiveness_index %>% group_by(Continent) %>% 
   summarise(avg_inclusiveness = mean(Inclusiveness.index.2020, na.rm=T)) %>%
-  ggplot(mapping = aes(x = Continent, y = avg_inclusiveness)) +
-  geom_col()
+  ggplot() +
+  geom_col(mapping = aes(x = Continent, y = avg_inclusiveness))
 
 ```
 

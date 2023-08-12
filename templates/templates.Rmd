@@ -1,7 +1,7 @@
 ---
 title: "ggplot2 Templates"
 author: "Angela Zoss"
-date: "3/5/2023"
+date: "8/12/2023"
 output: github_document
 ---
 
@@ -406,12 +406,12 @@ ggplot(adult) +
 
 ggplot(adult) +
   geom_bar(aes(sex)) +
-  geom_text(aes(sex, label=..count..), stat="count", nudge_y = 1000)
+  geom_text(aes(sex, label=after_stat(count)), stat="count", nudge_y = 1000)
 
 # geom_label is like geom_text, but it formats the label differently
 ggplot(adult) +
   geom_bar(aes(sex)) +
-  geom_label(aes(sex, label=..count..), stat="count", nudge_y = 1000)
+  geom_label(aes(sex, label=after_stat(count)), stat="count", nudge_y = 1000)
 
 ```
 

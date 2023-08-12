@@ -120,6 +120,20 @@ plot_ly(data = incl_bar_data,
 
 ```{r}
 
+# This format of the data also works for another chart type - a pie chart.
+# Try changing the type to "pie". 
+
+plot_ly(data = incl_bar_data,
+        labels = ~Continent,
+        values = ~n,
+        type = "pie"
+)
+
+```
+
+
+```{r}
+
 # Now, let's try the version with color.
 
 incl_bar_col <- ggplot(data = inclusiveness_index) +
@@ -365,8 +379,8 @@ names(gap) <- c("country","gdp","life.exp","pop","region","color")
 
 gap_plot <- ggplot(gap, aes(x=gdp, y=life.exp)) +
   geom_point(aes(size=pop, color=region)) +
-  scale_x_log10() + 
-  labs(x="Average GDP per capita (log 10)", y="Average life expectancy at birth", title="Averages across all years of the traditional Gapminder dataset") +
+  scale_x_log10(breaks=c(1000,10000)) + 
+  labs(x="Average GDP per capita (log 10)", y="Average life expectancy at birth", title="Averages across all years of the traditional Gapminder dataset", color="Region") +
   scale_size_continuous(name="Average total population", breaks=c(7500000,75000000,750000000),labels=c("7.5 million","75 million","750 million")) +
   geom_smooth(method="lm", se=FALSE, color="gray50") +
   geom_text(data=gap %>% filter(pop>200000000), aes(label=country)) +
@@ -379,6 +393,8 @@ gap_plot
 ```{r}
 
 # use ggplotly() function to convert ggplot2 chart to interactive plotly chart
+
+# Note: There is a difference here! What is missing?
 
 ggplotly(gap_plot)
 
@@ -398,7 +414,25 @@ ggplotly(gap_plot)
 
 plot_ly(gap, x = ~gdp, y = ~life.exp, size = ~pop, color = ~region, type = "scatter") %>%
   add_lines(y = ~fitted(lm(life.exp~log(gdp))), showlegend = F, line = list(color = '#555555')) %>%
-  layout(xaxis = list(type = "log")) %>%
+  layout(
+    title = list(
+      text="Averages across all years of the traditional Gapminder dataset",
+      xanchor = 'left',
+      x=0
+      ),
+    legend=list(
+      title=list(text='Region')
+      ),
+    yaxis = list(
+      title=list(text='Average life expectancy at birth')
+    ),
+    xaxis = list(
+      title="Average GDP per capita (log 10)",
+      type = "log",
+      tickvals = list(1000,10000),
+      ticktext = list("1000","10000")
+      )
+    ) %>%
   add_text(data = gap %>% filter(pop > 200000000), size = NULL, color = NULL, text = ~country, textposition="top center", showlegend=F)
 
 
