@@ -6,7 +6,7 @@ font-weight: 500;
 
 # Visualization for Data Science in R
 
-This repository contains files for a two-day course on Visualization for Data Science in R, offered during [Data Matters](http://datamatters.org) in the summer of 2023. The course description and activities are listed below. 
+This repository contains files for a two-day course on Visualization for Data Science in R, offered during [Data Matters](http://datamatters.org) in the summer of 2024. The course description and activities are listed below. 
 
 See additional details on the [pre-work](PreWork) page to prepare for the course.
 
