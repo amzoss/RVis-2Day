@@ -411,6 +411,10 @@ ggplotly(gap_plot)
 # - if you add a text layer, it will inherit the aesthetics mappings from the main plot
 #   function; you can cancel out those mappings by mapping the aesthetics to NULL in the
 #   new layer
+# - adding a name to the legend is also a layout property
+
+# Check the plotly documentation for examples to find the right syntax.
+# https://plotly.com/r/
 
 plot_ly(gap, x = ~gdp, y = ~life.exp, size = ~pop, color = ~region, type = "scatter") %>%
   add_lines(y = ~fitted(lm(life.exp~log(gdp))), showlegend = F, line = list(color = '#555555')) %>%
