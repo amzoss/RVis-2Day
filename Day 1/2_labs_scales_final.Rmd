@@ -1,7 +1,7 @@
 ---
 title: "Practicing Labels and Scales"
 author: "Angela Zoss"
-date: "8/5/2023"
+date: "8/9/2024"
 output: html_document
 ---
 
@@ -86,7 +86,7 @@ color_scatter +
 # scale with a built-in transformation. First, try a transformation scale. A
 # couple of options are "log10" and "reverse". Pick one of the axes (x or y),
 # then create a scale function to try one of those transformations. If you
-# want to tranform both axes, you need to add separate scales for each.
+# want to transform both axes, you need to add separate scales for each.
 
 color_scatter +
   labels +
@@ -250,7 +250,7 @@ color_scatter +
 
 brewer_palette <- brewer.pal(n = 5, name = "Dark2")
 
-named_colors <- brewer_palette
+named_colors <- brewer_palette # or could use continent_colors here)
 names(named_colors) <- levels(inclusiveness_index$Continent)
 
 filtered_color_scatter <- ggplot(data = inclusiveness_index %>% 
@@ -264,11 +264,11 @@ filtered_color_scatter
 
 color_scatter +
   labs(title="All five continents with original ColorBrewer palette.") +
-  scale_color_manual(values=brewer_palette)
+  scale_color_manual(values=brewer_palette) # or switch to continent_colors
 
 filtered_color_scatter +
   labs(title="Only four continents with original ColorBrewer palette.") +
-  scale_color_manual(values=brewer_palette)
+  scale_color_manual(values=brewer_palette) # or switch to continent_colors
 
 filtered_color_scatter +
   labs(title="Only four continents with named color vector.") +

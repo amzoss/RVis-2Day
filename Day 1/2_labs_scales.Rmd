@@ -1,7 +1,7 @@
 ---
 title: "Practicing Labels and Scales"
 author: "Angela Zoss"
-date: "8/5/2023"
+date: "8/9/2024"
 output: html_document
 ---
 
@@ -80,7 +80,7 @@ color_scatter +
 # scale with a built-in transformation. First, try a transformation scale. A
 # couple of options are "log10" and "reverse". Pick one of the axes (x or y),
 # then create a scale function to try one of those transformations. If you
-# want to tranform both axes, you need to add separate scales for each.
+# want to transform both axes, you need to add separate scales for each.
 
 color_scatter +
   labels +
