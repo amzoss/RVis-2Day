@@ -1,7 +1,7 @@
 ---
 title: "Game of Thromes Character Ratings"
 author: "Angela Zoss"
-date: "3/5/2023"
+date: "8/9/2024"
 output: html_document
 ---
 
@@ -32,9 +32,8 @@ got <- read_csv(here("data", "got_ratings.csv"))
 
 ```{r}
 
-ggplot(data = got, 
-       mapping = aes(x=moral,y=physical)) + 
-  geom_point()
+ggplot(data = got) + 
+  geom_point(mapping = aes(x=moral,y=physical))
 
 ```
 
@@ -46,8 +45,8 @@ ggplot(data = got,
 # check ?geom_point to see names of the different options available
 # where should the new option go? what layer? inside or outside of aesthetics?
 
-ggplot(got, aes(x=moral,y=physical)) + 
-  geom_point(alpha=.75)
+ggplot(data = got) + 
+  geom_point(mapping = aes(x=moral,y=physical), alpha=.75)
 
 ```
 
@@ -63,9 +62,9 @@ ggplot(got, aes(x=moral,y=physical)) +
 #  geom_point(aes(x=moral,y=physical)) + 
 #  geom_text(aes(label=label))
 
-ggplot(got, aes(x=moral,y=physical)) + 
-  geom_point(alpha=.75) + 
-  geom_text(aes(label=label))
+ggplot(data = got) + 
+  geom_point(mapping = aes(x=moral, y=physical, alpha=.75)) + 
+  geom_text(mapping = aes(x=moral, y=physical, label=label))
 
 ```
 
@@ -76,9 +75,9 @@ ggplot(got, aes(x=moral,y=physical)) +
 # hint: look at ?geom_text for an option that might change the position slightly
 # where should the new option go? what layer? inside or outside of aesthetics?
 
-ggplot(got, aes(x=moral,y=physical)) + 
-  geom_point(alpha=.75) + 
-  geom_text(aes(label=label), nudge_y = -.025)
+ggplot(data = got) + 
+  geom_point(mapping = aes(x=moral, y=physical, alpha=.75)) + 
+  geom_text(mapping = aes(x=moral, y=physical, label=label), nudge_y = -.025)
 
 ```
 
@@ -141,8 +140,8 @@ ggplot(got, aes(x=moral,y=physical, color=gender)) +
 ggplot(got, aes(x=moral,y=physical, color=gender)) + 
   scale_y_reverse() +
   geom_hline(yintercept=.5) +
-  geom_vline(xintercept=.5)+ 
-  geom_point(aes())  + 
+  geom_vline(xintercept=.5) + 
+  geom_point(alpha=.75)  + 
   geom_text(aes(label=label), nudge_y = -.025, show.legend = FALSE) +
   theme_minimal()
 

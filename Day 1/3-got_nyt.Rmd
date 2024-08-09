@@ -1,7 +1,7 @@
 ---
 title: "Game of Thromes Character Ratings"
 author: "Angela Zoss"
-date: "3/5/2023"
+date: "8/9/2024"
 output: html_document
 ---
 
@@ -13,7 +13,7 @@ output: html_document
 
 library(tidyverse)
 library(here)
-here::i_am("Day 1/3-got_nyt_final.Rmd")
+here::i_am("Day 1/3-got_nyt.Rmd")
 
 ```
 
