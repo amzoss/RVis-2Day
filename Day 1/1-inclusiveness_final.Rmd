@@ -1,7 +1,7 @@
 ---
 title: "Inclusiveness Index Data"
 author: "Angela Zoss"
-date: "3/5/2023"
+date: "8/9/2024"
 output: html_document
 ---
 
@@ -158,10 +158,20 @@ inclusiveness_index %>% count(Continent) %>%
 # Now calculate a different summary number for each continent: average inclusiveness index.
 # Visualize the results with geom_col().
 
-inclusiveness_index %>% group_by(Continent) %>% 
+# Option using na.rm in summarise() function
+inclusiveness_index %>% 
+  group_by(Continent) %>% 
   summarise(avg_inclusiveness = mean(Inclusiveness.index.2020, na.rm=T)) %>%
   ggplot() +
   geom_col(mapping = aes(x = Continent, y = avg_inclusiveness))
+
+# Option using drop_na() and also more user-friendly variable name
+inclusiveness_index %>%
+  drop_na(Inclusiveness.index.2020) %>%
+  group_by(Continent) %>%
+  summarise(`Average Inclusiveness Index` = mean(Inclusiveness.index.2020)) %>%
+  ggplot() +
+  geom_col(mapping=aes(x=Continent, y=`Average Inclusiveness Index`))
 
 ```
 
