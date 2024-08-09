@@ -1,7 +1,7 @@
 ---
 title: "Gapminder Average"
 author: "Angela Zoss"
-date: "3/5/2023"
+date: "8/9/2024"
 output: html_document
 ---
 
