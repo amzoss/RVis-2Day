@@ -47,9 +47,6 @@ View(inclusiveness_index)
 # Note: for a bar chart, you just need to specify the x-axis
 
 
-ggplot(data=inclusiveness_index) +
-  geom_bar(mapping=aes(x=Continent))
-
 
 ```
 
@@ -57,8 +54,7 @@ ggplot(data=inclusiveness_index) +
 
 ```{r}
 
-ggplot(data=inclusiveness_index) +
-  geom_bar(mapping=aes(x=Continent,fill=Index.categories.2020))
+
 
 ```
 
@@ -68,8 +64,7 @@ Before we start, what is the difference between a bar chart and a histogram?
 
 ```{r}
 
-ggplot(data=inclusiveness_index) +
-  geom_histogram(mapping=aes(x=Inclusiveness.index.2020))
+
 
 ```
 
@@ -85,8 +80,7 @@ ggplot(data=inclusiveness_index) +
 
 ```{r}
 
-ggplot(data=inclusiveness_index) +
-  geom_point(mapping=aes(x=Z.score.Religion,y=Inclusiveness.index.2020))
+
 
 ```
 
@@ -107,10 +101,6 @@ ggplot(data=inclusiveness_index) +
 
 # Hint: check the help page for facet_wrap()
 
-
-ggplot(data=inclusiveness_index) +
-  geom_point(mapping=aes(x=Z.score.Religion,y=Inclusiveness.index.2020)) +
-  facet_grid(cols=vars(Continent))
 
 
 ```
@@ -146,19 +136,11 @@ ggplot(data = inclusiveness_index) +
 
 ```
 
-
-
 ```{r}
 
 # Now calculate a different summary number for each continent: average inclusiveness index.
 # Visualize the results with geom_col().
 
-inclusiveness_index %>%
-  drop_na(Inclusiveness.index.2020) %>%
-  group_by(Continent) %>%
-  summarise(`Average Inclusiveness Index` = mean(Inclusiveness.index.2020)) %>%
-  ggplot() +
-  geom_col(mapping=aes(x=Continent, y=`Average Inclusiveness Index`))
 
 
 ```
