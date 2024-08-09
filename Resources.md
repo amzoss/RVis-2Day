@@ -6,6 +6,14 @@ font-weight: 500;
 
 # Resources Mentioned
 
+## Resources Mentioned, Data Matters Fall 2024
+
+- [Cedri Scherer, ggplot2 expert](https://www.cedricscherer.com/)
+- [ggplot2 extensions gallery](https://exts.ggplot2.tidyverse.org/gallery/)
+- [HTML widgets gallery](https://gallery.htmlwidgets.org/)
+- [Angela's sample flexdashboard, published on RPubs](https://rpubs.com/amz25/flexdash)
+- [Example flexdashboard projects](https://rstudio.github.io/flexdashboard/articles/examples.html)
+
 ## Resources Mentioned, Data Matters Fall 2023
 
 - [Additional code samples generated in class](CodeSamplesFall2023)
