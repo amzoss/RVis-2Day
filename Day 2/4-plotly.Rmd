@@ -1,7 +1,7 @@
 ---
 title: "Interactive charts with plotly"
 author: "Angela Zoss"
-date: "8/5/2022"
+date: "8/9/2024"
 output: html_document
 ---
 
@@ -61,7 +61,8 @@ plot_ly(
   x = ~_____, 
   y = ~_____, 
   color = ~_____, 
-  type="scatter")
+  type="scatter",
+  mode="markers")
 
 ```
 
@@ -121,11 +122,12 @@ plot_ly(data = _____,
 ```{r}
 
 # This format of the data also works for another chart type - a pie chart.
-# Try changing the type to "pie". 
+# Try changing the type to "pie". We also have to use different aesthetics
+# (labels and values, instead of x and y).
 
 plot_ly(data = _____,
-        x = ~_____,
-        y = ~_____,
+        labels = ~_____,
+        values = ~_____,
         type = _____
 )
 
@@ -309,6 +311,14 @@ incl_scatter_labs <- ggplot(data = inclusiveness_index) +
 
 incl_scatter_labs
 
+```
+
+```{r}
+
+# And remember, if we start with a nice ggplot2 chart and then send it to plotly,
+# we get nicer tooltips when we hover.
+
+ggplotly(incl_scatter_labs)
 
 ```
 

@@ -1,7 +1,7 @@
 ---
 title: "Interactive charts with plotly"
 author: "Angela Zoss"
-date: "8/5/2022"
+date: "8/9/2024"
 output: html_document
 ---
 
@@ -61,7 +61,8 @@ plot_ly(
   x = ~Petal.Width, 
   y = ~Petal.Length, 
   color = ~Species, 
-  type="scatter")
+  type="scatter",
+  mode="markers")
 
 ```
 
@@ -121,7 +122,8 @@ plot_ly(data = incl_bar_data,
 ```{r}
 
 # This format of the data also works for another chart type - a pie chart.
-# Try changing the type to "pie". 
+# Try changing the type to "pie". We also have to use different aesthetics
+# (labels and values, instead of x and y). 
 
 plot_ly(data = incl_bar_data,
         labels = ~Continent,
@@ -310,7 +312,8 @@ plot_ly(inclusiveness_index,
         x = ~Z.score.Religion,
         y = ~Inclusiveness.index.2020,
         color = ~Continent,
-        type = "scatter")
+        type = "scatter",
+        mode="markers")
 
 ```
 
@@ -330,6 +333,16 @@ incl_scatter_labs <- ggplot(data = inclusiveness_index) +
   scale_color_brewer(palette = "Set2")
 
 incl_scatter_labs
+
+```
+
+
+```{r}
+
+# And remember, if we start with a nice ggplot2 chart and then send it to plotly,
+# we get nicer tooltips when we hover.
+
+ggplotly(incl_scatter_labs)
 
 ```
 
@@ -363,7 +376,7 @@ ggplotly(got_expl)
 # Some additional properties that might be useful for this layer:
 # textposition = "bottom center", showlegend = FALSE
 
-plot_ly(data = got, x = ~moral, y = ~physical, color = ~gender, type = "scatter") %>%
+plot_ly(data = got, x = ~moral, y = ~physical, color = ~gender, type = "scatter", mode="markers") %>%
   add_text(text = ~label, textposition = "bottom center", showlegend = FALSE)
 
 ```
@@ -416,7 +429,7 @@ ggplotly(gap_plot)
 # Check the plotly documentation for examples to find the right syntax.
 # https://plotly.com/r/
 
-plot_ly(gap, x = ~gdp, y = ~life.exp, size = ~pop, color = ~region, type = "scatter") %>%
+plot_ly(gap, x = ~gdp, y = ~life.exp, size = ~pop, color = ~region, type = "scatter", mode="markers") %>%
   add_lines(y = ~fitted(lm(life.exp~log(gdp))), showlegend = F, line = list(color = '#555555')) %>%
   layout(
     title = list(
